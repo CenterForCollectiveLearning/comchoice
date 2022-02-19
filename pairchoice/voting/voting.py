@@ -16,6 +16,10 @@ class Pairwise:
 
 
     def divisiveness(self):
+        """
+        Calculates the disagreement that generates a candidate among voters.
+        Reference: Navarrete & Hidalgo (forthcoming)
+        """
         df = self.df.copy()
         df = df[df[self.selected] != 0].copy()
 
@@ -77,6 +81,10 @@ class Pairwise:
 
 
     def transform(self):
+        """
+        Transforms the data defined by the user into a valid pairchoice data set. 
+        That is, it includes columns needed to run aggregation methods and other analysis defined in the class.
+        """
         df = self.df
         df = _create_card_id(df)
         df["id"] = range(0, df.shape[0])
@@ -84,6 +92,9 @@ class Pairwise:
 
 
     def to_pairwise(self):
+        """
+        Converts a rating-based data set into a pairwise comparison data set.
+        """
         df = self.df
         
         candidate = self.candidate
@@ -112,6 +123,9 @@ class Pairwise:
 
 
     def win_rate(self, data=None):
+        """
+        Calculates the fraction of times a proposal is selected with respect to the total of its occurrences.
+        """
         df = data.copy() if isinstance(data, pd.DataFrame) else self.df.copy()
         df = df[df[self.selected] != 0]
         candidate = self.candidate
