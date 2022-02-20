@@ -15,6 +15,58 @@ class Pairwise:
         self.voter = "voter"
 
 
+    def ahp(self):
+        """
+        Calculates a ranking of candidates using Automatic Hierarchy Process (AHP)
+        Reference: Saaty 1980
+        """
+        candidate = self.candidate
+        df = self.df.copy()
+        voter = self.voter
+
+        dd = df.groupby(["option_source", "option_target"]).agg({voter: "count"}).reset_index()
+
+        a = dd.pivot(index="option_target", columns="option_source", values=voter)
+        b = np.divide(a, a.T)
+        np.fill_diagonal(b.values, 1)
+        c = b / b.sum()
+        weight = [1/c.shape[0] for i in range(c.shape[0])]
+
+        tmp = pd.DataFrame(np.sum(np.multiply(c, weight), axis=1)).reset_index().rename(columns={"option_target": candidate, 0: "value"})
+
+        return tmp
+
+
+    def copeland(self):
+        """
+        Calculates a ranking sorting candidates based on the Condorcet winner.
+        """
+        candidate = self.candidate
+        df = self.df.copy()
+        m = self.matrix_pairs(df) > 0.5
+        m = m.astype(float)
+        np.fill_diagonal(m.values, np.nan)
+
+        return pd.DataFrame(
+            [(a, b) for a, b in list(zip(list(m), np.nanmean(m, axis=0)))], 
+            columns=[candidate, "value"]
+        )
+
+
+    def matrix_pairs(self, df):
+        voter = self.voter
+        dd = df.groupby(["option_source", "option_target"]).agg({voter: "count"}).reset_index()
+        m = dd.pivot(index="option_source", columns="option_target",
+                    values=voter).fillna(0)
+        ids = set(df["option_source"]) | set(df["option_target"])
+        m = m.reindex(ids)
+        m = m.reindex(ids, axis=1)
+        m = m.fillna(0)
+
+        r = m + m.T
+        return m / r
+
+
     def divisiveness(self):
         """
         Calculates the disagreement that generates a candidate among voters.
@@ -78,6 +130,40 @@ class Pairwise:
         tmp_frag_c = tmp_frag_c.groupby(candidate).agg({"value": "mean"}).reset_index()
 
         return tmp_frag_c
+
+
+    def elo(self, rating=400, K=10):
+        """
+        Calculates a ranking of candidates using Elo rating.
+        """
+        df = self.df.copy()
+
+        ELO_RATING = {i: rating for i in set(df["option_a_sorted"]) | set(df["option_b_sorted"])}
+
+        for option_a, option_b, selected in list(zip(df["option_a_sorted"], df["option_b_sorted"], df["option_selected"])):
+            r_a = ELO_RATING[option_a]
+            r_b = ELO_RATING[option_b]
+
+            q_a = K ** (r_a / rating)
+            q_b = K ** (r_b / rating)
+
+            e_a = q_a / (q_a + q_b)
+            e_b = q_b / (q_a + q_b)
+
+            if selected == 0:
+                s_a = 0.5
+                s_b = 0.5
+            else: 
+                is_a_selected = selected == 1
+                s_a = 1 if is_a_selected else 0
+                s_b = 1 - s_a
+
+            ELO_RATING[option_a] = r_a + K * (s_a - e_a)
+            ELO_RATING[option_b] = r_b + K * (s_b - e_b) 
+
+        tmp = pd.DataFrame(ELO_RATING.items(), columns=[self.candidate, "value"])
+
+        return tmp
 
 
     def transform(self):
