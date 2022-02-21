@@ -1,2 +1,2 @@
 from .pairwise import Pairwise
-from .rating import Rating
+from .voting import Voting

@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-class Rating:
+class Voting:
     def __init__(self, df):
         self.candidate = "candidate"
         self.df = df
@@ -14,8 +14,8 @@ class Rating:
         """
         Calculates Borda Count
         """
-        candidate = self.candidate
         df = self.df.copy()
+        candidate = self.candidate
         rank = self.rank
         voters = self.voters
         plural_voters = voters in list(df)
@@ -71,6 +71,64 @@ class Rating:
         np.fill_diagonal(m.values, np.nan)
 
         return pd.DataFrame([(a, b) for a, b in list(zip(list(m), np.nanmean(m, axis=1)))], columns=[candidate, "value"])
+    
+    
+    def hare_rule(self):
+        """
+        Hare Rule, Ranked-Choice Voting, Alternative Vote, and Instant Runoff
+        """
+
+        df = self.df.copy()
+        candidate = self.candidate
+        rank = self.rank
+        voters = self.voters
+
+        if voters in list(df):
+            df = self.transform(df, unique_id=True)
+
+        def _plurality(df):
+            df = df[df["rank"] == 1].copy()
+            df["value"] = 1
+            if "voters" in list(df):
+                df["value"] *= df["voters"]
+
+            return df.groupby(candidate).agg({"value": "sum"}).reset_index()
+
+
+        tmp = _plurality(df)
+        tmp["value"] /= tmp["value"].sum()
+        tmp = tmp.sort_values("value", ascending=False).reset_index(drop=True)
+
+        while tmp.loc[0, "value"] <= 0.5:
+            rmv = tmp.loc[tmp.shape[0] - 1, candidate]
+
+            df = df[df[candidate] != rmv].copy()
+            df = df.sort_values(["_id", rank], ascending=[True, True])
+            df[rank] = df.groupby("_id").cumcount() + 1
+
+            tmp = _plurality(df.copy())
+            tmp["value"] /= tmp["value"].sum()
+            tmp = tmp.sort_values("value", ascending=False).reset_index(drop=True)
+
+        return tmp.head(1)
+
+    
+    def k_approval(self, k=1):
+        df = self.df.copy()
+
+        candidate = self.candidate
+        rank = self.rank
+        voters = self.voters
+        plural_voters = voters in list(df)
+
+        if plural_voters:
+            df = self.transform(df)
+
+        df["value"] = df[rank] <= k
+        if plural_voters:
+            df["value"] *= df[voters]
+
+        return df.groupby(candidate).agg({"value": "sum"}).reset_index()
 
     
     def plurality(self):
@@ -86,8 +144,36 @@ class Rating:
             df["value"] *= df["voters"]
 
         return df.groupby("candidate").agg({"value": "sum"}).reset_index()
+    
+    
+    def ranking(self, method="borda", k=1):
+        methods = {
+            "borda": self.borda(),
+            "copeland": self.copeland(),
+            "k-approval": self.k_approval(k=k),
+            "plurality": self.plurality()
+        }
 
+        try:
+            tmp = methods[method]
+            return tmp
+        except KeyError as err:
+            raise Exception(f"{method} is not a valid method.")
+    
+    
+    def _get_items(self, method="borda", ascending=False, n=1):
+        df = self.ranking(method=method)
+        return df.sort_values("value", ascending=ascending).head(n).reset_index(drop=True)
+    
 
+    def loser(self, method="borda", n=1):
+        return self._get_items(method=method, ascending=True, n=n)
+    
+    
+    def winner(self, method="borda", n=1):
+        return self._get_items(method=method, ascending=False, n=n)
+        
+    
     def transform(self, data, unique_id=False):
         df = data.copy()
         df["_id"] = range(df.shape[0])

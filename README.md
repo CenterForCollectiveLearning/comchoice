@@ -93,6 +93,8 @@ pwc.to_pairwise()
 ### Pairwise
 Pairwise includes the features to analyze pairwise comparison data. 
 
+### Voting
+
 ## Do you have any questions?
 We invite you to create an issue in the project's GitHub repository (https://github.com/CenterForCollectiveLearning/pairchoice/issues).
 
