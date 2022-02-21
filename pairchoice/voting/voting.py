@@ -60,9 +60,11 @@ class Voting:
 
         cols = ["_winner", "_loser"]
 
-        if "voters" in list(df):
+        if voters in list(df):
             df = self.transform(df, unique_id=True)
             df = df.rename(columns={"_id": "voter"})
+        else:
+            df[voters] = 1
 
         unique_candidates = df[candidate].unique()
         for idx, df_tmp in df.groupby([voter, voters]):
@@ -164,16 +166,21 @@ class Voting:
         Each voter selects one candidate (or none if voters can abstain), and the candidate(s) with the most votes win.
         """
         df = self.df.copy()
-        if "voters" in list(df):
-            df = self.transform(df)
-        df = df[df["rank"] == 1]
-        df["value"] = 1
-        if "voters" in list(df):
-            df["value"] *= df["voters"]
+        
+        candidate = self.candidate
+        rank = self.rank
+        voters = self.voters
 
-        tmp = df.groupby("candidate").agg({"value": "sum"}).reset_index().sort_values("value", ascending=False)
+        if voters in list(df):
+            df = self.transform(df)
+        df = df[df[rank] == 1]
+        df["value"] = 1
+        if voters in list(df):
+            df["value"] *= df[voters]
+
+        tmp = df.groupby(candidate).agg({"value": "sum"}).reset_index().sort_values("value", ascending=False)
         if self.show_rank:
-            tmp["rank"] = range(1, tmp.shape[0] + 1)
+            tmp[rank] = range(1, tmp.shape[0] + 1)
 
         return tmp
     
