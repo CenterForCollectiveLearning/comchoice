@@ -1,4 +1,5 @@
 import pandas as pd
+from itertools import combinations
 
 
 class Voting:
@@ -6,6 +7,7 @@ class Voting:
         self.candidate = "candidate"
         self.df = df
         self.rank = "rank"
+        self.show_rank = True
         self.voter = "voter"
         self.voters = "voters"
 
@@ -27,7 +29,23 @@ class Voting:
         if plural_voters:
             df["value"] *= df[voters]
 
-        return df.groupby(candidate).agg({"value": "sum"}).reset_index()
+        tmp = df.groupby(candidate).agg({"value": "sum"}).reset_index().sort_values("value", ascending=False)
+        if self.show_rank:
+            tmp["rank"] = range(1, tmp.shape[0] + 1)
+        return tmp
+    
+    
+    def compare_methods(self, methods=["borda", "k-approval", "copeland", "plurality"]):
+        output = pd.DataFrame()
+        candidate = self.candidate
+
+        for method in methods:
+            r = self.ranking(method=method, k=1)
+            r = r.rename(columns={"rank": method})
+            r = r[[candidate, method]]
+            output = r.copy() if output.shape[0] == 0 else pd.merge(output, r, on=candidate)
+
+        return output
     
     
     def copeland(self):
@@ -70,7 +88,12 @@ class Voting:
         m = m.astype(float)
         np.fill_diagonal(m.values, np.nan)
 
-        return pd.DataFrame([(a, b) for a, b in list(zip(list(m), np.nanmean(m, axis=1)))], columns=[candidate, "value"])
+        tmp = pd.DataFrame([(a, b) for a, b in list(zip(list(m), np.nanmean(m, axis=1)))], 
+                            columns=[candidate, "value"]).sort_values("value", ascending=False)
+        if self.show_rank:
+            tmp["rank"] = range(1, tmp.shape[0] + 1)
+
+        return tmp
     
     
     def hare_rule(self):
@@ -128,7 +151,11 @@ class Voting:
         if plural_voters:
             df["value"] *= df[voters]
 
-        return df.groupby(candidate).agg({"value": "sum"}).reset_index()
+        tmp = df.groupby(candidate).agg({"value": "sum"}).reset_index().sort_values("value", ascending=False)
+        if self.show_rank:
+            tmp["rank"] = range(1, tmp.shape[0] + 1)
+
+        return tmp
 
     
     def plurality(self):
@@ -143,7 +170,11 @@ class Voting:
         if "voters" in list(df):
             df["value"] *= df["voters"]
 
-        return df.groupby("candidate").agg({"value": "sum"}).reset_index()
+        tmp = df.groupby("candidate").agg({"value": "sum"}).reset_index().sort_values("value", ascending=False)
+        if self.show_rank:
+            tmp["rank"] = range(1, tmp.shape[0] + 1)
+
+        return tmp
     
     
     def ranking(self, method="borda", k=1):
