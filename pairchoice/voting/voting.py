@@ -4,7 +4,9 @@ from itertools import combinations
 
 
 class Voting:
-    def __init__(self, df):
+    def __init__(self, data):
+        df = data.copy() if isinstance(data, pd.DataFrame) else pd.DataFrame(data)
+
         self.candidate = "candidate"
         self.df = df
         self.rank = "rank"
@@ -14,8 +16,10 @@ class Voting:
 
 
     def borda(self):
-        """
-        Calculates Borda Count
+        """Calculates Borda Count
+
+        Returns:
+            pandas.DataFrame: a ranking of candidates using Borda Count. 
         """
         df = self.df.copy()
         candidate = self.candidate
@@ -37,6 +41,14 @@ class Voting:
     
     
     def compare_methods(self, methods=["borda", "k-approval", "copeland", "plurality"]):
+        """Compares the ranking given to a candidate in different aggregation methods.
+
+        Args:
+            methods (list, optional): Methods to be compared. Values accepted are borda, k-approval, copeland, and plurality.
+
+        Returns:
+            pandas.DataFrame: DataFrame with a comparison of the methods defined. The first column represents the candidate, and the following ones represent each method being compared.
+        """
         output = pd.DataFrame()
         candidate = self.candidate
 
@@ -49,6 +61,33 @@ class Voting:
         return output
     
     
+    def completeness(self):
+        """Verifies if the data is complete. That is, every voter selected all the candidates possible.
+        
+        Returns:
+            bool: Boolean variable to indicate if the data is complete.
+        """
+        df = self.df.copy()
+
+        candidate = self.candidate
+        voter = self.voter
+        voters = self.voters
+
+        if voters in list(df):
+            df = self.transform(df, unique_id=True)
+            df = df.rename(columns={"_id": "voter"})
+        else:
+            df[voters] = 1
+
+        unique_candidates = df[candidate].unique()
+        
+        for idx, df_tmp in df.groupby([voter, voters]):
+            if len(df_tmp[candidate].unique()) != len(unique_candidates):
+                return False
+            
+        return True
+
+
     def copeland(self):
         df = self.df.copy()
         output = []
@@ -140,6 +179,14 @@ class Voting:
 
     
     def k_approval(self, k=1):
+        """Calculates k-approval voting method. The method gives 1 if the candidate is ranked over or equal to k. Otherwise, the value given is 0.
+
+        Args:
+            k (int, optional): Threshold to score candidates with a value of 1.
+
+        Returns:
+            pandas.DataFrame: Values of k-approval method.
+        """
         df = self.df.copy()
 
         candidate = self.candidate
@@ -162,8 +209,7 @@ class Voting:
 
     
     def plurality(self):
-        """
-        Each voter selects one candidate (or none if voters can abstain), and the candidate(s) with the most votes win.
+        """Each voter selects one candidate (or none if voters can abstain), and the candidate(s) with the most votes win.
         """
         df = self.df.copy()
         
@@ -185,7 +231,16 @@ class Voting:
         return tmp
     
     
-    def ranking(self, method="borda", k=1):
+    def ranking(self, method="plurality", k=1):
+        """Calculates the ranking of candidates usen a given voting method.
+
+        Args:
+            method (str, optional): Method to be used for calculating the ranking.
+            k (str, optional): Just valid for k-approval method.
+
+        Returns:
+            pandas.DataFrame: Ranking of candidates calculated with the method defined.
+        """
         methods = {
             "borda": self.borda(),
             "copeland": self.copeland(),
