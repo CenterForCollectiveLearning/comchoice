@@ -139,6 +139,20 @@ class Voting:
         return tmp
 
 
+    def cumulative(self) -> pd.DataFrame:
+        """Calculates the cumulative score of each candidate (Cumulative Voting).
+        """
+        candidate = self.candidate
+        rank = self.rank
+        votes = self.votes
+        df = self.df.copy()
+        tmp = df.groupby(candidate).agg({votes: "sum"}).reset_index().rename(columns={votes: "value"}).sort_values("value", ascending=False)
+        if self.show_rank:
+            tmp[rank] = range(1, tmp.shape[0] + 1)
+
+        return tmp
+
+
     def dhondt(self, seats=1) -> pd.DataFrame:
         """Calculates the number of elected candidates of each party using the D'Hondt (or Jefferson) method.
 
