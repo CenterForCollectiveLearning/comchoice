@@ -160,11 +160,10 @@ class Voting:
         return tmp.head(seats).groupby(party).count().reset_index().rename(columns={"quot": "seats"})
     
     
-    def hare_rule(self):
+    def hare(self):
+        """Calculates the winner of an election using Hare Rule, also called as Instant Runoff, Ranked-Choice Voting, and Alternative Vote.
+        In each iteration, removes the candidate with the lowest score in a plurality rule, until to have a majority winner.
         """
-        Hare Rule, Ranked-Choice Voting, Alternative Vote, and Instant Runoff
-        """
-
         df = self.df.copy()
         candidate = self.candidate
         rank = self.rank
