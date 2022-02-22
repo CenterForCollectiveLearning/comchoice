@@ -250,8 +250,22 @@ class Voting:
             tmp[rank] = range(1, tmp.shape[0] + 1)
 
         return tmp
-    
-    
+
+
+    def score(self) -> pd.DataFrame:
+        """Calculates the score of each candidate--Score Voting--. Also called as Range Voting.
+        """
+        candidate = self.candidate
+        rank = self.rank
+        votes = self.votes
+        df = self.df.copy()
+        tmp = df.groupby(candidate).agg({votes: "mean"}).reset_index().rename(columns={votes: "value"}).sort_values("value", ascending=False)
+        if self.show_rank:
+            tmp[rank] = range(1, tmp.shape[0] + 1)
+
+        return tmp
+
+
     def ranking(self, method="plurality", k=1) -> pd.DataFrame:
         """Calculates the ranking of candidates usen a given voting method.
 
