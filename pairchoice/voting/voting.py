@@ -9,6 +9,7 @@ class Voting:
 
         self.candidate = "candidate"
         self.df = df
+        self.party = "party"
         self.rank = "rank"
         self.show_rank = True
         self.voter = "voter"
@@ -136,6 +137,27 @@ class Voting:
             tmp["rank"] = range(1, tmp.shape[0] + 1)
 
         return tmp
+
+
+    def dhondt(self, seats=1):
+        """Calculates the number of elected candidates of each party using the D'Hondt (or Jefferson) method.
+
+        Args:
+            seats (int, optional): Number of seats to be assigned in the election.
+
+        Returns:
+            pandas.DataFrame: Summary with the seats of each party.
+        """
+        df = self.df.copy()
+        party = self.party
+        output = []
+        for __party, df_tmp in df.groupby(party):
+            votes = df_tmp.votes.values[0]
+            for i in range(seats):
+                output.append({party: __party, "quot": votes / (i + 1)})
+            
+        tmp = pd.DataFrame(output).sort_values("quot", ascending=False)
+        return tmp.head(seats).groupby(party).count().reset_index().rename(columns={"quot": "seats"})
     
     
     def hare_rule(self):
@@ -255,17 +277,21 @@ class Voting:
             raise Exception(f"{method} is not a valid method.")
     
     
-    def _get_items(self, method="borda", ascending=False, n=1):
+    def __get_items(self, method="borda", ascending=False, n=1):
         df = self.ranking(method=method)
         return df.sort_values("value", ascending=ascending).head(n).reset_index(drop=True)
     
 
     def loser(self, method="borda", n=1):
-        return self._get_items(method=method, ascending=True, n=n)
+        """Returns the loser of an election based on a voting method.
+        """
+        return self.__get_items(method=method, ascending=True, n=n)
     
     
     def winner(self, method="borda", n=1):
-        return self._get_items(method=method, ascending=False, n=n)
+        """Returns the winner of an election based on a voting method.
+        """
+        return self.__get_items(method=method, ascending=False, n=n)
         
     
     def transform(self, data, unique_id=False):
