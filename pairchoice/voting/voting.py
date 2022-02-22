@@ -16,7 +16,7 @@ class Voting:
         self.voters = "voters"
 
 
-    def borda(self):
+    def borda(self) -> pd.DataFrame:
         """Calculates Borda Count
 
         Returns:
@@ -29,7 +29,7 @@ class Voting:
         plural_voters = voters in list(df)
 
         if plural_voters:
-            df = self.transform(df)
+            df = self.__transform(df)
         N = len(df[candidate].unique())
         df["value"] = N - df[rank]
         if plural_voters:
@@ -41,7 +41,7 @@ class Voting:
         return tmp
     
     
-    def compare_methods(self, methods=["borda", "k-approval", "copeland", "plurality"]):
+    def compare_methods(self, methods=["borda", "k-approval", "copeland", "plurality"]) -> pd.DataFrame:
         """Compares the ranking given to a candidate in different aggregation methods.
 
         Args:
@@ -62,7 +62,7 @@ class Voting:
         return output
     
     
-    def completeness(self):
+    def completeness(self) -> bool:
         """Verifies if the data is complete. That is, every voter selected all the candidates possible.
         
         Returns:
@@ -75,7 +75,7 @@ class Voting:
         voters = self.voters
 
         if voters in list(df):
-            df = self.transform(df, unique_id=True)
+            df = self.__transform(df, unique_id=True)
             df = df.rename(columns={"_id": "voter"})
         else:
             df[voters] = 1
@@ -89,7 +89,7 @@ class Voting:
         return True
 
 
-    def copeland(self):
+    def copeland(self) -> pd.DataFrame:
         df = self.df.copy()
         output = []
 
@@ -101,7 +101,7 @@ class Voting:
         cols = ["_winner", "_loser"]
 
         if voters in list(df):
-            df = self.transform(df, unique_id=True)
+            df = self.__transform(df, unique_id=True)
             df = df.rename(columns={"_id": "voter"})
         else:
             df[voters] = 1
@@ -139,7 +139,7 @@ class Voting:
         return tmp
 
 
-    def dhondt(self, seats=1):
+    def dhondt(self, seats=1) -> pd.DataFrame:
         """Calculates the number of elected candidates of each party using the D'Hondt (or Jefferson) method.
 
         Args:
@@ -160,7 +160,7 @@ class Voting:
         return tmp.head(seats).groupby(party).count().reset_index().rename(columns={"quot": "seats"})
     
     
-    def hare(self):
+    def hare(self) -> pd.DataFrame:
         """Calculates the winner of an election using Hare Rule, also called as Instant Runoff, Ranked-Choice Voting, and Alternative Vote.
         In each iteration, removes the candidate with the lowest score in a plurality rule, until to have a majority winner.
         """
@@ -170,9 +170,9 @@ class Voting:
         voters = self.voters
 
         if voters in list(df):
-            df = self.transform(df, unique_id=True)
+            df = self.__transform(df, unique_id=True)
 
-        def _plurality(df):
+        def __plurality(df):
             df = df[df["rank"] == 1].copy()
             df["value"] = 1
             if "voters" in list(df):
@@ -181,7 +181,7 @@ class Voting:
             return df.groupby(candidate).agg({"value": "sum"}).reset_index()
 
 
-        tmp = _plurality(df)
+        tmp = __plurality(df)
         tmp["value"] /= tmp["value"].sum()
         tmp = tmp.sort_values("value", ascending=False).reset_index(drop=True)
 
@@ -192,14 +192,14 @@ class Voting:
             df = df.sort_values(["_id", rank], ascending=[True, True])
             df[rank] = df.groupby("_id").cumcount() + 1
 
-            tmp = _plurality(df.copy())
+            tmp = __plurality(df.copy())
             tmp["value"] /= tmp["value"].sum()
             tmp = tmp.sort_values("value", ascending=False).reset_index(drop=True)
 
         return tmp.head(1)
 
     
-    def k_approval(self, k=1):
+    def k_approval(self, k=1) -> pd.DataFrame:
         """Calculates k-approval voting method. The method gives 1 if the candidate is ranked over or equal to k. Otherwise, the value given is 0.
 
         Args:
@@ -216,7 +216,7 @@ class Voting:
         plural_voters = voters in list(df)
 
         if plural_voters:
-            df = self.transform(df)
+            df = self.__transform(df)
 
         df["value"] = df[rank] <= k
         if plural_voters:
@@ -239,7 +239,7 @@ class Voting:
         voters = self.voters
 
         if voters in list(df):
-            df = self.transform(df)
+            df = self.__transform(df)
         df = df[df[rank] == 1]
         df["value"] = 1
         if voters in list(df):
@@ -252,7 +252,7 @@ class Voting:
         return tmp
     
     
-    def ranking(self, method="plurality", k=1):
+    def ranking(self, method="plurality", k=1) -> pd.DataFrame:
         """Calculates the ranking of candidates usen a given voting method.
 
         Args:
@@ -276,24 +276,24 @@ class Voting:
             raise Exception(f"{method} is not a valid method.")
     
     
-    def __get_items(self, method="borda", ascending=False, n=1):
+    def __get_items(self, method="borda", ascending=False, n=1) -> pd.DataFrame:
         df = self.ranking(method=method)
         return df.sort_values("value", ascending=ascending).head(n).reset_index(drop=True)
     
 
-    def loser(self, method="borda", n=1):
+    def loser(self, method="borda", n=1) -> pd.DataFrame:
         """Returns the loser of an election based on a voting method.
         """
         return self.__get_items(method=method, ascending=True, n=n)
     
     
-    def winner(self, method="borda", n=1):
+    def winner(self, method="borda", n=1) -> pd.DataFrame:
         """Returns the winner of an election based on a voting method.
         """
         return self.__get_items(method=method, ascending=False, n=n)
         
     
-    def transform(self, data, unique_id=False):
+    def __transform(self, data, unique_id=False) -> pd.DataFrame:
         df = data.copy()
         df["_id"] = range(df.shape[0])
         df = df.explode("rank")
