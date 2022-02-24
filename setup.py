@@ -15,6 +15,7 @@ setuptools.setup(
     install_requires=[
         "numpy",
         "pandas",
+        "fastparquet",
         "requests"
     ],
     classifiers=[

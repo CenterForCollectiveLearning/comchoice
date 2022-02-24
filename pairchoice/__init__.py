@@ -1,2 +1,4 @@
-from .utils import *
-from .voting import *
+"""
+.. include:: ../README.md
+"""
+__docformat__ = "numpy"
