@@ -33,8 +33,13 @@ class Voting:
         self.voters = "voters"
 
 
-    def borda(self) -> pd.DataFrame:
+    def borda(self, score="original") -> pd.DataFrame:
         """Calculates Borda Count.
+
+        Parameters
+        ----------
+        score: {"original", "score_n", "dowdall"}, default="original"
+            Method to calculate Borda score.s
 
         Returns
         -------
@@ -43,7 +48,8 @@ class Voting:
 
         References
         ----------
-        Borda, J. D. (1784). Mémoire sur les élections au scrutin. Histoire de l'Academie Royale des Sciences pour 1781 (Paris, 1784).
+        Borda, J. D. (1784). Mémoire sur les élections au scrutin. Histoire de l'Academie 
+        Royale des Sciences pour 1781 (Paris, 1784).
         """
         df = self.df.copy()
         candidate = self.candidate
@@ -54,7 +60,16 @@ class Voting:
         if plural_voters:
             df = self.__transform(df)
         N = len(df[candidate].unique())
-        df["value"] = N - df[rank]
+
+        if score == "dowdall":
+            df["value"] = 1 / df[rank]
+
+        elif score == "score_n":
+            df["value"] = N - df[rank] - 1
+
+        else:
+            df["value"] = N - df[rank]
+
         if plural_voters:
             df["value"] *= df[voters]
 
