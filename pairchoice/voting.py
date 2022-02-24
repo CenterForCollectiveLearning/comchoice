@@ -229,6 +229,12 @@ class Voting:
         return tmp
 
 
+    def dowdall(self) -> pd.DataFrame:
+        """Dowdall.
+        """
+        return self.borda(score="dowdall")
+
+
     def dhondt(self, seats=1) -> pd.DataFrame:
         """Calculates the number of elected candidates of each party using the D'Hondt (or Jefferson) method.
 
