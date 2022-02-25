@@ -1,6 +1,7 @@
+from itertools import combinations, permutations
 import numpy as np
 import pandas as pd
-from itertools import combinations
+
 
 class Voting:
     """Class Voting.
@@ -137,7 +138,7 @@ class Voting:
         return True
 
 
-    def copeland_matrix(self):
+    def copeland_matrix(self, n_votes = False):
         df = self.df.copy()
         output = []
 
@@ -182,6 +183,9 @@ class Voting:
         m = m.reindex(unique_candidates, axis=0)
         m = m.reindex(unique_candidates, axis=1)
         m = m.fillna(0)
+
+        if n_votes:
+            return m
 
         r = m + m.T
         m = m / r
@@ -336,6 +340,34 @@ class Voting:
             tmp["rank"] = range(1, tmp.shape[0] + 1)
 
         return tmp
+
+
+    def kemeny_young(self, score_matrix = False):
+        """
+        """
+        m = self.copeland_matrix(n_votes = True)
+        candidate = self.candidate
+        rank = self.rank
+
+        output = []
+        for permutation in permutations(list(m)):
+            score = 0
+            for items in combinations(permutation, 2):
+                i_winner, i_loser = items
+                value = m.loc[i_winner, i_loser]
+                score += value
+            output.append([list(permutation), score])
+
+        tmp = pd.DataFrame(output, columns=[rank, "score"]).sort_values("score", ascending=False).reset_index(drop=True)
+        
+        if score_matrix:
+            return tmp
+
+        tmp_r = pd.DataFrame()
+        tmp_r[candidate] = tmp.loc[0, "rank"]
+        tmp_r[rank] = range(1, tmp_r.shape[0] + 1)
+
+        return tmp_r
 
 
     def negative(self) -> pd.DataFrame:
