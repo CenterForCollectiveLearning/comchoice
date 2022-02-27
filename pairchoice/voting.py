@@ -34,6 +34,18 @@ class Voting:
         self.voters = "voters"
 
 
+    def black(self) -> pd.DataFrame:
+        """Calculates winner using Black procedure.
+
+        Returns
+        -------
+        pandas.DataFrame:
+            Winner
+        """
+        r = self.condorcet(weak = False)
+        return r if r.shape[0] > 0 else self.winner(method = "borda")
+
+
     def borda(self, score="original") -> pd.DataFrame:
         """Calculates Borda Count.
 
