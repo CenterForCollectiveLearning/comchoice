@@ -138,6 +138,36 @@ class Voting:
         return True
 
 
+    def condorcet(self, weak = True):
+        """Calculates Condorcet Winner.
+
+        Parameters
+        ----------
+        weak: bool, default=True
+            Returns a weak winner.
+
+        Returns
+        -------
+        pandas.DataFrame: 
+            Condorcet Winner. 
+            
+        """
+        df = self.df.copy()
+        candidate = self.candidate
+
+        m = self.copeland_matrix()
+
+        tmp = pd.DataFrame([(a, b) for a, b in list(zip(list(m), np.nanmean(m, axis=1)))], 
+                            columns=[candidate, "value"]).sort_values("value", ascending=False)
+
+        if weak:
+            return tmp.head(1)
+        else:
+            v = list(tmp["value"].values)
+            return pd.DataFrame([]) if v[0] < 1 else tmp.head(1)
+
+        return tmp
+
     def copeland_matrix(self, n_votes = False):
         df = self.df.copy()
         output = []
@@ -191,10 +221,13 @@ class Voting:
         m = m / r
 
         m = np.where(m > 0.5, 1, np.where(m == 0.5, 0.5, 0))
+        m = pd.DataFrame(m, index=unique_candidates, columns=unique_candidates)
+        m = m.reindex(unique_candidates, axis=0)
+        m = m.reindex(unique_candidates, axis=1)
         m = m.astype(float)
-        np.fill_diagonal(m, np.nan)
+        np.fill_diagonal(m.values, np.nan)
 
-        return pd.DataFrame(m, index=unique_candidates, columns=unique_candidates)
+        return m
 
 
     def copeland(self) -> pd.DataFrame:
@@ -209,7 +242,7 @@ class Voting:
         df = self.df.copy()
         candidate = self.candidate
 
-        m = self.copeland_matrix(df)
+        m = self.copeland_matrix()
 
         tmp = pd.DataFrame([(a, b) for a, b in list(zip(list(m), np.nanmean(m, axis=1)))], 
                             columns=[candidate, "value"]).sort_values("value", ascending=False)
