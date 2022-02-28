@@ -47,7 +47,16 @@ class Voting:
 
 
     def borda(self, score="original") -> pd.DataFrame:
-        """Calculates Borda Count.
+        """Borda Count (1784).
+
+        The Borda count is a voting method to rank candidates. 
+        In an election, each voter gives a ranked-ordered list of their preferences. 
+        Then, it assigns the lowest score to the lowest-ranked candidate, increasing 
+        the score assigned until the candidate ranks first. The winner is the candidate with the most points. 
+
+        The original version proposed by Borda for an election of n candidates, assigns n - 1 
+        points to the candidate in the first place, n - 2 to the candidate in the second place, 
+        and so on, until assigning 0 to the lowest-ranked candidate.
 
         Parameters
         ----------
@@ -122,7 +131,7 @@ class Voting:
     
     
     def completeness(self) -> bool:
-        """Verifies if the data is complete. That is, every voter selected all the candidates possible.
+        """Verifies if each voter sets a ranking of candidates.
         
         Returns
         -------
@@ -151,17 +160,28 @@ class Voting:
 
 
     def condorcet(self, weak = True):
-        """Calculates Condorcet Winner.
+        """Condorcet winner (1785).
+
+        A Condorcet winner is the candidate who wins 100% of 1v1 elections regarding all 
+        the other candidates running in the same election (under a plurality rule). 
+
+        A weak Condorcet winner does not need to satisfy the rule of 100% of victories.
 
         Parameters
         ----------
         weak: bool, default=True
-            Returns a weak winner.
+            If the value is `true`, returns a weak Condorcet winner.
 
         Returns
         -------
         pandas.DataFrame: 
-            Condorcet Winner. 
+            Condorcet winner
+
+        References
+        ----------
+        de Condorcet, M. (1785), Essai sur l’Application de l’Analyse à la Probabilité des Décisions Rendues à la Pluralité des Voix. Paris: L’Imprimerie Royale. 
+
+        Felsenthal, D.S., Tideman, N. Weak Condorcet winner(s) revisited. Public Choice 160, 313–326 (2014). https://doi.org/10.1007/s11127-014-0180-4
             
         """
         df = self.df.copy()
@@ -243,12 +263,17 @@ class Voting:
 
 
     def copeland(self) -> pd.DataFrame:
-        """Calculates Copeland.
+        """Copeland voting method (1951).
 
         Returns
         -------
         pandas.DataFrame: 
             a ranking of candidates using Copeland. 
+
+
+        References
+        ----------
+        Copeland, A.H. (1951). A “reasonable” social welfare function, mimeographed. In: Seminar on applications of mathematics to the social sciences. Ann Arbor: Department of Mathematics, University of Michigan.
             
         """
         df = self.df.copy()
@@ -265,7 +290,9 @@ class Voting:
 
 
     def cumulative(self) -> pd.DataFrame:
-        """Calculates the cumulative score of each candidate (Cumulative Voting).
+        """Cumulative Voting.
+
+        Calculates the cumulative score of each candidate 
         """
         candidate = self.candidate
         rank = self.rank
@@ -285,7 +312,9 @@ class Voting:
 
 
     def dhondt(self, seats=1) -> pd.DataFrame:
-        """Calculates the number of elected candidates of each party using the D'Hondt (or Jefferson) method.
+        """D'Hondt (or Jefferson) method.
+
+        Calculates the number of elected candidates of each party using the D'Hondt (or Jefferson) method.
 
         Parameters
         ----------
@@ -310,8 +339,9 @@ class Voting:
     
     
     def hare(self) -> pd.DataFrame:
-        """Calculates the winner of an election using Hare Rule, also called as Instant Runoff, Ranked-Choice Voting, and Alternative Vote.
-        In each iteration, removes the candidate with the lowest score in a plurality rule, until to have a majority winner.
+        """Hare Rule (also called as Instant Runoff, Ranked-Choice Voting, and Alternative Vote)
+        
+        Calculates the winner of an election. In each iteration, removes the candidate with the lowest score in a plurality rule, until to have a majority winner.
         """
         df = self.df.copy()
         candidate = self.candidate

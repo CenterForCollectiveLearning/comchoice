@@ -33,6 +33,14 @@ import tqdm
 from .__data_cleaning import _create_card_id
 
 class Pairwise:
+    &#34;&#34;&#34;Class Pairwise.
+
+    Attributes
+    ----------
+    candidate: str
+        Column name that includes the candidates.
+    
+    &#34;&#34;&#34;
     def __init__(self, df):
         self.candidate = &#34;candidate&#34;
         self.df = df
@@ -279,12 +287,25 @@ class Pairwise:
 <span>(</span><span>df)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Class Pairwise.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>candidate</code></strong> :&ensp;<code>str</code></dt>
+<dd>Column name that includes the candidates.</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Pairwise:
+    &#34;&#34;&#34;Class Pairwise.
+
+    Attributes
+    ----------
+    candidate: str
+        Column name that includes the candidates.
+    
+    &#34;&#34;&#34;
     def __init__(self, df):
         self.candidate = &#34;candidate&#34;
         self.df = df
