@@ -1,4 +1,4 @@
-![Pairchoice Logo](/docs/pairchoice.png)
+![Pairchoice Logo](/docs/logo.png)
 
 ## What it is?
 
