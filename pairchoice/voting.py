@@ -68,8 +68,8 @@ class Voting:
         Then, it assigns the lowest score to the lowest-ranked candidate, increasing 
         the score assigned until the candidate ranks first. The winner is the candidate with the most points. 
 
-        The original version proposed by Borda for an election of n candidates, assigns n - 1 
-        points to the candidate in the first place, n - 2 to the candidate in the second place, 
+        The original version proposed by Borda for an election of n candidates, assigns `n - 1` 
+        points to the candidate in the first place, `n - 2` to the candidate in the second place, 
         and so on, until assigning 0 to the lowest-ranked candidate.
 
         Parameters
