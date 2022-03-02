@@ -1,4 +1,4 @@
-![Pairchoice Logo](/docs/logo.png)
+<img src="logo.png" alt="drawing" width="200"/>
 
 ## What it is?
 
