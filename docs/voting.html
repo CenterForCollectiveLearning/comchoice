@@ -79,7 +79,7 @@ class Voting:
         Returns
         -------
         pandas.DataFrame:
-            Winner of an election using Black procedure.
+            Election&#39;s winner using Black procedure.
 
         References
         ----------
@@ -108,7 +108,7 @@ class Voting:
         Returns
         -------
         pandas.DataFrame: 
-            a ranking of candidates using Borda Count. 
+            Election results using Borda Count. 
 
         References
         ----------
@@ -222,7 +222,7 @@ class Voting:
 
         References
         ----------
-        de Condorcet, M. (1785), Essai sur l’Application de l’Analyse à la Probabilité des Décisions Rendues à la Pluralité des Voix. Paris: L’Imprimerie Royale. 
+        de Condorcet, M. (1785), Essai sur l&#39;Application de l&#39;Analyse à la Probabilité des Décisions Rendues à la Pluralité des Voix. Paris: L&#39;Imprimerie Royale. 
 
         Felsenthal, D.S., Tideman, N. Weak Condorcet winner(s) revisited. Public Choice 160, 313-326 (2014). https://doi.org/10.1007/s11127-014-0180-4
 
@@ -305,11 +305,16 @@ class Voting:
     def copeland(self) -&gt; pd.DataFrame:
         &#34;&#34;&#34;Copeland voting method (1951).
 
+        Each voter ranks candidates by preference. Next, we sort candidates by the 
+        number of times they beat another candidate in a pairwise comparison. 
+        The top-1 on Copeland&#39;s method is considered a weak Condorcet winner. 
+        Likewise, if in an election of `n` candidates, a candidate beats `n - 1` 
+        candidates in pairwise comparison scenarios, it is also considered a Condorcet winner.
+
         Returns
         -------
         pandas.DataFrame: 
-            a ranking of candidates using Copeland. 
-
+            Election results using Copeland method. 
 
         References
         ----------
@@ -331,7 +336,12 @@ class Voting:
     def cumulative(self) -&gt; pd.DataFrame:
         &#34;&#34;&#34;Cumulative Voting.
 
-        Calculates the cumulative score of each candidate 
+        Calculates the cumulative score of each candidate. 
+
+        Returns
+        -------
+        pandas.DataFrame: 
+            Election results using Cumulative Voting
         &#34;&#34;&#34;
         candidate = self.candidate
         rank = self.rank
@@ -345,7 +355,7 @@ class Voting:
         return tmp
 
     def dowdall(self) -&gt; pd.DataFrame:
-        &#34;&#34;&#34;Dowdall voting method.
+        &#34;&#34;&#34;Dowdall voting method (1971).
 
         Dowdall is an alternative to Borda count, devised by Nauru&#39;s Secretary 
         of Justice in 1971. As in Borda, each voter gives a ranking of candidates. 
@@ -395,6 +405,11 @@ class Voting:
         Calculates the winner of an election. In each iteration, 
         removes the candidate with the lowest score in a plurality rule, 
         until to have a majority winner.
+
+        Returns
+        -------
+        pandas.DataFrame: 
+            The election&#39;s winner using Hare Rule.
         &#34;&#34;&#34;
         df = self.df.copy()
         candidate = self.candidate
@@ -431,8 +446,9 @@ class Voting:
         return tmp.head(1)
 
     def k_approval(self, k=1) -&gt; pd.DataFrame:
-        &#34;&#34;&#34;Calculates k-approval voting method. The method gives 1 if the candidate 
-        is ranked over or equal to k. Otherwise, the value given is 0.
+        &#34;&#34;&#34;k-Approval voting method.
+
+        The method gives 1 if the candidate is ranked over or equal to k. Otherwise, the value given is 0.
 
         Parameters
         ----------
@@ -442,7 +458,7 @@ class Voting:
         Returns
         -------
         pandas.DataFrame: 
-            Values of k-approval method.
+            Election results using the k-approval method.
 
         References
         ----------
@@ -483,7 +499,7 @@ class Voting:
         Returns
         -------
         pandas.DataFrame: 
-            Values of Kemeny-Young method.
+            Election results using Kemeny-Young method.
 
         References
         ----------
@@ -526,7 +542,7 @@ class Voting:
         Returns
         -------
         pandas.DataFrame: 
-            Values of Negative Voting.
+            Election results using Negative Voting.
 
         &#34;&#34;&#34;
         candidate = self.candidate
@@ -549,7 +565,7 @@ class Voting:
         Returns
         -------
         pandas.DataFrame:
-            Votes of candidates using Plurality Rule.
+            Election results using Plurality Rule.
         &#34;&#34;&#34;
         df = self.df.copy()
 
@@ -580,7 +596,7 @@ class Voting:
         Returns
         -------
         pandas.DataFrame:
-            Scores of candidates using Score Voting.
+            Election results using Score Voting.
 
         &#34;&#34;&#34;
         candidate = self.candidate
@@ -795,7 +811,7 @@ it includes the number of voters that selected the same ranking of candidates.</
         Returns
         -------
         pandas.DataFrame:
-            Winner of an election using Black procedure.
+            Election&#39;s winner using Black procedure.
 
         References
         ----------
@@ -824,7 +840,7 @@ it includes the number of voters that selected the same ranking of candidates.</
         Returns
         -------
         pandas.DataFrame: 
-            a ranking of candidates using Borda Count. 
+            Election results using Borda Count. 
 
         References
         ----------
@@ -938,7 +954,7 @@ it includes the number of voters that selected the same ranking of candidates.</
 
         References
         ----------
-        de Condorcet, M. (1785), Essai sur l’Application de l’Analyse à la Probabilité des Décisions Rendues à la Pluralité des Voix. Paris: L’Imprimerie Royale. 
+        de Condorcet, M. (1785), Essai sur l&#39;Application de l&#39;Analyse à la Probabilité des Décisions Rendues à la Pluralité des Voix. Paris: L&#39;Imprimerie Royale. 
 
         Felsenthal, D.S., Tideman, N. Weak Condorcet winner(s) revisited. Public Choice 160, 313-326 (2014). https://doi.org/10.1007/s11127-014-0180-4
 
@@ -1021,11 +1037,16 @@ it includes the number of voters that selected the same ranking of candidates.</
     def copeland(self) -&gt; pd.DataFrame:
         &#34;&#34;&#34;Copeland voting method (1951).
 
+        Each voter ranks candidates by preference. Next, we sort candidates by the 
+        number of times they beat another candidate in a pairwise comparison. 
+        The top-1 on Copeland&#39;s method is considered a weak Condorcet winner. 
+        Likewise, if in an election of `n` candidates, a candidate beats `n - 1` 
+        candidates in pairwise comparison scenarios, it is also considered a Condorcet winner.
+
         Returns
         -------
         pandas.DataFrame: 
-            a ranking of candidates using Copeland. 
-
+            Election results using Copeland method. 
 
         References
         ----------
@@ -1047,7 +1068,12 @@ it includes the number of voters that selected the same ranking of candidates.</
     def cumulative(self) -&gt; pd.DataFrame:
         &#34;&#34;&#34;Cumulative Voting.
 
-        Calculates the cumulative score of each candidate 
+        Calculates the cumulative score of each candidate. 
+
+        Returns
+        -------
+        pandas.DataFrame: 
+            Election results using Cumulative Voting
         &#34;&#34;&#34;
         candidate = self.candidate
         rank = self.rank
@@ -1061,7 +1087,7 @@ it includes the number of voters that selected the same ranking of candidates.</
         return tmp
 
     def dowdall(self) -&gt; pd.DataFrame:
-        &#34;&#34;&#34;Dowdall voting method.
+        &#34;&#34;&#34;Dowdall voting method (1971).
 
         Dowdall is an alternative to Borda count, devised by Nauru&#39;s Secretary 
         of Justice in 1971. As in Borda, each voter gives a ranking of candidates. 
@@ -1111,6 +1137,11 @@ it includes the number of voters that selected the same ranking of candidates.</
         Calculates the winner of an election. In each iteration, 
         removes the candidate with the lowest score in a plurality rule, 
         until to have a majority winner.
+
+        Returns
+        -------
+        pandas.DataFrame: 
+            The election&#39;s winner using Hare Rule.
         &#34;&#34;&#34;
         df = self.df.copy()
         candidate = self.candidate
@@ -1147,8 +1178,9 @@ it includes the number of voters that selected the same ranking of candidates.</
         return tmp.head(1)
 
     def k_approval(self, k=1) -&gt; pd.DataFrame:
-        &#34;&#34;&#34;Calculates k-approval voting method. The method gives 1 if the candidate 
-        is ranked over or equal to k. Otherwise, the value given is 0.
+        &#34;&#34;&#34;k-Approval voting method.
+
+        The method gives 1 if the candidate is ranked over or equal to k. Otherwise, the value given is 0.
 
         Parameters
         ----------
@@ -1158,7 +1190,7 @@ it includes the number of voters that selected the same ranking of candidates.</
         Returns
         -------
         pandas.DataFrame: 
-            Values of k-approval method.
+            Election results using the k-approval method.
 
         References
         ----------
@@ -1199,7 +1231,7 @@ it includes the number of voters that selected the same ranking of candidates.</
         Returns
         -------
         pandas.DataFrame: 
-            Values of Kemeny-Young method.
+            Election results using Kemeny-Young method.
 
         References
         ----------
@@ -1242,7 +1274,7 @@ it includes the number of voters that selected the same ranking of candidates.</
         Returns
         -------
         pandas.DataFrame: 
-            Values of Negative Voting.
+            Election results using Negative Voting.
 
         &#34;&#34;&#34;
         candidate = self.candidate
@@ -1265,7 +1297,7 @@ it includes the number of voters that selected the same ranking of candidates.</
         Returns
         -------
         pandas.DataFrame:
-            Votes of candidates using Plurality Rule.
+            Election results using Plurality Rule.
         &#34;&#34;&#34;
         df = self.df.copy()
 
@@ -1296,7 +1328,7 @@ it includes the number of voters that selected the same ranking of candidates.</
         Returns
         -------
         pandas.DataFrame:
-            Scores of candidates using Score Voting.
+            Election results using Score Voting.
 
         &#34;&#34;&#34;
         candidate = self.candidate
@@ -1436,7 +1468,7 @@ using Borda count is the winner.</p>
 <h2 id="returns">Returns</h2>
 <dl>
 <dt><code>pandas.DataFrame:</code></dt>
-<dd>Winner of an election using Black procedure.</dd>
+<dd>Election's winner using Black procedure.</dd>
 </dl>
 <h2 id="references">References</h2>
 <p>Black, Duncan (1958). The theory of committees and elections. Cambridge: University Press.</p></div>
@@ -1454,7 +1486,7 @@ using Borda count is the winner.</p>
     Returns
     -------
     pandas.DataFrame:
-        Winner of an election using Black procedure.
+        Election&#39;s winner using Black procedure.
 
     References
     ----------
@@ -1484,7 +1516,7 @@ and so on, until assigning 0 to the lowest-ranked candidate.</p>
 <h2 id="returns">Returns</h2>
 <dl>
 <dt><code>pandas.DataFrame:</code></dt>
-<dd>a ranking of candidates using Borda Count.</dd>
+<dd>Election results using Borda Count.</dd>
 </dl>
 <h2 id="references">References</h2>
 <p>Borda, J. D. (1784). Mémoire sur les élections au scrutin. Histoire de l'Academie
@@ -1513,7 +1545,7 @@ Royale des Sciences pour 1781 (Paris, 1784).</p></div>
     Returns
     -------
     pandas.DataFrame: 
-        a ranking of candidates using Borda Count. 
+        Election results using Borda Count. 
 
     References
     ----------
@@ -1661,7 +1693,7 @@ the other candidates running in the same election (under a plurality rule). </p>
 <dd>Condorcet winner</dd>
 </dl>
 <h2 id="references">References</h2>
-<p>de Condorcet, M. (1785), Essai sur l’Application de l’Analyse à la Probabilité des Décisions Rendues à la Pluralité des Voix. Paris: L’Imprimerie Royale. </p>
+<p>de Condorcet, M. (1785), Essai sur l'Application de l'Analyse à la Probabilité des Décisions Rendues à la Pluralité des Voix. Paris: L'Imprimerie Royale. </p>
 <p>Felsenthal, D.S., Tideman, N. Weak Condorcet winner(s) revisited. Public Choice 160, 313-326 (2014). <a href="https://doi.org/10.1007/s11127-014-0180-4">https://doi.org/10.1007/s11127-014-0180-4</a></p></div>
 <details class="source">
 <summary>
@@ -1687,7 +1719,7 @@ the other candidates running in the same election (under a plurality rule). </p>
 
     References
     ----------
-    de Condorcet, M. (1785), Essai sur l’Application de l’Analyse à la Probabilité des Décisions Rendues à la Pluralité des Voix. Paris: L’Imprimerie Royale. 
+    de Condorcet, M. (1785), Essai sur l&#39;Application de l&#39;Analyse à la Probabilité des Décisions Rendues à la Pluralité des Voix. Paris: L&#39;Imprimerie Royale. 
 
     Felsenthal, D.S., Tideman, N. Weak Condorcet winner(s) revisited. Public Choice 160, 313-326 (2014). https://doi.org/10.1007/s11127-014-0180-4
 
@@ -1712,10 +1744,15 @@ the other candidates running in the same election (under a plurality rule). </p>
 </code></dt>
 <dd>
 <div class="desc"><p>Copeland voting method (1951).</p>
+<p>Each voter ranks candidates by preference. Next, we sort candidates by the
+number of times they beat another candidate in a pairwise comparison.
+The top-1 on Copeland's method is considered a weak Condorcet winner.
+Likewise, if in an election of <code>n</code> candidates, a candidate beats <code>n - 1</code>
+candidates in pairwise comparison scenarios, it is also considered a Condorcet winner.</p>
 <h2 id="returns">Returns</h2>
 <dl>
 <dt><code>pandas.DataFrame:</code></dt>
-<dd>a ranking of candidates using Copeland.</dd>
+<dd>Election results using Copeland method.</dd>
 </dl>
 <h2 id="references">References</h2>
 <p>Copeland, A.H. (1951). A “reasonable” social welfare function, mimeographed. In: Seminar on applications of mathematics to the social sciences. Ann Arbor: Department of Mathematics, University of Michigan.</p></div>
@@ -1726,11 +1763,16 @@ the other candidates running in the same election (under a plurality rule). </p>
 <pre><code class="python">def copeland(self) -&gt; pd.DataFrame:
     &#34;&#34;&#34;Copeland voting method (1951).
 
+    Each voter ranks candidates by preference. Next, we sort candidates by the 
+    number of times they beat another candidate in a pairwise comparison. 
+    The top-1 on Copeland&#39;s method is considered a weak Condorcet winner. 
+    Likewise, if in an election of `n` candidates, a candidate beats `n - 1` 
+    candidates in pairwise comparison scenarios, it is also considered a Condorcet winner.
+
     Returns
     -------
     pandas.DataFrame: 
-        a ranking of candidates using Copeland. 
-
+        Election results using Copeland method. 
 
     References
     ----------
@@ -1826,7 +1868,12 @@ the other candidates running in the same election (under a plurality rule). </p>
 </code></dt>
 <dd>
 <div class="desc"><p>Cumulative Voting.</p>
-<p>Calculates the cumulative score of each candidate</p></div>
+<p>Calculates the cumulative score of each candidate. </p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>pandas.DataFrame:</code></dt>
+<dd>Election results using Cumulative Voting</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1834,7 +1881,12 @@ the other candidates running in the same election (under a plurality rule). </p>
 <pre><code class="python">def cumulative(self) -&gt; pd.DataFrame:
     &#34;&#34;&#34;Cumulative Voting.
 
-    Calculates the cumulative score of each candidate 
+    Calculates the cumulative score of each candidate. 
+
+    Returns
+    -------
+    pandas.DataFrame: 
+        Election results using Cumulative Voting
     &#34;&#34;&#34;
     candidate = self.candidate
     rank = self.rank
@@ -1899,7 +1951,7 @@ the other candidates running in the same election (under a plurality rule). </p>
 <span>def <span class="ident">dowdall</span></span>(<span>self) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Dowdall voting method.</p>
+<div class="desc"><p>Dowdall voting method (1971).</p>
 <p>Dowdall is an alternative to Borda count, devised by Nauru's Secretary
 of Justice in 1971. As in Borda, each voter gives a ranking of candidates.
 The first candidate gets 1 point, the 2nd candidate 1/2 points, and so on
@@ -1916,7 +1968,7 @@ until the candidate ranked in the n position receives 1/n points.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def dowdall(self) -&gt; pd.DataFrame:
-    &#34;&#34;&#34;Dowdall voting method.
+    &#34;&#34;&#34;Dowdall voting method (1971).
 
     Dowdall is an alternative to Borda count, devised by Nauru&#39;s Secretary 
     of Justice in 1971. As in Borda, each voter gives a ranking of candidates. 
@@ -1942,7 +1994,12 @@ until the candidate ranked in the n position receives 1/n points.</p>
 <div class="desc"><p>Hare Rule (also called as Instant Runoff, Ranked-Choice Voting, and Alternative Vote)</p>
 <p>Calculates the winner of an election. In each iteration,
 removes the candidate with the lowest score in a plurality rule,
-until to have a majority winner.</p></div>
+until to have a majority winner.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>pandas.DataFrame:</code></dt>
+<dd>The election's winner using Hare Rule.</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1953,6 +2010,11 @@ until to have a majority winner.</p></div>
     Calculates the winner of an election. In each iteration, 
     removes the candidate with the lowest score in a plurality rule, 
     until to have a majority winner.
+
+    Returns
+    -------
+    pandas.DataFrame: 
+        The election&#39;s winner using Hare Rule.
     &#34;&#34;&#34;
     df = self.df.copy()
     candidate = self.candidate
@@ -1993,15 +2055,15 @@ until to have a majority winner.</p></div>
 <span>def <span class="ident">k_approval</span></span>(<span>self, k=1) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Calculates k-approval voting method. The method gives 1 if the candidate
-is ranked over or equal to k. Otherwise, the value given is 0.</p>
+<div class="desc"><p>k-Approval voting method.</p>
+<p>The method gives 1 if the candidate is ranked over or equal to k. Otherwise, the value given is 0.</p>
 <h2 id="parameters">Parameters</h2>
 <p>k (int, optional):
 Threshold to score candidates with a value of 1.</p>
 <h2 id="returns">Returns</h2>
 <dl>
 <dt><code>pandas.DataFrame:</code></dt>
-<dd>Values of k-approval method.</dd>
+<dd>Election results using the k-approval method.</dd>
 </dl>
 <h2 id="references">References</h2></div>
 <details class="source">
@@ -2009,8 +2071,9 @@ Threshold to score candidates with a value of 1.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def k_approval(self, k=1) -&gt; pd.DataFrame:
-    &#34;&#34;&#34;Calculates k-approval voting method. The method gives 1 if the candidate 
-    is ranked over or equal to k. Otherwise, the value given is 0.
+    &#34;&#34;&#34;k-Approval voting method.
+
+    The method gives 1 if the candidate is ranked over or equal to k. Otherwise, the value given is 0.
 
     Parameters
     ----------
@@ -2020,7 +2083,7 @@ Threshold to score candidates with a value of 1.</p>
     Returns
     -------
     pandas.DataFrame: 
-        Values of k-approval method.
+        Election results using the k-approval method.
 
     References
     ----------
@@ -2063,7 +2126,7 @@ and pairwise comparison to identify the most popular candidates in an election. 
 <h2 id="returns">Returns</h2>
 <dl>
 <dt><code>pandas.DataFrame:</code></dt>
-<dd>Values of Kemeny-Young method.</dd>
+<dd>Election results using Kemeny-Young method.</dd>
 </dl>
 <h2 id="references">References</h2>
 <p>John Kemeny, "Mathematics without numbers", Daedalus 88 (1959), pp. 577-591.</p>
@@ -2087,7 +2150,7 @@ and pairwise comparison to identify the most popular candidates in an election. 
     Returns
     -------
     pandas.DataFrame: 
-        Values of Kemeny-Young method.
+        Election results using Kemeny-Young method.
 
     References
     ----------
@@ -2169,7 +2232,7 @@ and pairwise comparison to identify the most popular candidates in an election. 
 <h2 id="returns">Returns</h2>
 <dl>
 <dt><code>pandas.DataFrame:</code></dt>
-<dd>Values of Negative Voting.</dd>
+<dd>Election results using Negative Voting.</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -2183,7 +2246,7 @@ and pairwise comparison to identify the most popular candidates in an election. 
     Returns
     -------
     pandas.DataFrame: 
-        Values of Negative Voting.
+        Election results using Negative Voting.
 
     &#34;&#34;&#34;
     candidate = self.candidate
@@ -2208,7 +2271,7 @@ and pairwise comparison to identify the most popular candidates in an election. 
 <h2 id="returns">Returns</h2>
 <dl>
 <dt><code>pandas.DataFrame:</code></dt>
-<dd>Votes of candidates using Plurality Rule.</dd>
+<dd>Election results using Plurality Rule.</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -2222,7 +2285,7 @@ and pairwise comparison to identify the most popular candidates in an election. 
     Returns
     -------
     pandas.DataFrame:
-        Votes of candidates using Plurality Rule.
+        Election results using Plurality Rule.
     &#34;&#34;&#34;
     df = self.df.copy()
 
@@ -2310,7 +2373,7 @@ and the winner is the candidate with the highest score.</p>
 <h2 id="returns">Returns</h2>
 <dl>
 <dt><code>pandas.DataFrame:</code></dt>
-<dd>Scores of candidates using Score Voting.</dd>
+<dd>Election results using Score Voting.</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -2325,7 +2388,7 @@ and the winner is the candidate with the highest score.</p>
     Returns
     -------
     pandas.DataFrame:
-        Scores of candidates using Score Voting.
+        Election results using Score Voting.
 
     &#34;&#34;&#34;
     candidate = self.candidate
