@@ -38,7 +38,56 @@ Before we start, you will frequently find the following concepts: candidate and 
 
 ## Hands on Coding
 
-Pairchoice requires a `pandas.DataFrame` to be initialized. To work with the library, the dataset must to include the column with the voter, the candidates compared and the candidate selected.
+Pairchoice classes require a `pandas.DataFrame` or a `list` of `dict` to be initialized.
+
+### Hello world: Election data
+
+For starting, let's use the data of an election of 22 voters and 4 candidates. Each voter provided their ranking of candidates.
+
+```
+from pairchoice.voting import Voting
+
+data = [
+    {"voters": 7, "rank": ["A", "B", "C", "D"]},
+    {"voters": 5, "rank": ["B", "C", "D", "A"]},
+    {"voters": 6, "rank": ["D", "B", "C", "A"]},
+    {"voters": 4, "rank": ["C", "D", "A", "B"]}
+]
+
+pch = Voting(data)
+df_borda = pch.borda()
+
+df_borda.head()
+```
+
+Here, our goal is to calculate an aggregate ranking of candidates. The result using Borda count is:
+
+| candidate | value | rank |
+| --------- | ----- | ---- |
+| B         | 41    | 1    |
+| C         | 35    | 2    |
+| D         | 31    | 3    |
+| A         | 25    | 4    |
+
+As shown in the table above, `.borda()` method includes candidates' Borda score and their aggregate position.
+
+Next, if you are interested in testing other rules using the same data, you just need to execute another method to the class already defined. For instance, `.condorcet()` method calculates the Condorcet winner of an election.
+
+```
+pch.condorcet()
+```
+
+| candidate | value    |
+| --------- | -------- |
+| B         | 0.833333 |
+
+In this example, B is a weak Condorcet winner because it is ranked above any other alternative in individual matches. Still, it does not beat all the alternatives.
+
+### Pairwise Comparison
+
+The dataset must include the voter, the candidates compared, and the candidate selected to use methods defined in `Pairwise`.
+
+Let's assume we have a CSV file of an experiment with three voters and three candidates.
 
 | voter | option_a | option_b | selected |
 | ----- | -------- | -------- | -------- |
@@ -55,13 +104,15 @@ from pairchoice import Pairwise
 df = pd.read_csv("/path/to/file/pairwise.csv")
 
 pwc = Pairwise(df)
+
+pwc.copeland()
 ```
 
-### Rating-based to Pairwise comparison
+### Conversion Data into Pairwise comparison
 
-Pairchoice allows converting a rating-based dataset into pairwise comparison data through method `to_pairwise()`.
+`pairchoice` allows converting a an election dataset into pairwise comparison data through `to_pairwise()` method defined in the class `Pairwise`.
 
-Let's suppose that we have two candidates and two users. Voter 1 rates candidate A with 5 stars, and rates candidate B with 3 stars. In this case, we could assume that voter 1 will choose candidate A over candidate B.
+Let's suppose that we have two candidates and two voters. Voter 1 rates candidate A with 5 stars, and rates candidate B with 3 stars. In this case, we could assume that voter 1 will choose candidate A over candidate B.
 
 Original data:
 | voter | candidate | rating |
