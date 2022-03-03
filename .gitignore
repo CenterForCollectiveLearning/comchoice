@@ -2,3 +2,6 @@
 **/__pycache__/
 
 *.ipynb
+
+DRAFT.md
+generate_docs.sh

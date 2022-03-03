@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pairchoice",
-    version="0.0.1",
+    version="0.1.0",
     author="cnavarreteliz",
     author_email="cnavarreteliz@gmail.com",
     description="Toolkit to analyze pairwise comparison data",
@@ -13,9 +13,9 @@ setuptools.setup(
     url="https://github.com/CenterForCollectiveLearning/pairchoice",
     packages=setuptools.find_packages(),
     install_requires=[
+        "fastparquet",
         "numpy",
         "pandas",
-        "fastparquet",
         "requests"
     ],
     classifiers=[

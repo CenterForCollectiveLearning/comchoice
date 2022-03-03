@@ -1,4 +1,4 @@
-<img src="logo.png" alt="drawing" width="200"/>
+<img src="https://github.com/CenterForCollectiveLearning/pairchoice/raw/master/logo.png" alt="" width="200"/>
 
 ## What it is?
 
@@ -6,16 +6,12 @@ Pairchoice is an open-source toolkit to analyze rating-based and pairwise compar
 
 We provided support to the most common aggregation methods used in social choice theory, computational social choice, and operations research.
 
-## Basic background
-
-Before we start, you will frequently find the following concepts: candidate and voter. A candidate is the unit that we want to measure (its score), and the voter is the one who voted for the candidate. In general, the goal is to aggregate voters' individual preferences to elect a candidate. There are multiple voting methods (either absolute or relative judgments). For instance, we can consider reviewing a place in Google Maps as a voting mechanism because a user (voter) rates a place (candidate) on a scale of 1-5 stars (value).
-
 ## What we provide?
 
-- Aggregation methods (e.g. Borda count, Copeland)
-- Random Utility Models (e.g. Elo)
-- Methods to calculate divisive candidates (Divisiveness)
-- Convert rating-based datasets to pairwise comparison
+- Rules to aggregate individual preferences (e.g., Borda count, Condorcet winner).
+- Methods to test some axiomatic properties in social choice theory.
+- A novel method to calculate disagreements in pairwise comparison data (Divisiveness).
+- Empiric and synthetic data of elections and pairwise comparison.
 
 ## Getting Started
 
@@ -31,13 +27,14 @@ To install pairchoice from source, you need to clone the repository of the proje
 
 ```
 git clone https://github.com/CenterForCollectiveLearning/pairchoice.git
-```
-
-Then, you just need to run:
-
-```
+cd pairchoice
 python setup.py install
+
 ```
+
+## Basic background
+
+Before we start, you will frequently find the following concepts: candidate and voter. A candidate is the unit that we want to measure (its score), and the voter is the one who voted for the candidate. In general, the goal is to aggregate voters' individual preferences to elect a candidate. There are multiple voting methods (either absolute or relative judgments). For instance, we can consider reviewing a place in Google Maps as a voting mechanism because a user (voter) rates a place (candidate) on a scale of 1-5 stars (value).
 
 ## Hands on Coding
 
@@ -92,16 +89,6 @@ pwc.value = "rating"
 pwc.to_pairwise()
 ```
 
-## Classes
-
-### Pairwise
-
-Pairwise includes the features to analyze pairwise comparison data.
-
-### Voting
-
 ## Do you have any questions?
 
 We invite you to create an issue in the project's GitHub repository (https://github.com/CenterForCollectiveLearning/pairchoice/issues).
-
-## References
