@@ -4,7 +4,7 @@
 
 Pairchoice is an open-source toolkit to analyze rating-based and pairwise comparison datasets for Python. Pairchoice is designed for users that need aggregating individual preferences.
 
-We provided support to the most common aggregation methods used in social choice theory, computational social choice, and operations research.
+We provided support to the most common aggregation methods used in **social choice theory**, **computational social choice**, and **operations research**.
 
 ## What we provide?
 
@@ -99,7 +99,7 @@ Let's assume we have a CSV file of an experiment with three voters and three can
 
 ```
 import pandas as pd
-from pairchoice import Pairwise
+from pairchoice.pairwise import Pairwise
 
 df = pd.read_csv("/path/to/file/pairwise.csv")
 
@@ -110,36 +110,52 @@ pwc.copeland()
 
 ### Conversion Data into Pairwise comparison
 
-`pairchoice` allows converting a an election dataset into pairwise comparison data through `to_pairwise()` method defined in the class `Pairwise`.
+`pairchoice` allows converting an election dataset into pairwise comparison data through `to_pairwise()` method defined in the class `Pairwise`.
 
 Let's suppose that we have two candidates and two voters. Voter 1 rates candidate A with 5 stars, and rates candidate B with 3 stars. In this case, we could assume that voter 1 will choose candidate A over candidate B.
 
 Original data:
+
 | voter | candidate | rating |
-| --- | --- | --- |
-| 1 | A | 5 |
-| 1 | B | 3 |
-| 2 | A | 4 |
-| 2 | B | 5 |
+| ----- | --------- | ------ |
+| 1     | A         | 5      |
+| 1     | B         | 3      |
+| 2     | A         | 4      |
+| 2     | B         | 5      |
 
 Pairwise comparison data:
+
 | voter | option_a | option_b | selected |
-| --- | --- | --- | --- |
-| 1 | A | B | A |
-| 2 | A | B | B |
+| ----- | -------- | -------- | -------- |
+| 1     | A        | B        | A        |
+| 2     | A        | B        | B        |
 
 Here an example how would be the code:
 
 ```
-pwc = Pairwise(df)
+pch = Pairwise(df)
 
-pwc.candidate = "candidate"
-pwc.voter = "voter"
-pwc.value = "rating"
+pch.candidate = "candidate"
+pch.voter = "voter"
+pch.value = "rating"
 
-pwc.to_pairwise()
+pch.to_pairwise()
 ```
 
 ## Do you have any questions?
 
 We invite you to create an issue in the project's GitHub repository (https://github.com/CenterForCollectiveLearning/pairchoice/issues).
+
+## About
+
+`Pairchoice` was developed by the research group in Digital Democracy of the [Center for Collective Learning](https://centerforcollectivelearning.org/).
+
+## MIT License
+
+Copyright 2022 Center For Collective Learning
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
