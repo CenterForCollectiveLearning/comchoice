@@ -25,7 +25,7 @@
 <p><img src="https://github.com/CenterForCollectiveLearning/pairchoice/raw/master/logo.png" alt="" width="200"/></p>
 <h2 id="what-it-is">What it is?</h2>
 <p>Pairchoice is an open-source toolkit to analyze rating-based and pairwise comparison datasets for Python. Pairchoice is designed for users that need aggregating individual preferences.</p>
-<p>We provided support to the most common aggregation methods used in social choice theory, computational social choice, and operations research.</p>
+<p>We provided support to the most common aggregation methods used in <strong>social choice theory</strong>, <strong>computational social choice</strong>, and <strong>operations research</strong>.</p>
 <h2 id="what-we-provide">What we provide?</h2>
 <ul>
 <li>Rules to aggregate individual preferences (e.g., Borda count, Condorcet winner).</li>
@@ -161,7 +161,7 @@ df_borda.head()
 </tbody>
 </table>
 <pre><code>import pandas as pd
-from pairchoice import Pairwise
+from pairchoice.pairwise import Pairwise
 
 df = pd.read_csv(&quot;/path/to/file/pairwise.csv&quot;)
 
@@ -170,31 +170,83 @@ pwc = Pairwise(df)
 pwc.copeland()
 </code></pre>
 <h3 id="conversion-data-into-pairwise-comparison">Conversion Data into Pairwise comparison</h3>
-<p><code><a title="pairchoice" href="#pairchoice">pairchoice</a></code> allows converting a an election dataset into pairwise comparison data through <code>to_pairwise()</code> method defined in the class <code>Pairwise</code>.</p>
+<p><code><a title="pairchoice" href="#pairchoice">pairchoice</a></code> allows converting an election dataset into pairwise comparison data through <code>to_pairwise()</code> method defined in the class <code>Pairwise</code>.</p>
 <p>Let's suppose that we have two candidates and two voters. Voter 1 rates candidate A with 5 stars, and rates candidate B with 3 stars. In this case, we could assume that voter 1 will choose candidate A over candidate B.</p>
-<p>Original data:
-| voter | candidate | rating |
-| &mdash; | &mdash; | &mdash; |
-| 1 | A | 5 |
-| 1 | B | 3 |
-| 2 | A | 4 |
-| 2 | B | 5 |</p>
-<p>Pairwise comparison data:
-| voter | option_a | option_b | selected |
-| &mdash; | &mdash; | &mdash; | &mdash; |
-| 1 | A | B | A |
-| 2 | A | B | B |</p>
+<p>Original data:</p>
+<table>
+<thead>
+<tr>
+<th>voter</th>
+<th>candidate</th>
+<th>rating</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>A</td>
+<td>5</td>
+</tr>
+<tr>
+<td>1</td>
+<td>B</td>
+<td>3</td>
+</tr>
+<tr>
+<td>2</td>
+<td>A</td>
+<td>4</td>
+</tr>
+<tr>
+<td>2</td>
+<td>B</td>
+<td>5</td>
+</tr>
+</tbody>
+</table>
+<p>Pairwise comparison data:</p>
+<table>
+<thead>
+<tr>
+<th>voter</th>
+<th>option_a</th>
+<th>option_b</th>
+<th>selected</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>A</td>
+<td>B</td>
+<td>A</td>
+</tr>
+<tr>
+<td>2</td>
+<td>A</td>
+<td>B</td>
+<td>B</td>
+</tr>
+</tbody>
+</table>
 <p>Here an example how would be the code:</p>
-<pre><code>pwc = Pairwise(df)
+<pre><code>pch = Pairwise(df)
 
-pwc.candidate = &quot;candidate&quot;
-pwc.voter = &quot;voter&quot;
-pwc.value = &quot;rating&quot;
+pch.candidate = &quot;candidate&quot;
+pch.voter = &quot;voter&quot;
+pch.value = &quot;rating&quot;
 
-pwc.to_pairwise()
+pch.to_pairwise()
 </code></pre>
 <h2 id="do-you-have-any-questions">Do you have any questions?</h2>
 <p>We invite you to create an issue in the project's GitHub repository (<a href="https://github.com/CenterForCollectiveLearning/pairchoice/issues">https://github.com/CenterForCollectiveLearning/pairchoice/issues</a>).</p>
+<h2 id="about">About</h2>
+<p><code>Pairchoice</code> was developed by the research group in Digital Democracy of the <a href="https://centerforcollectivelearning.org/">Center for Collective Learning</a>.</p>
+<h2 id="mit-license">MIT License</h2>
+<p>Copyright 2022 Center For Collective Learning</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -248,6 +300,8 @@ __docformat__ = &#34;numpy&#34;</code></pre>
 </ul>
 </li>
 <li><a href="#do-you-have-any-questions">Do you have any questions?</a></li>
+<li><a href="#about">About</a></li>
+<li><a href="#mit-license">MIT License</a></li>
 </ul>
 </div>
 <ul id="index">
