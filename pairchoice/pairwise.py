@@ -15,14 +15,16 @@ class Pairwise:
     candidate: str
         Column name that includes the candidates.
     card_id : str
-        Unique identifier name of pairs.
+        Unique identifier column name of candidates' pairs.
     option_a: str
+        Column name of the candidate A.
     option_b: str
+        Column name of the candidate B.
     selected: str, default="selected"
         Column name of the candidate selected.
-
     value: str, default="value"
     voter: str, default="voter"
+        Column name of the voter.
     """
 
     def __init__(self, df):
@@ -31,12 +33,14 @@ class Pairwise:
         self.df = df
         self.option_a = "option_a"
         self.option_b = "option_b"
+        self.rank = "rank"
         self.selected = "selected"
+        self.show_rank = True
         self.value = "value"
         self.voter = "voter"
 
     def __create_card_id(self, df, concat="_") -> pd.DataFrame:
-        """Private method to create an unique identifier of a proposal pair (card_id)
+        """Creates a unique identifier for candidates' pair (card_id).
 
         Parameters
         ----------
@@ -85,7 +89,7 @@ class Pairwise:
 
         return df
 
-    def ahp(self):
+    def ahp(self) -> pd.DataFrame:
         """Analytic Hierarchy Process (AHP) (1980)
 
         Calculates a ranking of candidates using Analytic Hierarchy Process (AHP)
@@ -118,6 +122,58 @@ class Pairwise:
 
         return tmp
 
+    def bradley_terry(self, iterations: int = 1) -> pd.DataFrame:
+        """Bradley-Terry model (1952)
+
+        Parameters
+        ----------
+        iterations : int, optional
+            _description_, by default 1
+
+        Returns
+        -------
+        pd.DataFrame
+            _description_
+
+        References
+        ----------
+        Bradley, Ralph Allan; Terry, Milton E. (1952). "Rank Analysis of Incomplete Block Designs: I. The Method of Paired Comparisons". Biometrika. 39 (3/4): 324–345. doi:10.2307/2334029. JSTOR 2334029.
+        """
+        self.fit()  # Creates custom columns into the dataset
+        df = self.df.copy()
+
+        m = self.copeland_matrix(df, absolute=True)
+        m = m.values
+
+        candidate = self.candidate
+        option_a = self.option_a
+        option_b = self.option_b
+        rank = self.rank
+
+        ids = set(df[option_a]) | set(df[option_b])
+        N = len(ids)
+
+        p = np.ones(N)
+        pp = np.zeros(N)
+
+        for _ in range(iterations):
+            for i in range(N):
+                num = 0
+                den = 0
+                for j in range(N):
+                    num += m[j, i]
+                    den += (m[i, j] + m[j, i]) / (p[i] + p[j])
+
+                pp[i] = num / den
+            p = pp
+
+        tmp = pd.DataFrame(p / p.sum(), index=ids, columns=["value"]).reset_index()\
+            .rename(columns={"index": candidate}).sort_values("value", ascending=False)
+        if self.show_rank:
+            tmp[rank] = range(1, tmp.shape[0] + 1)
+
+        return tmp
+
     def copeland(self):
         """Copeland method (1951)
 
@@ -130,7 +186,7 @@ class Pairwise:
         """
         candidate = self.candidate
         df = self.df.copy()
-        m = self.matrix_pairs(df) > 0.5
+        m = self.copeland_matrix(df) > 0.5
         m = m.astype(float)
         np.fill_diagonal(m.values, np.nan)
 
@@ -139,13 +195,16 @@ class Pairwise:
             columns=[candidate, "value"]
         )
 
-    def matrix_pairs(self, data):
+    def copeland_matrix(self, data: pd.DataFrame, absolute: bool = False):
         """Matrix Condorcet.
 
         Parameters
         ----------
         data : pandas.DataFrame
-            Pairwise data
+            Pairwise data.
+
+        absolute : bool, default="true"
+            If value is `true`, returns matrix of wins.
 
         Returns
         -------
@@ -162,10 +221,13 @@ class Pairwise:
         m = m.reindex(ids, axis=1)
         m = m.fillna(0)
 
+        if absolute:
+            return m
+
         r = m + m.T
         return m / r
 
-    def divisiveness(self, agg="win_rate", progress=True) -> pd.DataFrame:
+    def divisiveness(self, agg: str = "win_rate", progress: bool = True) -> pd.DataFrame:
         """Divisiveness method (2022)
 
         Calculates how divisive a candidate is.
@@ -174,7 +236,7 @@ class Pairwise:
 
         Parameters
         ----------
-        agg : {"win_rate", "copeland", "ahp", "elo"}, default="win_rate"
+        agg : {"win_rate", "copeland", "ahp", "elo", "bradley_terry"}, default="win_rate"
             Aggregation method to calculate the ranking of candidates.
 
         progress : bool, default="true"
@@ -228,7 +290,10 @@ class Pairwise:
 
         _data_tmp = dd.groupby(level=[0, 1])
 
-        for idx, df_select in tqdm.tqdm(_data_tmp, position=0, leave=True):
+        _iter = tqdm.tqdm(_data_tmp, position=0,
+                          leave=True) if progress else _data_tmp
+
+        for idx, df_select in _iter:
             tmp_list.append(_f(idx, df_select))
 
         tmp = pd.concat(tmp_list, ignore_index=True)
@@ -260,7 +325,7 @@ class Pairwise:
 
         return tmp_frag_c
 
-    def elo(self, rating=400, K=10):
+    def elo(self, rating: int = 400, K: int = 10):
         """Elo score.
 
         Calculates a ranking of candidates using Elo rating.
@@ -274,11 +339,15 @@ class Pairwise:
 
         """
         df = self.df.copy()
+        option_a = self.option_a
+        option_b = self.option_b
+        option_a_sorted = f"{option_a}_sorted"
+        option_b_sorted = f"{option_b}_sorted"
 
         ELO_RATING = {i: rating for i in set(
-            df["option_a_sorted"]) | set(df["option_b_sorted"])}
+            df[option_a_sorted]) | set(df[option_b_sorted])}
 
-        for option_a, option_b, selected in list(zip(df["option_a_sorted"], df["option_b_sorted"], df["option_selected"])):
+        for option_a, option_b, selected in list(zip(df[option_a_sorted], df[option_b_sorted], df["option_selected"])):
             r_a = ELO_RATING[option_a]
             r_b = ELO_RATING[option_b]
 
@@ -304,23 +373,33 @@ class Pairwise:
 
         return tmp
 
-    def transform(self):
-        """
-        Transforms the data defined by the user into a valid pairchoice data set. 
-        That is, it includes columns needed to run aggregation methods and other analysis defined in the class.
+    def fit(self, auto_id=True):
+        """Fits a data set to a valid pairchoice data set. 
+        It includes columns to the dataset that are required to execute methods defined in the class.
+
+        Parameters
+        ----------
+        auto_id : bool, default="true"
+            If value is `true`, it creates an auto increment primary ID column.
         """
         df = self.df
         df = self.__create_card_id(df)
-        df["id"] = range(0, df.shape[0])
+
+        if auto_id:
+            df["id"] = range(1, df.shape[0] + 1)
         self.df = df
 
-    def to_pairwise(self):
-        """
-        Converts a rating-based data set into a pairwise comparison data set.
+    def to_pairwise(self, progress=True):
+        """Converts a star rating dataset to a pairwise comparison dataset.
+
+        Parameters
+        ----------
+        progress : bool, default="true"
+            If `value` is true, it displays a progress bar for iteration.
 
         Returns
         -------
-        pandas.DataFrame:
+        pandas.DataFrame :
             Pairwise comparison data
         """
         df = self.df
@@ -332,8 +411,12 @@ class Pairwise:
         value = self.value
         voter = self.voter
 
+        _data_tmp = df.groupby(voter)
+        _iter = tqdm.tqdm(_data_tmp, position=0,
+                          leave=True) if progress else _data_tmp
+
         output = []
-        for user_id, df_tmp in tqdm.tqdm(df.groupby(voter), position=0, leave=True):
+        for user_id, df_tmp in _iter:
             tmp = pd.merge(df_tmp, df_tmp, on=voter, how="outer")
             tmp = tmp[tmp[f"{candidate}_x"] != tmp[f"{candidate}_y"]]
             tmp = tmp[tmp[f"{candidate}_x"] > tmp[f"{candidate}_y"]]
@@ -362,7 +445,7 @@ class Pairwise:
             Win Rate
         """
         df = data.copy() if isinstance(data, pd.DataFrame) else self.df.copy()
-        df = df[df[self.selected] != 0]
+        df = df[df[self.selected] != 0].copy()
         candidate = self.candidate
         voter = self.voter
 
