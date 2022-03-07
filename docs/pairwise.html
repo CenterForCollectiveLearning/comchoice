@@ -30,19 +30,32 @@
 import pandas as pd
 import tqdm
 
-from .__data_cleaning import _create_card_id
 
 class Pairwise:
-    &#34;&#34;&#34;Class Pairwise.
+    &#34;&#34;&#34;Pairwise.
+
+    The class `Pairwise` includes methods to manage pairwise comparison data.
+    For instance, allows to rank candidates, to convert rating-based data
+    into pairwise comparison data, and calculates divisiveness.
 
     Attributes
     ----------
     candidate: str
         Column name that includes the candidates.
-    
+    card_id : str
+        Unique identifier name of pairs.
+    option_a: str
+    option_b: str
+    selected: str, default=&#34;selected&#34;
+        Column name of the candidate selected.
+
+    value: str, default=&#34;value&#34;
+    voter: str, default=&#34;voter&#34;
     &#34;&#34;&#34;
+
     def __init__(self, df):
         self.candidate = &#34;candidate&#34;
+        self.card_id = &#34;card_id&#34;
         self.df = df
         self.option_a = &#34;option_a&#34;
         self.option_b = &#34;option_b&#34;
@@ -50,32 +63,98 @@ class Pairwise:
         self.value = &#34;value&#34;
         self.voter = &#34;voter&#34;
 
+    def __create_card_id(self, df, concat=&#34;_&#34;) -&gt; pd.DataFrame:
+        &#34;&#34;&#34;Private method to create an unique identifier of a proposal pair (card_id)
+
+        Parameters
+        ----------
+        df : pandas.DataFrame
+            Pairwise comparison DataFrame.
+
+        concat : str, default=&#34;_&#34;
+            String to concatenate options.
+
+        Returns
+        -------
+        pd.DataFrame
+            A pairwise comparison DataFrame with card_id column.
+        &#34;&#34;&#34;
+        option_a = self.option_a
+        option_b = self.option_b
+        selected = self.selected
+
+        option_a_sorted = f&#34;{option_a}_sorted&#34;
+        option_b_sorted = f&#34;{option_b}_sorted&#34;
+
+        cols = [option_a, option_b, selected]
+        a = df[cols].values
+
+        # Sorts options, always lower value on left column
+        df[option_a_sorted] = np.where(a[:, 0] &lt; a[:, 1], a[:, 0], a[:, 1])
+        df[option_b_sorted] = np.where(a[:, 0] &gt;= a[:, 1], a[:, 0], a[:, 1])
+
+        _a = df[option_a_sorted]
+        _b = df[option_b_sorted]
+
+        df[&#34;option_selected&#34;] = np.where(
+            _a[:] == a[:, 2], 1, np.where(_b[:] == a[:, 2], -1, 0))
+
+        # Creates card_id
+        df[&#34;card_id&#34;] = _a.astype(str) + &#34;_&#34; + _b.astype(str)
+
+        # Boolean variable, check if a/b was selected
+        df[&#34;option_source&#34;] = np.where(a[:, 1] == a[:, 2], a[:, 0], a[:, 1])
+        df[&#34;option_target&#34;] = np.where(a[:, 0] == a[:, 2], a[:, 0], a[:, 1])
+
+        # Creates option_source / option_target
+        selected_zero = df[selected] == 0
+        df.loc[selected_zero, &#34;option_source&#34;] = df.loc[selected_zero, option_a]
+        df.loc[selected_zero, &#34;option_target&#34;] = df.loc[selected_zero, option_b]
+
+        return df
 
     def ahp(self):
-        &#34;&#34;&#34;
-        Calculates a ranking of candidates using Automatic Hierarchy Process (AHP)
-        Reference: Saaty 1980
+        &#34;&#34;&#34;Analytic Hierarchy Process (AHP) (1980)
+
+        Calculates a ranking of candidates using Analytic Hierarchy Process (AHP)
+
+        Returns
+        -------
+        pandas.DataFrame :
+            Ranking of candidates using AHP
+
+        References
+        ----------
+        Saaty, T. L. (1988). What is the analytic hierarchy process?. In Mathematical models for decision support (pp. 109-121). Springer, Berlin, Heidelberg.
         &#34;&#34;&#34;
         candidate = self.candidate
         df = self.df.copy()
         voter = self.voter
 
-        dd = df.groupby([&#34;option_source&#34;, &#34;option_target&#34;]).agg({voter: &#34;count&#34;}).reset_index()
+        dd = df.groupby([&#34;option_source&#34;, &#34;option_target&#34;]).agg(
+            {voter: &#34;count&#34;}).reset_index()
 
-        a = dd.pivot(index=&#34;option_target&#34;, columns=&#34;option_source&#34;, values=voter)
+        a = dd.pivot(index=&#34;option_target&#34;,
+                     columns=&#34;option_source&#34;, values=voter)
         b = np.divide(a, a.T)
         np.fill_diagonal(b.values, 1)
         c = b / b.sum()
         weight = [1/c.shape[0] for i in range(c.shape[0])]
 
-        tmp = pd.DataFrame(np.sum(np.multiply(c, weight), axis=1)).reset_index().rename(columns={&#34;option_target&#34;: candidate, 0: &#34;value&#34;})
+        tmp = pd.DataFrame(np.sum(np.multiply(c, weight), axis=1)).reset_index().rename(
+            columns={&#34;option_target&#34;: candidate, 0: &#34;value&#34;})
 
         return tmp
 
-
     def copeland(self):
-        &#34;&#34;&#34;
+        &#34;&#34;&#34;Copeland method (1951)
+
         Calculates a ranking sorting candidates based on the Condorcet winner.
+
+        Returns
+        -------
+        pandas.DataFrame :
+            Copeland ranking
         &#34;&#34;&#34;
         candidate = self.candidate
         df = self.df.copy()
@@ -84,17 +163,29 @@ class Pairwise:
         np.fill_diagonal(m.values, np.nan)
 
         return pd.DataFrame(
-            [(a, b) for a, b in list(zip(list(m), np.nanmean(m, axis=0)))], 
+            [(a, b) for a, b in list(zip(list(m), np.nanmean(m, axis=0)))],
             columns=[candidate, &#34;value&#34;]
         )
 
+    def matrix_pairs(self, data):
+        &#34;&#34;&#34;Matrix Condorcet.
 
-    def matrix_pairs(self, df):
+        Parameters
+        ----------
+        data : pandas.DataFrame
+            Pairwise data
+
+        Returns
+        -------
+        pandas.DataFrame
+            Matrix of pairwise matches.
+        &#34;&#34;&#34;
         voter = self.voter
-        dd = df.groupby([&#34;option_source&#34;, &#34;option_target&#34;]).agg({voter: &#34;count&#34;}).reset_index()
+        dd = data.groupby([&#34;option_source&#34;, &#34;option_target&#34;]).agg(
+            {voter: &#34;count&#34;}).reset_index()
         m = dd.pivot(index=&#34;option_source&#34;, columns=&#34;option_target&#34;,
-                    values=voter).fillna(0)
-        ids = set(df[&#34;option_source&#34;]) | set(df[&#34;option_target&#34;])
+                     values=voter).fillna(0)
+        ids = set(data[&#34;option_source&#34;]) | set(data[&#34;option_target&#34;])
         m = m.reindex(ids)
         m = m.reindex(ids, axis=1)
         m = m.fillna(0)
@@ -102,9 +193,21 @@ class Pairwise:
         r = m + m.T
         return m / r
 
+    def divisiveness(self, agg=&#34;win_rate&#34;, progress=True) -&gt; pd.DataFrame:
+        &#34;&#34;&#34;Divisiveness method (2022)
 
-    def divisiveness(self) -&gt; pd.DataFrame:
-        &#34;&#34;&#34;Calculates the level of disagreement that generates a candidate between voters.
+        Calculates how divisive a candidate is.
+
+        Let&#39;s suppose we have 20 candidates: {A, B, C, … } and 1000 voters. Then, we paired candidates. When we asked voters to choose between A or B, 200 voted A, and 800 voted B. We will assume that the overall ranking of candidates of those groups (voters that selected A and voters that selected B) are different, because, under the same dilemma, they selected a different candidate (A&gt;B or B&gt;A). Separately, we aggregate the preferences of both groups (e.g., using Win Rate). Then, we compared the score of each candidate. The greater the absolute difference in the score of the same candidate in both rankings, the more divisive the candidate is. We repeat this procedure for each comparison (given an N number of candidates, there are N(N - 1)/2 possibilities), and the average for each candidate is divisiveness.
+
+        Parameters
+        ----------
+        agg : {&#34;win_rate&#34;, &#34;copeland&#34;, &#34;ahp&#34;, &#34;elo&#34;}, default=&#34;win_rate&#34;
+            Aggregation method to calculate the ranking of candidates.
+
+        progress : bool, default=&#34;true&#34;
+            If `value` is true, it displays a progress bar for each 1v1 comparison.
+            Given a dataset with N candidates, the maximum number of iterations is N(N - 1).
 
         Returns
         -------
@@ -113,29 +216,32 @@ class Pairwise:
 
         References
         ----------
-        Navarrete &amp; Hidalgo (forthcoming)
+        Navarrete &amp; Hidalgo (2022)
         &#34;&#34;&#34;
         df = self.df.copy()
-        df = df[df[self.selected] != 0].copy()
 
         candidate = self.candidate
         option_a = self.option_a
         option_b = self.option_b
         selected = self.selected
-        value = self.value
         voter = self.voter
+
+        df = df[(df[option_a] == df[selected]) | (
+            df[option_b] == df[selected])].copy()
 
         dd = df.groupby([&#34;card_id&#34;, selected, voter]).agg({&#34;id&#34;: &#34;count&#34;})
         _data = df.copy().set_index(voter)
-        
-        _ = self.win_rate
+
+        def method_not_found():
+            print(f&#34;No Method {agg} Found!&#34;)
+
+        _ = getattr(self, agg, method_not_found)
 
         def _f(idx, df_select):
             card_id = idx[0]
             s = idx[1]
-
             users = [item[2] for item in df_select.index.to_numpy()]
-            
+
             data_temp = _data.loc[users]
 
             r_tmp = _(data_temp.reset_index()).dropna()
@@ -155,33 +261,50 @@ class Pairwise:
 
         tmp = pd.concat(tmp_list, ignore_index=True)
 
-        tmp[[f&#34;{option_a}_sorted&#34;, f&#34;{option_b}_sorted&#34;]] = tmp[&#34;card_id&#34;].str.split(&#34;_&#34;, expand=True)
-        tmp[&#34;group&#34;] = tmp[f&#34;{option_a}_sorted&#34;].astype(str) == tmp[selected].astype(str)
+        tmp[[f&#34;{option_a}_sorted&#34;, f&#34;{option_b}_sorted&#34;]
+            ] = tmp[&#34;card_id&#34;].str.split(&#34;_&#34;, expand=True)
+        tmp[&#34;group&#34;] = tmp[f&#34;{option_a}_sorted&#34;].astype(
+            str) == tmp[selected].astype(str)
         tmp[&#34;group&#34;] = tmp[&#34;group&#34;].replace({True: &#34;A&#34;, False: &#34;B&#34;})
-        
+
         tmp_a = tmp[tmp[&#34;group&#34;] == &#34;A&#34;]
         tmp_b = tmp[tmp[&#34;group&#34;] == &#34;B&#34;]
-        
-        tmp_dv = pd.merge(tmp_a, tmp_b, on=[&#34;card_id&#34;, candidate, f&#34;{option_a}_sorted&#34;, f&#34;{option_b}_sorted&#34;])
-        tmp_dv = tmp_dv[[candidate, &#34;card_id&#34;, &#34;value_x&#34;, &#34;value_y&#34;, f&#34;{selected}_x&#34;, f&#34;{selected}_y&#34;]]
+
+        tmp_dv = pd.merge(tmp_a, tmp_b, on=[
+                          &#34;card_id&#34;, candidate, f&#34;{option_a}_sorted&#34;, f&#34;{option_b}_sorted&#34;])
+        tmp_dv = tmp_dv[[candidate, &#34;card_id&#34;, &#34;value_x&#34;,
+                         &#34;value_y&#34;, f&#34;{selected}_x&#34;, f&#34;{selected}_y&#34;]]
         tmp_dv[&#34;value&#34;] = abs(tmp_dv[&#34;value_x&#34;] - tmp_dv[&#34;value_y&#34;])
 
-        tmp_frag_a = tmp_dv[[candidate, f&#34;{selected}_x&#34;, &#34;value&#34;]].rename(columns={f&#34;{selected}_x&#34;: &#34;selected&#34;})
-        tmp_frag_b = tmp_dv[[candidate, f&#34;{selected}_y&#34;, &#34;value&#34;]].rename(columns={f&#34;{selected}_y&#34;: &#34;selected&#34;})
+        tmp_frag_a = tmp_dv[[candidate, f&#34;{selected}_x&#34;, &#34;value&#34;]].rename(
+            columns={f&#34;{selected}_x&#34;: &#34;selected&#34;})
+        tmp_frag_b = tmp_dv[[candidate, f&#34;{selected}_y&#34;, &#34;value&#34;]].rename(
+            columns={f&#34;{selected}_y&#34;: &#34;selected&#34;})
         tmp_frag_c = pd.concat([tmp_frag_a, tmp_frag_b])
-        tmp_frag_c = tmp_frag_c[tmp_frag_c[candidate] == tmp_frag_c[&#34;selected&#34;]]
-        tmp_frag_c = tmp_frag_c.groupby(candidate).agg({&#34;value&#34;: &#34;mean&#34;}).reset_index()
+        tmp_frag_c = tmp_frag_c[tmp_frag_c[candidate]
+                                == tmp_frag_c[&#34;selected&#34;]]
+        tmp_frag_c = tmp_frag_c.groupby(candidate).agg(
+            {&#34;value&#34;: &#34;mean&#34;}).reset_index()
 
         return tmp_frag_c
 
-
     def elo(self, rating=400, K=10):
-        &#34;&#34;&#34;
+        &#34;&#34;&#34;Elo score.
+
         Calculates a ranking of candidates using Elo rating.
+
+        Parameters
+        ----------
+        rating : int, default=400
+            Initial rating of each candidate.
+        K : int, default=10
+            The K-factor estimates the score that a player can win in a game.
+
         &#34;&#34;&#34;
         df = self.df.copy()
 
-        ELO_RATING = {i: rating for i in set(df[&#34;option_a_sorted&#34;]) | set(df[&#34;option_b_sorted&#34;])}
+        ELO_RATING = {i: rating for i in set(
+            df[&#34;option_a_sorted&#34;]) | set(df[&#34;option_b_sorted&#34;])}
 
         for option_a, option_b, selected in list(zip(df[&#34;option_a_sorted&#34;], df[&#34;option_b_sorted&#34;], df[&#34;option_selected&#34;])):
             r_a = ELO_RATING[option_a]
@@ -196,18 +319,18 @@ class Pairwise:
             if selected == 0:
                 s_a = 0.5
                 s_b = 0.5
-            else: 
+            else:
                 is_a_selected = selected == 1
                 s_a = 1 if is_a_selected else 0
                 s_b = 1 - s_a
 
             ELO_RATING[option_a] = r_a + K * (s_a - e_a)
-            ELO_RATING[option_b] = r_b + K * (s_b - e_b) 
+            ELO_RATING[option_b] = r_b + K * (s_b - e_b)
 
-        tmp = pd.DataFrame(ELO_RATING.items(), columns=[self.candidate, &#34;value&#34;])
+        tmp = pd.DataFrame(ELO_RATING.items(), columns=[
+                           self.candidate, &#34;value&#34;])
 
         return tmp
-
 
     def transform(self):
         &#34;&#34;&#34;
@@ -215,24 +338,28 @@ class Pairwise:
         That is, it includes columns needed to run aggregation methods and other analysis defined in the class.
         &#34;&#34;&#34;
         df = self.df
-        df = _create_card_id(df)
+        df = self.__create_card_id(df)
         df[&#34;id&#34;] = range(0, df.shape[0])
         self.df = df
-
 
     def to_pairwise(self):
         &#34;&#34;&#34;
         Converts a rating-based data set into a pairwise comparison data set.
+
+        Returns
+        -------
+        pandas.DataFrame:
+            Pairwise comparison data
         &#34;&#34;&#34;
         df = self.df
-        
+
         candidate = self.candidate
         option_a = self.option_a
         option_b = self.option_b
         selected = self.selected
         value = self.value
         voter = self.voter
-        
+
         output = []
         for user_id, df_tmp in tqdm.tqdm(df.groupby(voter), position=0, leave=True):
             tmp = pd.merge(df_tmp, df_tmp, on=voter, how=&#34;outer&#34;)
@@ -240,28 +367,37 @@ class Pairwise:
             tmp = tmp[tmp[f&#34;{candidate}_x&#34;] &gt; tmp[f&#34;{candidate}_y&#34;]]
             output.append(tmp)
             del tmp
-            
+
         tmp = pd.concat(output)
-        tmp = tmp.rename(columns={f&#34;{candidate}_x&#34;: option_a, f&#34;{candidate}_y&#34;: option_b})
+        tmp = tmp.rename(
+            columns={f&#34;{candidate}_x&#34;: option_a, f&#34;{candidate}_y&#34;: option_b})
         tmp[&#34;selected&#34;] = np.where(
-            tmp[f&#34;{value}_x&#34;] == tmp[f&#34;{value}_y&#34;], 0, 
-            np.where(tmp[f&#34;{value}_x&#34;] &gt; tmp[f&#34;{value}_y&#34;], tmp[option_a], tmp[option_b])
+            tmp[f&#34;{value}_x&#34;] == tmp[f&#34;{value}_y&#34;], 0,
+            np.where(tmp[f&#34;{value}_x&#34;] &gt; tmp[f&#34;{value}_y&#34;],
+                     tmp[option_a], tmp[option_b])
         )
 
         self.df = tmp[[voter, option_a, option_b, selected]]
 
-
     def win_rate(self, data=None):
-        &#34;&#34;&#34;
+        &#34;&#34;&#34;Win Rate (also called weighted Borda count)
+
         Calculates the fraction of times a proposal is selected with respect to the total of its occurrences.
+
+        Returns
+        -------
+        pandas.DataFrame:
+            Win Rate
         &#34;&#34;&#34;
         df = data.copy() if isinstance(data, pd.DataFrame) else self.df.copy()
         df = df[df[self.selected] != 0]
         candidate = self.candidate
         voter = self.voter
 
-        dd = df.groupby([&#34;option_source&#34;, &#34;option_target&#34;]).agg({voter: &#34;count&#34;}).reset_index()
-        m = dd.pivot(index=&#34;option_source&#34;, columns=&#34;option_target&#34;, values=voter).fillna(0)
+        dd = df.groupby([&#34;option_source&#34;, &#34;option_target&#34;]).agg(
+            {voter: &#34;count&#34;}).reset_index()
+        m = dd.pivot(index=&#34;option_source&#34;,
+                     columns=&#34;option_target&#34;, values=voter).fillna(0)
         ids = set(df[&#34;option_source&#34;]) | set(df[&#34;option_target&#34;])
         m = m.reindex(ids)
         m = m.reindex(ids, axis=1)
@@ -287,27 +423,56 @@ class Pairwise:
 <span>(</span><span>df)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Class Pairwise.</p>
+<div class="desc"><p>Pairwise.</p>
+<p>The class <code><a title="pairchoice.pairwise.Pairwise" href="#pairchoice.pairwise.Pairwise">Pairwise</a></code> includes methods to manage pairwise comparison data.
+For instance, allows to rank candidates, to convert rating-based data
+into pairwise comparison data, and calculates divisiveness.</p>
 <h2 id="attributes">Attributes</h2>
 <dl>
 <dt><strong><code>candidate</code></strong> :&ensp;<code>str</code></dt>
 <dd>Column name that includes the candidates.</dd>
+<dt><strong><code>card_id</code></strong> :&ensp;<code>str</code></dt>
+<dd>Unique identifier name of pairs.</dd>
+<dt><strong><code>option_a</code></strong> :&ensp;<code>str</code></dt>
+<dd>&nbsp;</dd>
+<dt><strong><code>option_b</code></strong> :&ensp;<code>str</code></dt>
+<dd>&nbsp;</dd>
+<dt><strong><code>selected</code></strong> :&ensp;<code>str</code>, default=<code>"selected"</code></dt>
+<dd>Column name of the candidate selected.</dd>
+<dt><strong><code>value</code></strong> :&ensp;<code>str</code>, default=<code>"value"</code></dt>
+<dd>&nbsp;</dd>
+<dt><strong><code>voter</code></strong> :&ensp;<code>str</code>, default=<code>"voter"</code></dt>
+<dd>&nbsp;</dd>
 </dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Pairwise:
-    &#34;&#34;&#34;Class Pairwise.
+    &#34;&#34;&#34;Pairwise.
+
+    The class `Pairwise` includes methods to manage pairwise comparison data.
+    For instance, allows to rank candidates, to convert rating-based data
+    into pairwise comparison data, and calculates divisiveness.
 
     Attributes
     ----------
     candidate: str
         Column name that includes the candidates.
-    
+    card_id : str
+        Unique identifier name of pairs.
+    option_a: str
+    option_b: str
+    selected: str, default=&#34;selected&#34;
+        Column name of the candidate selected.
+
+    value: str, default=&#34;value&#34;
+    voter: str, default=&#34;voter&#34;
     &#34;&#34;&#34;
+
     def __init__(self, df):
         self.candidate = &#34;candidate&#34;
+        self.card_id = &#34;card_id&#34;
         self.df = df
         self.option_a = &#34;option_a&#34;
         self.option_b = &#34;option_b&#34;
@@ -315,32 +480,98 @@ class Pairwise:
         self.value = &#34;value&#34;
         self.voter = &#34;voter&#34;
 
+    def __create_card_id(self, df, concat=&#34;_&#34;) -&gt; pd.DataFrame:
+        &#34;&#34;&#34;Private method to create an unique identifier of a proposal pair (card_id)
+
+        Parameters
+        ----------
+        df : pandas.DataFrame
+            Pairwise comparison DataFrame.
+
+        concat : str, default=&#34;_&#34;
+            String to concatenate options.
+
+        Returns
+        -------
+        pd.DataFrame
+            A pairwise comparison DataFrame with card_id column.
+        &#34;&#34;&#34;
+        option_a = self.option_a
+        option_b = self.option_b
+        selected = self.selected
+
+        option_a_sorted = f&#34;{option_a}_sorted&#34;
+        option_b_sorted = f&#34;{option_b}_sorted&#34;
+
+        cols = [option_a, option_b, selected]
+        a = df[cols].values
+
+        # Sorts options, always lower value on left column
+        df[option_a_sorted] = np.where(a[:, 0] &lt; a[:, 1], a[:, 0], a[:, 1])
+        df[option_b_sorted] = np.where(a[:, 0] &gt;= a[:, 1], a[:, 0], a[:, 1])
+
+        _a = df[option_a_sorted]
+        _b = df[option_b_sorted]
+
+        df[&#34;option_selected&#34;] = np.where(
+            _a[:] == a[:, 2], 1, np.where(_b[:] == a[:, 2], -1, 0))
+
+        # Creates card_id
+        df[&#34;card_id&#34;] = _a.astype(str) + &#34;_&#34; + _b.astype(str)
+
+        # Boolean variable, check if a/b was selected
+        df[&#34;option_source&#34;] = np.where(a[:, 1] == a[:, 2], a[:, 0], a[:, 1])
+        df[&#34;option_target&#34;] = np.where(a[:, 0] == a[:, 2], a[:, 0], a[:, 1])
+
+        # Creates option_source / option_target
+        selected_zero = df[selected] == 0
+        df.loc[selected_zero, &#34;option_source&#34;] = df.loc[selected_zero, option_a]
+        df.loc[selected_zero, &#34;option_target&#34;] = df.loc[selected_zero, option_b]
+
+        return df
 
     def ahp(self):
-        &#34;&#34;&#34;
-        Calculates a ranking of candidates using Automatic Hierarchy Process (AHP)
-        Reference: Saaty 1980
+        &#34;&#34;&#34;Analytic Hierarchy Process (AHP) (1980)
+
+        Calculates a ranking of candidates using Analytic Hierarchy Process (AHP)
+
+        Returns
+        -------
+        pandas.DataFrame :
+            Ranking of candidates using AHP
+
+        References
+        ----------
+        Saaty, T. L. (1988). What is the analytic hierarchy process?. In Mathematical models for decision support (pp. 109-121). Springer, Berlin, Heidelberg.
         &#34;&#34;&#34;
         candidate = self.candidate
         df = self.df.copy()
         voter = self.voter
 
-        dd = df.groupby([&#34;option_source&#34;, &#34;option_target&#34;]).agg({voter: &#34;count&#34;}).reset_index()
+        dd = df.groupby([&#34;option_source&#34;, &#34;option_target&#34;]).agg(
+            {voter: &#34;count&#34;}).reset_index()
 
-        a = dd.pivot(index=&#34;option_target&#34;, columns=&#34;option_source&#34;, values=voter)
+        a = dd.pivot(index=&#34;option_target&#34;,
+                     columns=&#34;option_source&#34;, values=voter)
         b = np.divide(a, a.T)
         np.fill_diagonal(b.values, 1)
         c = b / b.sum()
         weight = [1/c.shape[0] for i in range(c.shape[0])]
 
-        tmp = pd.DataFrame(np.sum(np.multiply(c, weight), axis=1)).reset_index().rename(columns={&#34;option_target&#34;: candidate, 0: &#34;value&#34;})
+        tmp = pd.DataFrame(np.sum(np.multiply(c, weight), axis=1)).reset_index().rename(
+            columns={&#34;option_target&#34;: candidate, 0: &#34;value&#34;})
 
         return tmp
 
-
     def copeland(self):
-        &#34;&#34;&#34;
+        &#34;&#34;&#34;Copeland method (1951)
+
         Calculates a ranking sorting candidates based on the Condorcet winner.
+
+        Returns
+        -------
+        pandas.DataFrame :
+            Copeland ranking
         &#34;&#34;&#34;
         candidate = self.candidate
         df = self.df.copy()
@@ -349,17 +580,29 @@ class Pairwise:
         np.fill_diagonal(m.values, np.nan)
 
         return pd.DataFrame(
-            [(a, b) for a, b in list(zip(list(m), np.nanmean(m, axis=0)))], 
+            [(a, b) for a, b in list(zip(list(m), np.nanmean(m, axis=0)))],
             columns=[candidate, &#34;value&#34;]
         )
 
+    def matrix_pairs(self, data):
+        &#34;&#34;&#34;Matrix Condorcet.
 
-    def matrix_pairs(self, df):
+        Parameters
+        ----------
+        data : pandas.DataFrame
+            Pairwise data
+
+        Returns
+        -------
+        pandas.DataFrame
+            Matrix of pairwise matches.
+        &#34;&#34;&#34;
         voter = self.voter
-        dd = df.groupby([&#34;option_source&#34;, &#34;option_target&#34;]).agg({voter: &#34;count&#34;}).reset_index()
+        dd = data.groupby([&#34;option_source&#34;, &#34;option_target&#34;]).agg(
+            {voter: &#34;count&#34;}).reset_index()
         m = dd.pivot(index=&#34;option_source&#34;, columns=&#34;option_target&#34;,
-                    values=voter).fillna(0)
-        ids = set(df[&#34;option_source&#34;]) | set(df[&#34;option_target&#34;])
+                     values=voter).fillna(0)
+        ids = set(data[&#34;option_source&#34;]) | set(data[&#34;option_target&#34;])
         m = m.reindex(ids)
         m = m.reindex(ids, axis=1)
         m = m.fillna(0)
@@ -367,9 +610,21 @@ class Pairwise:
         r = m + m.T
         return m / r
 
+    def divisiveness(self, agg=&#34;win_rate&#34;, progress=True) -&gt; pd.DataFrame:
+        &#34;&#34;&#34;Divisiveness method (2022)
 
-    def divisiveness(self) -&gt; pd.DataFrame:
-        &#34;&#34;&#34;Calculates the level of disagreement that generates a candidate between voters.
+        Calculates how divisive a candidate is.
+
+        Let&#39;s suppose we have 20 candidates: {A, B, C, … } and 1000 voters. Then, we paired candidates. When we asked voters to choose between A or B, 200 voted A, and 800 voted B. We will assume that the overall ranking of candidates of those groups (voters that selected A and voters that selected B) are different, because, under the same dilemma, they selected a different candidate (A&gt;B or B&gt;A). Separately, we aggregate the preferences of both groups (e.g., using Win Rate). Then, we compared the score of each candidate. The greater the absolute difference in the score of the same candidate in both rankings, the more divisive the candidate is. We repeat this procedure for each comparison (given an N number of candidates, there are N(N - 1)/2 possibilities), and the average for each candidate is divisiveness.
+
+        Parameters
+        ----------
+        agg : {&#34;win_rate&#34;, &#34;copeland&#34;, &#34;ahp&#34;, &#34;elo&#34;}, default=&#34;win_rate&#34;
+            Aggregation method to calculate the ranking of candidates.
+
+        progress : bool, default=&#34;true&#34;
+            If `value` is true, it displays a progress bar for each 1v1 comparison.
+            Given a dataset with N candidates, the maximum number of iterations is N(N - 1).
 
         Returns
         -------
@@ -378,29 +633,32 @@ class Pairwise:
 
         References
         ----------
-        Navarrete &amp; Hidalgo (forthcoming)
+        Navarrete &amp; Hidalgo (2022)
         &#34;&#34;&#34;
         df = self.df.copy()
-        df = df[df[self.selected] != 0].copy()
 
         candidate = self.candidate
         option_a = self.option_a
         option_b = self.option_b
         selected = self.selected
-        value = self.value
         voter = self.voter
+
+        df = df[(df[option_a] == df[selected]) | (
+            df[option_b] == df[selected])].copy()
 
         dd = df.groupby([&#34;card_id&#34;, selected, voter]).agg({&#34;id&#34;: &#34;count&#34;})
         _data = df.copy().set_index(voter)
-        
-        _ = self.win_rate
+
+        def method_not_found():
+            print(f&#34;No Method {agg} Found!&#34;)
+
+        _ = getattr(self, agg, method_not_found)
 
         def _f(idx, df_select):
             card_id = idx[0]
             s = idx[1]
-
             users = [item[2] for item in df_select.index.to_numpy()]
-            
+
             data_temp = _data.loc[users]
 
             r_tmp = _(data_temp.reset_index()).dropna()
@@ -420,33 +678,50 @@ class Pairwise:
 
         tmp = pd.concat(tmp_list, ignore_index=True)
 
-        tmp[[f&#34;{option_a}_sorted&#34;, f&#34;{option_b}_sorted&#34;]] = tmp[&#34;card_id&#34;].str.split(&#34;_&#34;, expand=True)
-        tmp[&#34;group&#34;] = tmp[f&#34;{option_a}_sorted&#34;].astype(str) == tmp[selected].astype(str)
+        tmp[[f&#34;{option_a}_sorted&#34;, f&#34;{option_b}_sorted&#34;]
+            ] = tmp[&#34;card_id&#34;].str.split(&#34;_&#34;, expand=True)
+        tmp[&#34;group&#34;] = tmp[f&#34;{option_a}_sorted&#34;].astype(
+            str) == tmp[selected].astype(str)
         tmp[&#34;group&#34;] = tmp[&#34;group&#34;].replace({True: &#34;A&#34;, False: &#34;B&#34;})
-        
+
         tmp_a = tmp[tmp[&#34;group&#34;] == &#34;A&#34;]
         tmp_b = tmp[tmp[&#34;group&#34;] == &#34;B&#34;]
-        
-        tmp_dv = pd.merge(tmp_a, tmp_b, on=[&#34;card_id&#34;, candidate, f&#34;{option_a}_sorted&#34;, f&#34;{option_b}_sorted&#34;])
-        tmp_dv = tmp_dv[[candidate, &#34;card_id&#34;, &#34;value_x&#34;, &#34;value_y&#34;, f&#34;{selected}_x&#34;, f&#34;{selected}_y&#34;]]
+
+        tmp_dv = pd.merge(tmp_a, tmp_b, on=[
+                          &#34;card_id&#34;, candidate, f&#34;{option_a}_sorted&#34;, f&#34;{option_b}_sorted&#34;])
+        tmp_dv = tmp_dv[[candidate, &#34;card_id&#34;, &#34;value_x&#34;,
+                         &#34;value_y&#34;, f&#34;{selected}_x&#34;, f&#34;{selected}_y&#34;]]
         tmp_dv[&#34;value&#34;] = abs(tmp_dv[&#34;value_x&#34;] - tmp_dv[&#34;value_y&#34;])
 
-        tmp_frag_a = tmp_dv[[candidate, f&#34;{selected}_x&#34;, &#34;value&#34;]].rename(columns={f&#34;{selected}_x&#34;: &#34;selected&#34;})
-        tmp_frag_b = tmp_dv[[candidate, f&#34;{selected}_y&#34;, &#34;value&#34;]].rename(columns={f&#34;{selected}_y&#34;: &#34;selected&#34;})
+        tmp_frag_a = tmp_dv[[candidate, f&#34;{selected}_x&#34;, &#34;value&#34;]].rename(
+            columns={f&#34;{selected}_x&#34;: &#34;selected&#34;})
+        tmp_frag_b = tmp_dv[[candidate, f&#34;{selected}_y&#34;, &#34;value&#34;]].rename(
+            columns={f&#34;{selected}_y&#34;: &#34;selected&#34;})
         tmp_frag_c = pd.concat([tmp_frag_a, tmp_frag_b])
-        tmp_frag_c = tmp_frag_c[tmp_frag_c[candidate] == tmp_frag_c[&#34;selected&#34;]]
-        tmp_frag_c = tmp_frag_c.groupby(candidate).agg({&#34;value&#34;: &#34;mean&#34;}).reset_index()
+        tmp_frag_c = tmp_frag_c[tmp_frag_c[candidate]
+                                == tmp_frag_c[&#34;selected&#34;]]
+        tmp_frag_c = tmp_frag_c.groupby(candidate).agg(
+            {&#34;value&#34;: &#34;mean&#34;}).reset_index()
 
         return tmp_frag_c
 
-
     def elo(self, rating=400, K=10):
-        &#34;&#34;&#34;
+        &#34;&#34;&#34;Elo score.
+
         Calculates a ranking of candidates using Elo rating.
+
+        Parameters
+        ----------
+        rating : int, default=400
+            Initial rating of each candidate.
+        K : int, default=10
+            The K-factor estimates the score that a player can win in a game.
+
         &#34;&#34;&#34;
         df = self.df.copy()
 
-        ELO_RATING = {i: rating for i in set(df[&#34;option_a_sorted&#34;]) | set(df[&#34;option_b_sorted&#34;])}
+        ELO_RATING = {i: rating for i in set(
+            df[&#34;option_a_sorted&#34;]) | set(df[&#34;option_b_sorted&#34;])}
 
         for option_a, option_b, selected in list(zip(df[&#34;option_a_sorted&#34;], df[&#34;option_b_sorted&#34;], df[&#34;option_selected&#34;])):
             r_a = ELO_RATING[option_a]
@@ -461,18 +736,18 @@ class Pairwise:
             if selected == 0:
                 s_a = 0.5
                 s_b = 0.5
-            else: 
+            else:
                 is_a_selected = selected == 1
                 s_a = 1 if is_a_selected else 0
                 s_b = 1 - s_a
 
             ELO_RATING[option_a] = r_a + K * (s_a - e_a)
-            ELO_RATING[option_b] = r_b + K * (s_b - e_b) 
+            ELO_RATING[option_b] = r_b + K * (s_b - e_b)
 
-        tmp = pd.DataFrame(ELO_RATING.items(), columns=[self.candidate, &#34;value&#34;])
+        tmp = pd.DataFrame(ELO_RATING.items(), columns=[
+                           self.candidate, &#34;value&#34;])
 
         return tmp
-
 
     def transform(self):
         &#34;&#34;&#34;
@@ -480,24 +755,28 @@ class Pairwise:
         That is, it includes columns needed to run aggregation methods and other analysis defined in the class.
         &#34;&#34;&#34;
         df = self.df
-        df = _create_card_id(df)
+        df = self.__create_card_id(df)
         df[&#34;id&#34;] = range(0, df.shape[0])
         self.df = df
-
 
     def to_pairwise(self):
         &#34;&#34;&#34;
         Converts a rating-based data set into a pairwise comparison data set.
+
+        Returns
+        -------
+        pandas.DataFrame:
+            Pairwise comparison data
         &#34;&#34;&#34;
         df = self.df
-        
+
         candidate = self.candidate
         option_a = self.option_a
         option_b = self.option_b
         selected = self.selected
         value = self.value
         voter = self.voter
-        
+
         output = []
         for user_id, df_tmp in tqdm.tqdm(df.groupby(voter), position=0, leave=True):
             tmp = pd.merge(df_tmp, df_tmp, on=voter, how=&#34;outer&#34;)
@@ -505,28 +784,37 @@ class Pairwise:
             tmp = tmp[tmp[f&#34;{candidate}_x&#34;] &gt; tmp[f&#34;{candidate}_y&#34;]]
             output.append(tmp)
             del tmp
-            
+
         tmp = pd.concat(output)
-        tmp = tmp.rename(columns={f&#34;{candidate}_x&#34;: option_a, f&#34;{candidate}_y&#34;: option_b})
+        tmp = tmp.rename(
+            columns={f&#34;{candidate}_x&#34;: option_a, f&#34;{candidate}_y&#34;: option_b})
         tmp[&#34;selected&#34;] = np.where(
-            tmp[f&#34;{value}_x&#34;] == tmp[f&#34;{value}_y&#34;], 0, 
-            np.where(tmp[f&#34;{value}_x&#34;] &gt; tmp[f&#34;{value}_y&#34;], tmp[option_a], tmp[option_b])
+            tmp[f&#34;{value}_x&#34;] == tmp[f&#34;{value}_y&#34;], 0,
+            np.where(tmp[f&#34;{value}_x&#34;] &gt; tmp[f&#34;{value}_y&#34;],
+                     tmp[option_a], tmp[option_b])
         )
 
         self.df = tmp[[voter, option_a, option_b, selected]]
 
-
     def win_rate(self, data=None):
-        &#34;&#34;&#34;
+        &#34;&#34;&#34;Win Rate (also called weighted Borda count)
+
         Calculates the fraction of times a proposal is selected with respect to the total of its occurrences.
+
+        Returns
+        -------
+        pandas.DataFrame:
+            Win Rate
         &#34;&#34;&#34;
         df = data.copy() if isinstance(data, pd.DataFrame) else self.df.copy()
         df = df[df[self.selected] != 0]
         candidate = self.candidate
         voter = self.voter
 
-        dd = df.groupby([&#34;option_source&#34;, &#34;option_target&#34;]).agg({voter: &#34;count&#34;}).reset_index()
-        m = dd.pivot(index=&#34;option_source&#34;, columns=&#34;option_target&#34;, values=voter).fillna(0)
+        dd = df.groupby([&#34;option_source&#34;, &#34;option_target&#34;]).agg(
+            {voter: &#34;count&#34;}).reset_index()
+        m = dd.pivot(index=&#34;option_source&#34;,
+                     columns=&#34;option_target&#34;, values=voter).fillna(0)
         ids = set(df[&#34;option_source&#34;]) | set(df[&#34;option_target&#34;])
         m = m.reindex(ids)
         m = m.reindex(ids, axis=1)
@@ -543,30 +831,49 @@ class Pairwise:
 <span>def <span class="ident">ahp</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Calculates a ranking of candidates using Automatic Hierarchy Process (AHP)
-Reference: Saaty 1980</p></div>
+<div class="desc"><p>Analytic Hierarchy Process (AHP) (1980)</p>
+<p>Calculates a ranking of candidates using Analytic Hierarchy Process (AHP)</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>pandas.DataFrame :</code></dt>
+<dd>Ranking of candidates using AHP</dd>
+</dl>
+<h2 id="references">References</h2>
+<p>Saaty, T. L. (1988). What is the analytic hierarchy process?. In Mathematical models for decision support (pp. 109-121). Springer, Berlin, Heidelberg.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def ahp(self):
-    &#34;&#34;&#34;
-    Calculates a ranking of candidates using Automatic Hierarchy Process (AHP)
-    Reference: Saaty 1980
+    &#34;&#34;&#34;Analytic Hierarchy Process (AHP) (1980)
+
+    Calculates a ranking of candidates using Analytic Hierarchy Process (AHP)
+
+    Returns
+    -------
+    pandas.DataFrame :
+        Ranking of candidates using AHP
+
+    References
+    ----------
+    Saaty, T. L. (1988). What is the analytic hierarchy process?. In Mathematical models for decision support (pp. 109-121). Springer, Berlin, Heidelberg.
     &#34;&#34;&#34;
     candidate = self.candidate
     df = self.df.copy()
     voter = self.voter
 
-    dd = df.groupby([&#34;option_source&#34;, &#34;option_target&#34;]).agg({voter: &#34;count&#34;}).reset_index()
+    dd = df.groupby([&#34;option_source&#34;, &#34;option_target&#34;]).agg(
+        {voter: &#34;count&#34;}).reset_index()
 
-    a = dd.pivot(index=&#34;option_target&#34;, columns=&#34;option_source&#34;, values=voter)
+    a = dd.pivot(index=&#34;option_target&#34;,
+                 columns=&#34;option_source&#34;, values=voter)
     b = np.divide(a, a.T)
     np.fill_diagonal(b.values, 1)
     c = b / b.sum()
     weight = [1/c.shape[0] for i in range(c.shape[0])]
 
-    tmp = pd.DataFrame(np.sum(np.multiply(c, weight), axis=1)).reset_index().rename(columns={&#34;option_target&#34;: candidate, 0: &#34;value&#34;})
+    tmp = pd.DataFrame(np.sum(np.multiply(c, weight), axis=1)).reset_index().rename(
+        columns={&#34;option_target&#34;: candidate, 0: &#34;value&#34;})
 
     return tmp</code></pre>
 </details>
@@ -575,14 +882,26 @@ Reference: Saaty 1980</p></div>
 <span>def <span class="ident">copeland</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Calculates a ranking sorting candidates based on the Condorcet winner.</p></div>
+<div class="desc"><p>Copeland method (1951)</p>
+<p>Calculates a ranking sorting candidates based on the Condorcet winner.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>pandas.DataFrame :</code></dt>
+<dd>Copeland ranking</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def copeland(self):
-    &#34;&#34;&#34;
+    &#34;&#34;&#34;Copeland method (1951)
+
     Calculates a ranking sorting candidates based on the Condorcet winner.
+
+    Returns
+    -------
+    pandas.DataFrame :
+        Copeland ranking
     &#34;&#34;&#34;
     candidate = self.candidate
     df = self.df.copy()
@@ -591,29 +910,52 @@ Reference: Saaty 1980</p></div>
     np.fill_diagonal(m.values, np.nan)
 
     return pd.DataFrame(
-        [(a, b) for a, b in list(zip(list(m), np.nanmean(m, axis=0)))], 
+        [(a, b) for a, b in list(zip(list(m), np.nanmean(m, axis=0)))],
         columns=[candidate, &#34;value&#34;]
     )</code></pre>
 </details>
 </dd>
 <dt id="pairchoice.pairwise.Pairwise.divisiveness"><code class="name flex">
-<span>def <span class="ident">divisiveness</span></span>(<span>self) ‑> pandas.core.frame.DataFrame</span>
+<span>def <span class="ident">divisiveness</span></span>(<span>self, agg='win_rate', progress=True) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Calculates the level of disagreement that generates a candidate between voters.</p>
+<div class="desc"><p>Divisiveness method (2022)</p>
+<p>Calculates how divisive a candidate is.</p>
+<p>Let's suppose we have 20 candidates: {A, B, C, … } and 1000 voters. Then, we paired candidates. When we asked voters to choose between A or B, 200 voted A, and 800 voted B. We will assume that the overall ranking of candidates of those groups (voters that selected A and voters that selected B) are different, because, under the same dilemma, they selected a different candidate (A&gt;B or B&gt;A). Separately, we aggregate the preferences of both groups (e.g., using Win Rate). Then, we compared the score of each candidate. The greater the absolute difference in the score of the same candidate in both rankings, the more divisive the candidate is. We repeat this procedure for each comparison (given an N number of candidates, there are N(N - 1)/2 possibilities), and the average for each candidate is divisiveness.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>agg</code></strong> :&ensp;<code>{"win_rate", "copeland", "ahp", "elo"}</code>, default=<code>"win_rate"</code></dt>
+<dd>Aggregation method to calculate the ranking of candidates.</dd>
+<dt><strong><code>progress</code></strong> :&ensp;<code>bool</code>, default=<code>"true"</code></dt>
+<dd>If <code>value</code> is true, it displays a progress bar for each 1v1 comparison.
+Given a dataset with N candidates, the maximum number of iterations is N(N - 1).</dd>
+</dl>
 <h2 id="returns">Returns</h2>
 <dl>
 <dt><code>pandas.DataFrame</code></dt>
 <dd>A set of candidates and their respective divisiveness</dd>
 </dl>
 <h2 id="references">References</h2>
-<p>Navarrete &amp; Hidalgo (forthcoming)</p></div>
+<p>Navarrete &amp; Hidalgo (2022)</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def divisiveness(self) -&gt; pd.DataFrame:
-    &#34;&#34;&#34;Calculates the level of disagreement that generates a candidate between voters.
+<pre><code class="python">def divisiveness(self, agg=&#34;win_rate&#34;, progress=True) -&gt; pd.DataFrame:
+    &#34;&#34;&#34;Divisiveness method (2022)
+
+    Calculates how divisive a candidate is.
+
+    Let&#39;s suppose we have 20 candidates: {A, B, C, … } and 1000 voters. Then, we paired candidates. When we asked voters to choose between A or B, 200 voted A, and 800 voted B. We will assume that the overall ranking of candidates of those groups (voters that selected A and voters that selected B) are different, because, under the same dilemma, they selected a different candidate (A&gt;B or B&gt;A). Separately, we aggregate the preferences of both groups (e.g., using Win Rate). Then, we compared the score of each candidate. The greater the absolute difference in the score of the same candidate in both rankings, the more divisive the candidate is. We repeat this procedure for each comparison (given an N number of candidates, there are N(N - 1)/2 possibilities), and the average for each candidate is divisiveness.
+
+    Parameters
+    ----------
+    agg : {&#34;win_rate&#34;, &#34;copeland&#34;, &#34;ahp&#34;, &#34;elo&#34;}, default=&#34;win_rate&#34;
+        Aggregation method to calculate the ranking of candidates.
+
+    progress : bool, default=&#34;true&#34;
+        If `value` is true, it displays a progress bar for each 1v1 comparison.
+        Given a dataset with N candidates, the maximum number of iterations is N(N - 1).
 
     Returns
     -------
@@ -622,29 +964,32 @@ Reference: Saaty 1980</p></div>
 
     References
     ----------
-    Navarrete &amp; Hidalgo (forthcoming)
+    Navarrete &amp; Hidalgo (2022)
     &#34;&#34;&#34;
     df = self.df.copy()
-    df = df[df[self.selected] != 0].copy()
 
     candidate = self.candidate
     option_a = self.option_a
     option_b = self.option_b
     selected = self.selected
-    value = self.value
     voter = self.voter
+
+    df = df[(df[option_a] == df[selected]) | (
+        df[option_b] == df[selected])].copy()
 
     dd = df.groupby([&#34;card_id&#34;, selected, voter]).agg({&#34;id&#34;: &#34;count&#34;})
     _data = df.copy().set_index(voter)
-    
-    _ = self.win_rate
+
+    def method_not_found():
+        print(f&#34;No Method {agg} Found!&#34;)
+
+    _ = getattr(self, agg, method_not_found)
 
     def _f(idx, df_select):
         card_id = idx[0]
         s = idx[1]
-
         users = [item[2] for item in df_select.index.to_numpy()]
-        
+
         data_temp = _data.loc[users]
 
         r_tmp = _(data_temp.reset_index()).dropna()
@@ -664,22 +1009,30 @@ Reference: Saaty 1980</p></div>
 
     tmp = pd.concat(tmp_list, ignore_index=True)
 
-    tmp[[f&#34;{option_a}_sorted&#34;, f&#34;{option_b}_sorted&#34;]] = tmp[&#34;card_id&#34;].str.split(&#34;_&#34;, expand=True)
-    tmp[&#34;group&#34;] = tmp[f&#34;{option_a}_sorted&#34;].astype(str) == tmp[selected].astype(str)
+    tmp[[f&#34;{option_a}_sorted&#34;, f&#34;{option_b}_sorted&#34;]
+        ] = tmp[&#34;card_id&#34;].str.split(&#34;_&#34;, expand=True)
+    tmp[&#34;group&#34;] = tmp[f&#34;{option_a}_sorted&#34;].astype(
+        str) == tmp[selected].astype(str)
     tmp[&#34;group&#34;] = tmp[&#34;group&#34;].replace({True: &#34;A&#34;, False: &#34;B&#34;})
-    
+
     tmp_a = tmp[tmp[&#34;group&#34;] == &#34;A&#34;]
     tmp_b = tmp[tmp[&#34;group&#34;] == &#34;B&#34;]
-    
-    tmp_dv = pd.merge(tmp_a, tmp_b, on=[&#34;card_id&#34;, candidate, f&#34;{option_a}_sorted&#34;, f&#34;{option_b}_sorted&#34;])
-    tmp_dv = tmp_dv[[candidate, &#34;card_id&#34;, &#34;value_x&#34;, &#34;value_y&#34;, f&#34;{selected}_x&#34;, f&#34;{selected}_y&#34;]]
+
+    tmp_dv = pd.merge(tmp_a, tmp_b, on=[
+                      &#34;card_id&#34;, candidate, f&#34;{option_a}_sorted&#34;, f&#34;{option_b}_sorted&#34;])
+    tmp_dv = tmp_dv[[candidate, &#34;card_id&#34;, &#34;value_x&#34;,
+                     &#34;value_y&#34;, f&#34;{selected}_x&#34;, f&#34;{selected}_y&#34;]]
     tmp_dv[&#34;value&#34;] = abs(tmp_dv[&#34;value_x&#34;] - tmp_dv[&#34;value_y&#34;])
 
-    tmp_frag_a = tmp_dv[[candidate, f&#34;{selected}_x&#34;, &#34;value&#34;]].rename(columns={f&#34;{selected}_x&#34;: &#34;selected&#34;})
-    tmp_frag_b = tmp_dv[[candidate, f&#34;{selected}_y&#34;, &#34;value&#34;]].rename(columns={f&#34;{selected}_y&#34;: &#34;selected&#34;})
+    tmp_frag_a = tmp_dv[[candidate, f&#34;{selected}_x&#34;, &#34;value&#34;]].rename(
+        columns={f&#34;{selected}_x&#34;: &#34;selected&#34;})
+    tmp_frag_b = tmp_dv[[candidate, f&#34;{selected}_y&#34;, &#34;value&#34;]].rename(
+        columns={f&#34;{selected}_y&#34;: &#34;selected&#34;})
     tmp_frag_c = pd.concat([tmp_frag_a, tmp_frag_b])
-    tmp_frag_c = tmp_frag_c[tmp_frag_c[candidate] == tmp_frag_c[&#34;selected&#34;]]
-    tmp_frag_c = tmp_frag_c.groupby(candidate).agg({&#34;value&#34;: &#34;mean&#34;}).reset_index()
+    tmp_frag_c = tmp_frag_c[tmp_frag_c[candidate]
+                            == tmp_frag_c[&#34;selected&#34;]]
+    tmp_frag_c = tmp_frag_c.groupby(candidate).agg(
+        {&#34;value&#34;: &#34;mean&#34;}).reset_index()
 
     return tmp_frag_c</code></pre>
 </details>
@@ -688,18 +1041,36 @@ Reference: Saaty 1980</p></div>
 <span>def <span class="ident">elo</span></span>(<span>self, rating=400, K=10)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Calculates a ranking of candidates using Elo rating.</p></div>
+<div class="desc"><p>Elo score.</p>
+<p>Calculates a ranking of candidates using Elo rating.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>rating</code></strong> :&ensp;<code>int</code>, default=<code>400</code></dt>
+<dd>Initial rating of each candidate.</dd>
+<dt><strong><code>K</code></strong> :&ensp;<code>int</code>, default=<code>10</code></dt>
+<dd>The K-factor estimates the score that a player can win in a game.</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def elo(self, rating=400, K=10):
-    &#34;&#34;&#34;
+    &#34;&#34;&#34;Elo score.
+
     Calculates a ranking of candidates using Elo rating.
+
+    Parameters
+    ----------
+    rating : int, default=400
+        Initial rating of each candidate.
+    K : int, default=10
+        The K-factor estimates the score that a player can win in a game.
+
     &#34;&#34;&#34;
     df = self.df.copy()
 
-    ELO_RATING = {i: rating for i in set(df[&#34;option_a_sorted&#34;]) | set(df[&#34;option_b_sorted&#34;])}
+    ELO_RATING = {i: rating for i in set(
+        df[&#34;option_a_sorted&#34;]) | set(df[&#34;option_b_sorted&#34;])}
 
     for option_a, option_b, selected in list(zip(df[&#34;option_a_sorted&#34;], df[&#34;option_b_sorted&#34;], df[&#34;option_selected&#34;])):
         r_a = ELO_RATING[option_a]
@@ -714,34 +1085,58 @@ Reference: Saaty 1980</p></div>
         if selected == 0:
             s_a = 0.5
             s_b = 0.5
-        else: 
+        else:
             is_a_selected = selected == 1
             s_a = 1 if is_a_selected else 0
             s_b = 1 - s_a
 
         ELO_RATING[option_a] = r_a + K * (s_a - e_a)
-        ELO_RATING[option_b] = r_b + K * (s_b - e_b) 
+        ELO_RATING[option_b] = r_b + K * (s_b - e_b)
 
-    tmp = pd.DataFrame(ELO_RATING.items(), columns=[self.candidate, &#34;value&#34;])
+    tmp = pd.DataFrame(ELO_RATING.items(), columns=[
+                       self.candidate, &#34;value&#34;])
 
     return tmp</code></pre>
 </details>
 </dd>
 <dt id="pairchoice.pairwise.Pairwise.matrix_pairs"><code class="name flex">
-<span>def <span class="ident">matrix_pairs</span></span>(<span>self, df)</span>
+<span>def <span class="ident">matrix_pairs</span></span>(<span>self, data)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Matrix Condorcet.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>data</code></strong> :&ensp;<code>pandas.DataFrame</code></dt>
+<dd>Pairwise data</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>pandas.DataFrame</code></dt>
+<dd>Matrix of pairwise matches.</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def matrix_pairs(self, df):
+<pre><code class="python">def matrix_pairs(self, data):
+    &#34;&#34;&#34;Matrix Condorcet.
+
+    Parameters
+    ----------
+    data : pandas.DataFrame
+        Pairwise data
+
+    Returns
+    -------
+    pandas.DataFrame
+        Matrix of pairwise matches.
+    &#34;&#34;&#34;
     voter = self.voter
-    dd = df.groupby([&#34;option_source&#34;, &#34;option_target&#34;]).agg({voter: &#34;count&#34;}).reset_index()
+    dd = data.groupby([&#34;option_source&#34;, &#34;option_target&#34;]).agg(
+        {voter: &#34;count&#34;}).reset_index()
     m = dd.pivot(index=&#34;option_source&#34;, columns=&#34;option_target&#34;,
-                values=voter).fillna(0)
-    ids = set(df[&#34;option_source&#34;]) | set(df[&#34;option_target&#34;])
+                 values=voter).fillna(0)
+    ids = set(data[&#34;option_source&#34;]) | set(data[&#34;option_target&#34;])
     m = m.reindex(ids)
     m = m.reindex(ids, axis=1)
     m = m.fillna(0)
@@ -754,7 +1149,12 @@ Reference: Saaty 1980</p></div>
 <span>def <span class="ident">to_pairwise</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Converts a rating-based data set into a pairwise comparison data set.</p></div>
+<div class="desc"><p>Converts a rating-based data set into a pairwise comparison data set.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>pandas.DataFrame:</code></dt>
+<dd>Pairwise comparison data</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -762,16 +1162,21 @@ Reference: Saaty 1980</p></div>
 <pre><code class="python">def to_pairwise(self):
     &#34;&#34;&#34;
     Converts a rating-based data set into a pairwise comparison data set.
+
+    Returns
+    -------
+    pandas.DataFrame:
+        Pairwise comparison data
     &#34;&#34;&#34;
     df = self.df
-    
+
     candidate = self.candidate
     option_a = self.option_a
     option_b = self.option_b
     selected = self.selected
     value = self.value
     voter = self.voter
-    
+
     output = []
     for user_id, df_tmp in tqdm.tqdm(df.groupby(voter), position=0, leave=True):
         tmp = pd.merge(df_tmp, df_tmp, on=voter, how=&#34;outer&#34;)
@@ -779,12 +1184,14 @@ Reference: Saaty 1980</p></div>
         tmp = tmp[tmp[f&#34;{candidate}_x&#34;] &gt; tmp[f&#34;{candidate}_y&#34;]]
         output.append(tmp)
         del tmp
-        
+
     tmp = pd.concat(output)
-    tmp = tmp.rename(columns={f&#34;{candidate}_x&#34;: option_a, f&#34;{candidate}_y&#34;: option_b})
+    tmp = tmp.rename(
+        columns={f&#34;{candidate}_x&#34;: option_a, f&#34;{candidate}_y&#34;: option_b})
     tmp[&#34;selected&#34;] = np.where(
-        tmp[f&#34;{value}_x&#34;] == tmp[f&#34;{value}_y&#34;], 0, 
-        np.where(tmp[f&#34;{value}_x&#34;] &gt; tmp[f&#34;{value}_y&#34;], tmp[option_a], tmp[option_b])
+        tmp[f&#34;{value}_x&#34;] == tmp[f&#34;{value}_y&#34;], 0,
+        np.where(tmp[f&#34;{value}_x&#34;] &gt; tmp[f&#34;{value}_y&#34;],
+                 tmp[option_a], tmp[option_b])
     )
 
     self.df = tmp[[voter, option_a, option_b, selected]]</code></pre>
@@ -806,7 +1213,7 @@ That is, it includes columns needed to run aggregation methods and other analysi
     That is, it includes columns needed to run aggregation methods and other analysis defined in the class.
     &#34;&#34;&#34;
     df = self.df
-    df = _create_card_id(df)
+    df = self.__create_card_id(df)
     df[&#34;id&#34;] = range(0, df.shape[0])
     self.df = df</code></pre>
 </details>
@@ -815,22 +1222,36 @@ That is, it includes columns needed to run aggregation methods and other analysi
 <span>def <span class="ident">win_rate</span></span>(<span>self, data=None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Calculates the fraction of times a proposal is selected with respect to the total of its occurrences.</p></div>
+<div class="desc"><p>Win Rate (also called weighted Borda count)</p>
+<p>Calculates the fraction of times a proposal is selected with respect to the total of its occurrences.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>pandas.DataFrame:</code></dt>
+<dd>Win Rate</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def win_rate(self, data=None):
-    &#34;&#34;&#34;
+    &#34;&#34;&#34;Win Rate (also called weighted Borda count)
+
     Calculates the fraction of times a proposal is selected with respect to the total of its occurrences.
+
+    Returns
+    -------
+    pandas.DataFrame:
+        Win Rate
     &#34;&#34;&#34;
     df = data.copy() if isinstance(data, pd.DataFrame) else self.df.copy()
     df = df[df[self.selected] != 0]
     candidate = self.candidate
     voter = self.voter
 
-    dd = df.groupby([&#34;option_source&#34;, &#34;option_target&#34;]).agg({voter: &#34;count&#34;}).reset_index()
-    m = dd.pivot(index=&#34;option_source&#34;, columns=&#34;option_target&#34;, values=voter).fillna(0)
+    dd = df.groupby([&#34;option_source&#34;, &#34;option_target&#34;]).agg(
+        {voter: &#34;count&#34;}).reset_index()
+    m = dd.pivot(index=&#34;option_source&#34;,
+                 columns=&#34;option_target&#34;, values=voter).fillna(0)
     ids = set(df[&#34;option_source&#34;]) | set(df[&#34;option_target&#34;])
     m = m.reindex(ids)
     m = m.reindex(ids, axis=1)

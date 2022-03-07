@@ -2,20 +2,20 @@ import numpy as np
 import pandas as pd
 import tqdm
 
-from .__data_cleaning import _create_card_id
-
 
 class Pairwise:
     """Pairwise.
 
     The class `Pairwise` includes methods to manage pairwise comparison data.
-    For instance, allows to rank candidates, to convert rating-based data 
+    For instance, allows to rank candidates, to convert rating-based data
     into pairwise comparison data, and calculates divisiveness.
 
     Attributes
     ----------
     candidate: str
-        Column name that includes the candidates. 
+        Column name that includes the candidates.
+    card_id : str
+        Unique identifier name of pairs.
     option_a: str
     option_b: str
     selected: str, default="selected"
@@ -27,12 +27,63 @@ class Pairwise:
 
     def __init__(self, df):
         self.candidate = "candidate"
+        self.card_id = "card_id"
         self.df = df
         self.option_a = "option_a"
         self.option_b = "option_b"
         self.selected = "selected"
         self.value = "value"
         self.voter = "voter"
+
+    def __create_card_id(self, df, concat="_") -> pd.DataFrame:
+        """Private method to create an unique identifier of a proposal pair (card_id)
+
+        Parameters
+        ----------
+        df : pandas.DataFrame
+            Pairwise comparison DataFrame.
+
+        concat : str, default="_"
+            String to concatenate options.
+
+        Returns
+        -------
+        pd.DataFrame
+            A pairwise comparison DataFrame with card_id column.
+        """
+        option_a = self.option_a
+        option_b = self.option_b
+        selected = self.selected
+
+        option_a_sorted = f"{option_a}_sorted"
+        option_b_sorted = f"{option_b}_sorted"
+
+        cols = [option_a, option_b, selected]
+        a = df[cols].values
+
+        # Sorts options, always lower value on left column
+        df[option_a_sorted] = np.where(a[:, 0] < a[:, 1], a[:, 0], a[:, 1])
+        df[option_b_sorted] = np.where(a[:, 0] >= a[:, 1], a[:, 0], a[:, 1])
+
+        _a = df[option_a_sorted]
+        _b = df[option_b_sorted]
+
+        df["option_selected"] = np.where(
+            _a[:] == a[:, 2], 1, np.where(_b[:] == a[:, 2], -1, 0))
+
+        # Creates card_id
+        df["card_id"] = _a.astype(str) + "_" + _b.astype(str)
+
+        # Boolean variable, check if a/b was selected
+        df["option_source"] = np.where(a[:, 1] == a[:, 2], a[:, 0], a[:, 1])
+        df["option_target"] = np.where(a[:, 0] == a[:, 2], a[:, 0], a[:, 1])
+
+        # Creates option_source / option_target
+        selected_zero = df[selected] == 0
+        df.loc[selected_zero, "option_source"] = df.loc[selected_zero, option_a]
+        df.loc[selected_zero, "option_target"] = df.loc[selected_zero, option_b]
+
+        return df
 
     def ahp(self):
         """Analytic Hierarchy Process (AHP) (1980)
@@ -89,6 +140,18 @@ class Pairwise:
         )
 
     def matrix_pairs(self, data):
+        """Matrix Condorcet.
+
+        Parameters
+        ----------
+        data : pandas.DataFrame
+            Pairwise data
+
+        Returns
+        -------
+        pandas.DataFrame
+            Matrix of pairwise matches.
+        """
         voter = self.voter
         dd = data.groupby(["option_source", "option_target"]).agg(
             {voter: "count"}).reset_index()
@@ -105,17 +168,17 @@ class Pairwise:
     def divisiveness(self, agg="win_rate", progress=True) -> pd.DataFrame:
         """Divisiveness method (2022)
 
-        Calculate the ranking of disagreements.
+        Calculates how divisive a candidate is.
 
-        Let's suppose we have 20 candidates: {A, B, C, ... } and 1000 voters. In a comparison between A and B, 200 voted by A and 800 voted by B. We will assume that the preferences of those voters are significantly different because, under the same dilemma, they selected a different proposal (A>B or B>A). Separately, we aggregate the preferences of both groups (e.g., using Win Rate). Then, we compared the score of each candidate. The greater the absolute difference in the score of the same candidate in both rankings, the more divisive the candidate is. We repeat this procedure for each comparison (given an N number of candidates, there are N(N - 1)/2 possibilities), and the average for each candidate is divisiveness.
+        Let's suppose we have 20 candidates: {A, B, C, … } and 1000 voters. Then, we paired candidates. When we asked voters to choose between A or B, 200 voted A, and 800 voted B. We will assume that the overall ranking of candidates of those groups (voters that selected A and voters that selected B) are different, because, under the same dilemma, they selected a different candidate (A>B or B>A). Separately, we aggregate the preferences of both groups (e.g., using Win Rate). Then, we compared the score of each candidate. The greater the absolute difference in the score of the same candidate in both rankings, the more divisive the candidate is. We repeat this procedure for each comparison (given an N number of candidates, there are N(N - 1)/2 possibilities), and the average for each candidate is divisiveness.
 
         Parameters
         ----------
         agg : {"win_rate", "copeland", "ahp", "elo"}, default="win_rate"
-            Aggregation method to calculate the ranking of candidates in each iteration.
+            Aggregation method to calculate the ranking of candidates.
 
         progress : bool, default="true"
-            If `value` is true, it displays a progress bar for each 1v1 comparison. 
+            If `value` is true, it displays a progress bar for each 1v1 comparison.
             Given a dataset with N candidates, the maximum number of iterations is N(N - 1).
 
         Returns
@@ -141,7 +204,10 @@ class Pairwise:
         dd = df.groupby(["card_id", selected, voter]).agg({"id": "count"})
         _data = df.copy().set_index(voter)
 
-        _ = self.win_rate
+        def method_not_found():
+            print(f"No Method {agg} Found!")
+
+        _ = getattr(self, agg, method_not_found)
 
         def _f(idx, df_select):
             card_id = idx[0]
@@ -244,7 +310,7 @@ class Pairwise:
         That is, it includes columns needed to run aggregation methods and other analysis defined in the class.
         """
         df = self.df
-        df = _create_card_id(df)
+        df = self.__create_card_id(df)
         df["id"] = range(0, df.shape[0])
         self.df = df
 
