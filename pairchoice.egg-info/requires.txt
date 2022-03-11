@@ -1,0 +1,4 @@
+fastparquet
+numpy
+pandas
+requests
