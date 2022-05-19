@@ -1,4 +1,4 @@
-<img src="https://github.com/CenterForCollectiveLearning/pairchoice/raw/master/logo.png" alt="" width="200"/>
+<img src="https://github.com/CenterForCollectiveLearning/comchoice/raw/master/logo.png" alt="" width="200"/>
 
 ## What it is?
 
@@ -18,16 +18,16 @@ We provided support to the most common aggregation methods used in **social choi
 ### Via pip
 
 ```
-pip install pairchoice
+pip install comchoice
 ```
 
 ### From source code
 
-To install pairchoice from source, you need to clone the repository of the project in your laptop.
+To install comchoice from source, you need to clone the repository of the project in your laptop.
 
 ```
-git clone https://github.com/CenterForCollectiveLearning/pairchoice.git
-cd pairchoice
+git clone https://github.com/CenterForCollectiveLearning/comchoice.git
+cd comchoice
 python setup.py install
 
 ```
@@ -45,7 +45,7 @@ Pairchoice classes require a `pandas.DataFrame` or a `list` of `dict` to be init
 For starting, let's use the data of an election of 22 voters and 4 candidates. Each voter provided their ranking of candidates.
 
 ```
-from pairchoice.voting import Voting
+from comchoice.voting import Voting
 
 data = [
     {"voters": 7, "rank": ["A", "B", "C", "D"]},
@@ -99,7 +99,7 @@ Let's assume we have a CSV file of an experiment with three voters and three can
 
 ```
 import pandas as pd
-from pairchoice.pairwise import Pairwise
+from comchoice.pairwise import Pairwise
 
 df = pd.read_csv("/path/to/file/pairwise.csv")
 
@@ -110,7 +110,7 @@ pwc.copeland()
 
 ### Conversion Data into Pairwise comparison
 
-`pairchoice` allows converting an election dataset into pairwise comparison data through `to_pairwise()` method defined in the class `Pairwise`.
+`comchoice` allows converting an election dataset into pairwise comparison data through `to_pairwise()` method defined in the class `Pairwise`.
 
 Let's suppose that we have two candidates and two voters. Voter 1 rates candidate A with 5 stars, and rates candidate B with 3 stars. In this case, we could assume that voter 1 will choose candidate A over candidate B.
 
@@ -144,7 +144,7 @@ pch.to_pairwise()
 
 ## Do you have any questions?
 
-We invite you to create an issue in the project's GitHub repository (https://github.com/CenterForCollectiveLearning/pairchoice/issues).
+We invite you to create an issue in the project's GitHub repository (https://github.com/CenterForCollectiveLearning/comchoice/issues).
 
 ## About
 

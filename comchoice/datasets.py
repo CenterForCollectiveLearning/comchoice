@@ -1,0 +1,116 @@
+from itertools import combinations
+from os import path
+from random import choice, choices, sample
+from string import ascii_lowercase
+import pandas as pd
+
+
+def load_synthetic_election(full_rank=True, n_candidates=3, n_voters=4,
+                            candidates=None) -> pd.DataFrame:
+    """Generates synthetic voting data.
+
+    Parameters
+    ----------
+    full_rank : bool, default=True
+        If the value is `true`, every voter assigns a complete ranking of candidates.
+    n_candidates : int, default=3
+        Number of candidates. Must be a positive value.
+    n_voters : int, default=4
+        Number of voters. Must be a positive value.
+    candidates: string list, default=alphabet
+        List of the names/candidates
+
+    Returns
+    -------
+    pandas.DataFrame
+        A DataFrame of synthetic voting data.
+
+    See Also
+    --------
+    load_synthetic_pairwise : Generates synthetic voting data.
+    """
+
+    if candidates == None or len(candidates) != n_candidates:
+        if n_candidates <= 26:
+            alphabet_string = ascii_lowercase
+            candidates = list(alphabet_string[:n_candidates])
+        else:
+            candidates = list(range(1, n_candidates + 1))
+
+    output = []
+
+    for voter in range(1, n_voters + 1):
+        voted = sample(
+            candidates, n_candidates) if full_rank else choice(candidates)
+        output.append({
+            "voters": 1,
+            "rank": ",".join(voted)
+        })
+
+    tmp = pd.DataFrame(output).groupby("rank").agg(
+        {"voters": "sum"}).reset_index()
+    tmp['rank'] = tmp['rank'].apply(lambda x: x.split(","))
+
+    return tmp
+
+
+def load_synthetic_pairwise(
+    n_candidates=3,
+    n_voters=10,
+    ties=False,
+    transitive=True,
+    weight_tie=0.1,
+    candidates=None
+) -> pd.DataFrame:
+    """Generates synthetic pairwise comparison data.
+
+    Parameters
+    ----------
+    n_candidates : int, default=3
+        Number of candidates. Must be a positive value.
+    n_voters : int, default=10
+        Number of voters. Must be a positive value.
+    ties : bool, default=False
+        If the value is `true`, the data will include ties between comparisons.
+    transitive : bool, default=True
+        If the value is `true`, individual preferences are transitives.
+    weight_tie : float, default=0.1
+        Probability of a tie in a pairwise choice. It works if ties=True.
+    candidates: string list, default=numbers
+        List of the names/candidates
+
+    Returns
+    -------
+    pandas.DataFrame
+        A DataFrame of synthetic pairwise comparison data.
+
+    See Also
+    --------
+    load_synthetic_election : Generates synthetic voting data.
+    """
+    if candidates == None or len(candidates) != n_candidates:
+        candidates = list(range(1, n_candidates + 1))
+
+    voters = list(range(1, n_voters + 1))
+
+    output = []
+
+    for voter in voters:
+        rank_order = combinations(sample(candidates, n_candidates), 2)
+        for candidate_a, candidate_b in rank_order:
+
+            options = sample([candidate_a, candidate_b], 2)
+            option_a = options[0]
+            option_b = options[1]
+
+            selected = choices([candidate_a, 0], weights=[
+                               1 - weight_tie, weight_tie])[0] if ties else candidate_a
+
+            output.append({
+                "voter": voter,
+                "option_a": option_a,
+                "option_b": option_b,
+                "selected": selected
+            })
+
+    return pd.DataFrame(output)

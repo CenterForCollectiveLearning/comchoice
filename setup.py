@@ -4,13 +4,13 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="pairchoice",
+    name="comchoice",
     version="0.1.0",
     author="cnavarreteliz",
     author_email="cnavarreteliz@gmail.com",
-    description="Toolkit to analyze pairwise comparison data",
+    description="Toolkit for social choice theory and computational social choice",
     long_description=long_description,
-    url="https://github.com/CenterForCollectiveLearning/pairchoice",
+    url="https://github.com/CenterForCollectiveLearning/comchoice",
     packages=setuptools.find_packages(),
     install_requires=[
         "fastparquet",

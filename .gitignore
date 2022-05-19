@@ -1,9 +1,11 @@
 .ipynb_checkpoint/
+.ipynb_checkpoints/
+
 **/__pycache__/
 
 build/
 dist/
-pairchoice.egg-info/
+comchoice.egg-info/
 
 DRAFT.md
 generate_docs.sh

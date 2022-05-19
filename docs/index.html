@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
-<title>pairchoice API documentation</title>
-<meta name="description" content="&lt;img src=&#34;https://github.com/CenterForCollectiveLearning/pairchoice/raw/master/logo.png&#34; alt=&#34;&#34; width=&#34;200&#34;/&gt; …" />
+<title>comchoice API documentation</title>
+<meta name="description" content="&lt;img src=&#34;https://github.com/CenterForCollectiveLearning/comchoice/raw/master/logo.png&#34; alt=&#34;&#34; width=&#34;200&#34;/&gt; …" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -19,10 +19,10 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Package <code>pairchoice</code></h1>
+<h1 class="title">Package <code>comchoice</code></h1>
 </header>
 <section id="section-intro">
-<p><img src="https://github.com/CenterForCollectiveLearning/pairchoice/raw/master/logo.png" alt="" width="200"/></p>
+<p><img src="https://github.com/CenterForCollectiveLearning/comchoice/raw/master/logo.png" alt="" width="200"/></p>
 <h2 id="what-it-is">What it is?</h2>
 <p>Pairchoice is an open-source toolkit to analyze rating-based and pairwise comparison datasets for Python. Pairchoice is designed for users that need aggregating individual preferences.</p>
 <p>We provided support to the most common aggregation methods used in <strong>social choice theory</strong>, <strong>computational social choice</strong>, and <strong>operations research</strong>.</p>
@@ -35,12 +35,12 @@
 </ul>
 <h2 id="getting-started">Getting Started</h2>
 <h3 id="via-pip">Via pip</h3>
-<pre><code>pip install pairchoice
+<pre><code>pip install comchoice
 </code></pre>
 <h3 id="from-source-code">From source code</h3>
-<p>To install pairchoice from source, you need to clone the repository of the project in your laptop.</p>
-<pre><code>git clone https://github.com/CenterForCollectiveLearning/pairchoice.git
-cd pairchoice
+<p>To install comchoice from source, you need to clone the repository of the project in your laptop.</p>
+<pre><code>git clone https://github.com/CenterForCollectiveLearning/comchoice.git
+cd comchoice
 python setup.py install
 
 </code></pre>
@@ -50,7 +50,7 @@ python setup.py install
 <p>Pairchoice classes require a <code>pandas.DataFrame</code> or a <code>list</code> of <code>dict</code> to be initialized.</p>
 <h3 id="hello-world-election-data">Hello world: Election data</h3>
 <p>For starting, let's use the data of an election of 22 voters and 4 candidates. Each voter provided their ranking of candidates.</p>
-<pre><code>from pairchoice.voting import Voting
+<pre><code>from comchoice.voting import Voting
 
 data = [
     {&quot;voters&quot;: 7, &quot;rank&quot;: [&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;]},
@@ -161,7 +161,7 @@ df_borda.head()
 </tbody>
 </table>
 <pre><code>import pandas as pd
-from pairchoice.pairwise import Pairwise
+from comchoice.pairwise import Pairwise
 
 df = pd.read_csv(&quot;/path/to/file/pairwise.csv&quot;)
 
@@ -170,7 +170,7 @@ pwc = Pairwise(df)
 pwc.copeland()
 </code></pre>
 <h3 id="conversion-data-into-pairwise-comparison">Conversion Data into Pairwise comparison</h3>
-<p><code><a title="pairchoice" href="#pairchoice">pairchoice</a></code> allows converting an election dataset into pairwise comparison data through <code>to_pairwise()</code> method defined in the class <code>Pairwise</code>.</p>
+<p><code><a title="comchoice" href="#comchoice">comchoice</a></code> allows converting an election dataset into pairwise comparison data through <code>to_pairwise()</code> method defined in the class <code>Pairwise</code>.</p>
 <p>Let's suppose that we have two candidates and two voters. Voter 1 rates candidate A with 5 stars, and rates candidate B with 3 stars. In this case, we could assume that voter 1 will choose candidate A over candidate B.</p>
 <p>Original data:</p>
 <table>
@@ -239,7 +239,7 @@ pch.value = &quot;rating&quot;
 pch.to_pairwise()
 </code></pre>
 <h2 id="do-you-have-any-questions">Do you have any questions?</h2>
-<p>We invite you to create an issue in the project's GitHub repository (<a href="https://github.com/CenterForCollectiveLearning/pairchoice/issues">https://github.com/CenterForCollectiveLearning/pairchoice/issues</a>).</p>
+<p>We invite you to create an issue in the project's GitHub repository (<a href="https://github.com/CenterForCollectiveLearning/comchoice/issues">https://github.com/CenterForCollectiveLearning/comchoice/issues</a>).</p>
 <h2 id="about">About</h2>
 <p><code>Pairchoice</code> was developed by the research group in Digital Democracy of the <a href="https://centerforcollectivelearning.org/">Center for Collective Learning</a>.</p>
 <h2 id="mit-license">MIT License</h2>
@@ -260,15 +260,15 @@ __docformat__ = &#34;numpy&#34;</code></pre>
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
-<dt><code class="name"><a title="pairchoice.datasets" href="datasets.html">pairchoice.datasets</a></code></dt>
+<dt><code class="name"><a title="comchoice.datasets" href="datasets.html">comchoice.datasets</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt><code class="name"><a title="pairchoice.pairwise" href="pairwise.html">pairchoice.pairwise</a></code></dt>
+<dt><code class="name"><a title="comchoice.pairwise" href="pairwise.html">comchoice.pairwise</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt><code class="name"><a title="pairchoice.voting" href="voting.html">pairchoice.voting</a></code></dt>
+<dt><code class="name"><a title="comchoice.voting" href="voting.html">comchoice.voting</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -307,9 +307,9 @@ __docformat__ = &#34;numpy&#34;</code></pre>
 <ul id="index">
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
-<li><code><a title="pairchoice.datasets" href="datasets.html">pairchoice.datasets</a></code></li>
-<li><code><a title="pairchoice.pairwise" href="pairwise.html">pairchoice.pairwise</a></code></li>
-<li><code><a title="pairchoice.voting" href="voting.html">pairchoice.voting</a></code></li>
+<li><code><a title="comchoice.datasets" href="datasets.html">comchoice.datasets</a></code></li>
+<li><code><a title="comchoice.pairwise" href="pairwise.html">comchoice.pairwise</a></code></li>
+<li><code><a title="comchoice.voting" href="voting.html">comchoice.voting</a></code></li>
 </ul>
 </li>
 </ul>

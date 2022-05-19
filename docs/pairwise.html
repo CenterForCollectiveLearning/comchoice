@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
-<title>pairchoice.pairwise API documentation</title>
+<title>comchoice.pairwise API documentation</title>
 <meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
@@ -19,7 +19,7 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>pairchoice.pairwise</code></h1>
+<h1 class="title">Module <code>comchoice.pairwise</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
@@ -402,7 +402,7 @@ class Pairwise:
         return tmp
 
     def fit(self, auto_id=True):
-        &#34;&#34;&#34;Fits a data set to a valid pairchoice data set. 
+        &#34;&#34;&#34;Fits a data set to a valid comchoice data set. 
         It includes columns to the dataset that are required to execute methods defined in the class.
 
         Parameters
@@ -501,13 +501,13 @@ class Pairwise:
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="pairchoice.pairwise.Pairwise"><code class="flex name class">
+<dt id="comchoice.pairwise.Pairwise"><code class="flex name class">
 <span>class <span class="ident">Pairwise</span></span>
 <span>(</span><span>df)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Pairwise.</p>
-<p>The class <code><a title="pairchoice.pairwise.Pairwise" href="#pairchoice.pairwise.Pairwise">Pairwise</a></code> includes methods to manage pairwise comparison data.
+<p>The class <code><a title="comchoice.pairwise.Pairwise" href="#comchoice.pairwise.Pairwise">Pairwise</a></code> includes methods to manage pairwise comparison data.
 For instance, allows to rank candidates, to convert rating-based data
 into pairwise comparison data, and calculates divisiveness.</p>
 <h2 id="attributes">Attributes</h2>
@@ -902,7 +902,7 @@ into pairwise comparison data, and calculates divisiveness.</p>
         return tmp
 
     def fit(self, auto_id=True):
-        &#34;&#34;&#34;Fits a data set to a valid pairchoice data set. 
+        &#34;&#34;&#34;Fits a data set to a valid comchoice data set. 
         It includes columns to the dataset that are required to execute methods defined in the class.
 
         Parameters
@@ -993,7 +993,7 @@ into pairwise comparison data, and calculates divisiveness.</p>
 </details>
 <h3>Methods</h3>
 <dl>
-<dt id="pairchoice.pairwise.Pairwise.ahp"><code class="name flex">
+<dt id="comchoice.pairwise.Pairwise.ahp"><code class="name flex">
 <span>def <span class="ident">ahp</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -1044,7 +1044,7 @@ into pairwise comparison data, and calculates divisiveness.</p>
     return tmp</code></pre>
 </details>
 </dd>
-<dt id="pairchoice.pairwise.Pairwise.bradley_terry"><code class="name flex">
+<dt id="comchoice.pairwise.Pairwise.bradley_terry"><code class="name flex">
 <span>def <span class="ident">bradley_terry</span></span>(<span>self, iterations: int = 1) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
 <dd>
@@ -1118,7 +1118,7 @@ into pairwise comparison data, and calculates divisiveness.</p>
     return tmp</code></pre>
 </details>
 </dd>
-<dt id="pairchoice.pairwise.Pairwise.copeland"><code class="name flex">
+<dt id="comchoice.pairwise.Pairwise.copeland"><code class="name flex">
 <span>def <span class="ident">copeland</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -1155,7 +1155,7 @@ into pairwise comparison data, and calculates divisiveness.</p>
     )</code></pre>
 </details>
 </dd>
-<dt id="pairchoice.pairwise.Pairwise.copeland_matrix"><code class="name flex">
+<dt id="comchoice.pairwise.Pairwise.copeland_matrix"><code class="name flex">
 <span>def <span class="ident">copeland_matrix</span></span>(<span>self, data: pandas.core.frame.DataFrame, absolute: bool = False)</span>
 </code></dt>
 <dd>
@@ -1209,7 +1209,7 @@ into pairwise comparison data, and calculates divisiveness.</p>
     return m / r</code></pre>
 </details>
 </dd>
-<dt id="pairchoice.pairwise.Pairwise.divisiveness"><code class="name flex">
+<dt id="comchoice.pairwise.Pairwise.divisiveness"><code class="name flex">
 <span>def <span class="ident">divisiveness</span></span>(<span>self, agg: str = 'win_rate', progress: bool = True) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
 <dd>
@@ -1334,7 +1334,7 @@ Given a dataset with N candidates, the maximum number of iterations is N(N - 1).
     return tmp_frag_c</code></pre>
 </details>
 </dd>
-<dt id="pairchoice.pairwise.Pairwise.elo"><code class="name flex">
+<dt id="comchoice.pairwise.Pairwise.elo"><code class="name flex">
 <span>def <span class="ident">elo</span></span>(<span>self, rating: int = 400, K: int = 10)</span>
 </code></dt>
 <dd>
@@ -1400,11 +1400,11 @@ Given a dataset with N candidates, the maximum number of iterations is N(N - 1).
     return tmp</code></pre>
 </details>
 </dd>
-<dt id="pairchoice.pairwise.Pairwise.fit"><code class="name flex">
+<dt id="comchoice.pairwise.Pairwise.fit"><code class="name flex">
 <span>def <span class="ident">fit</span></span>(<span>self, auto_id=True)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Fits a data set to a valid pairchoice data set.
+<div class="desc"><p>Fits a data set to a valid comchoice data set.
 It includes columns to the dataset that are required to execute methods defined in the class.</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
@@ -1416,7 +1416,7 @@ It includes columns to the dataset that are required to execute methods defined 
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def fit(self, auto_id=True):
-    &#34;&#34;&#34;Fits a data set to a valid pairchoice data set. 
+    &#34;&#34;&#34;Fits a data set to a valid comchoice data set. 
     It includes columns to the dataset that are required to execute methods defined in the class.
 
     Parameters
@@ -1432,7 +1432,7 @@ It includes columns to the dataset that are required to execute methods defined 
     self.df = df</code></pre>
 </details>
 </dd>
-<dt id="pairchoice.pairwise.Pairwise.to_pairwise"><code class="name flex">
+<dt id="comchoice.pairwise.Pairwise.to_pairwise"><code class="name flex">
 <span>def <span class="ident">to_pairwise</span></span>(<span>self, progress=True)</span>
 </code></dt>
 <dd>
@@ -1497,7 +1497,7 @@ It includes columns to the dataset that are required to execute methods defined 
     self.df = tmp[[voter, option_a, option_b, selected]]</code></pre>
 </details>
 </dd>
-<dt id="pairchoice.pairwise.Pairwise.win_rate"><code class="name flex">
+<dt id="comchoice.pairwise.Pairwise.win_rate"><code class="name flex">
 <span>def <span class="ident">win_rate</span></span>(<span>self, data=None)</span>
 </code></dt>
 <dd>
@@ -1555,23 +1555,23 @@ It includes columns to the dataset that are required to execute methods defined 
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="pairchoice" href="index.html">pairchoice</a></code></li>
+<li><code><a title="comchoice" href="index.html">comchoice</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="pairchoice.pairwise.Pairwise" href="#pairchoice.pairwise.Pairwise">Pairwise</a></code></h4>
+<h4><code><a title="comchoice.pairwise.Pairwise" href="#comchoice.pairwise.Pairwise">Pairwise</a></code></h4>
 <ul class="two-column">
-<li><code><a title="pairchoice.pairwise.Pairwise.ahp" href="#pairchoice.pairwise.Pairwise.ahp">ahp</a></code></li>
-<li><code><a title="pairchoice.pairwise.Pairwise.bradley_terry" href="#pairchoice.pairwise.Pairwise.bradley_terry">bradley_terry</a></code></li>
-<li><code><a title="pairchoice.pairwise.Pairwise.copeland" href="#pairchoice.pairwise.Pairwise.copeland">copeland</a></code></li>
-<li><code><a title="pairchoice.pairwise.Pairwise.copeland_matrix" href="#pairchoice.pairwise.Pairwise.copeland_matrix">copeland_matrix</a></code></li>
-<li><code><a title="pairchoice.pairwise.Pairwise.divisiveness" href="#pairchoice.pairwise.Pairwise.divisiveness">divisiveness</a></code></li>
-<li><code><a title="pairchoice.pairwise.Pairwise.elo" href="#pairchoice.pairwise.Pairwise.elo">elo</a></code></li>
-<li><code><a title="pairchoice.pairwise.Pairwise.fit" href="#pairchoice.pairwise.Pairwise.fit">fit</a></code></li>
-<li><code><a title="pairchoice.pairwise.Pairwise.to_pairwise" href="#pairchoice.pairwise.Pairwise.to_pairwise">to_pairwise</a></code></li>
-<li><code><a title="pairchoice.pairwise.Pairwise.win_rate" href="#pairchoice.pairwise.Pairwise.win_rate">win_rate</a></code></li>
+<li><code><a title="comchoice.pairwise.Pairwise.ahp" href="#comchoice.pairwise.Pairwise.ahp">ahp</a></code></li>
+<li><code><a title="comchoice.pairwise.Pairwise.bradley_terry" href="#comchoice.pairwise.Pairwise.bradley_terry">bradley_terry</a></code></li>
+<li><code><a title="comchoice.pairwise.Pairwise.copeland" href="#comchoice.pairwise.Pairwise.copeland">copeland</a></code></li>
+<li><code><a title="comchoice.pairwise.Pairwise.copeland_matrix" href="#comchoice.pairwise.Pairwise.copeland_matrix">copeland_matrix</a></code></li>
+<li><code><a title="comchoice.pairwise.Pairwise.divisiveness" href="#comchoice.pairwise.Pairwise.divisiveness">divisiveness</a></code></li>
+<li><code><a title="comchoice.pairwise.Pairwise.elo" href="#comchoice.pairwise.Pairwise.elo">elo</a></code></li>
+<li><code><a title="comchoice.pairwise.Pairwise.fit" href="#comchoice.pairwise.Pairwise.fit">fit</a></code></li>
+<li><code><a title="comchoice.pairwise.Pairwise.to_pairwise" href="#comchoice.pairwise.Pairwise.to_pairwise">to_pairwise</a></code></li>
+<li><code><a title="comchoice.pairwise.Pairwise.win_rate" href="#comchoice.pairwise.Pairwise.win_rate">win_rate</a></code></li>
 </ul>
 </li>
 </ul>
