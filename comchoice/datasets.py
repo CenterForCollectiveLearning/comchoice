@@ -84,7 +84,7 @@ def load_synthetic_election(
     load_synthetic_pairwise : Generates synthetic voting data.
     """
 
-    if candidates == None or len(candidates) != n_candidates:
+    if candidates == None:
         if n_candidates <= 26:
             alphabet_string = ascii_lowercase
             candidates = list(alphabet_string[:n_candidates])
