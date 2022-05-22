@@ -1,6 +1,6 @@
 from itertools import combinations
 from os import path
-from random import choice, choices, sample
+from random import choice, choices, sample, seed
 from string import ascii_lowercase
 import pandas as pd
 import re
@@ -50,20 +50,27 @@ def from_preflib(path):
     return df_nodes, df_edges
 
 
-def load_synthetic_election(full_rank=True, n_candidates=3, n_voters=4,
-                            candidates=None) -> pd.DataFrame:
+def load_synthetic_election(
+    candidates=None,
+    full_rank=True,
+    n_candidates=3,
+    n_voters=4,
+    random_state=None
+) -> pd.DataFrame:
     """Generates synthetic voting data.
 
     Parameters
     ----------
+    candidates: string list, default=alphabet
+        List of the names/candidates
     full_rank : bool, default=True
         If the value is `true`, every voter assigns a complete ranking of candidates.
     n_candidates : int, default=3
         Number of candidates. Must be a positive value.
     n_voters : int, default=4
         Number of voters. Must be a positive value.
-    candidates: string list, default=alphabet
-        List of the names/candidates
+    random_state : int, None, default=None
+        Random state
 
     Returns
     -------
@@ -81,6 +88,11 @@ def load_synthetic_election(full_rank=True, n_candidates=3, n_voters=4,
             candidates = list(alphabet_string[:n_candidates])
         else:
             candidates = list(range(1, n_candidates + 1))
+    else:
+        n_candidates = len(candidates)
+
+    if random_state != None and (type(random_state) == int or float):
+        seed(random_state)
 
     output = []
 
@@ -94,7 +106,6 @@ def load_synthetic_election(full_rank=True, n_candidates=3, n_voters=4,
 
     tmp = pd.DataFrame(output).groupby("rank").agg(
         {"voters": "sum"}).reset_index()
-    tmp['rank'] = tmp['rank'].apply(lambda x: x.split(","))
 
     return tmp
 
@@ -102,6 +113,7 @@ def load_synthetic_election(full_rank=True, n_candidates=3, n_voters=4,
 def load_synthetic_pairwise(
     n_candidates=3,
     n_voters=10,
+    random_state=None,
     ties=False,
     transitive=True,
     weight_tie=0.1,
@@ -111,18 +123,20 @@ def load_synthetic_pairwise(
 
     Parameters
     ----------
+    candidates: string list, default=numbers
+        List of the names/candidates
     n_candidates : int, default=3
         Number of candidates. Must be a positive value.
     n_voters : int, default=10
         Number of voters. Must be a positive value.
+    random_state : int, None, default=None
+        Random state
     ties : bool, default=False
         If the value is `true`, the data will include ties between comparisons.
     transitive : bool, default=True
         If the value is `true`, individual preferences are transitives.
     weight_tie : float, default=0.1
         Probability of a tie in a pairwise choice. It works if ties=True.
-    candidates: string list, default=numbers
-        List of the names/candidates
 
     Returns
     -------
@@ -133,8 +147,13 @@ def load_synthetic_pairwise(
     --------
     load_synthetic_election : Generates synthetic voting data.
     """
-    if candidates == None or len(candidates) != n_candidates:
+    if candidates == None:
         candidates = list(range(1, n_candidates + 1))
+    else:
+        n_candidates = len(candidates)
+
+    if random_state != None and (type(random_state) == int or float):
+        seed(random_state)
 
     voters = list(range(1, n_voters + 1))
 
