@@ -9,6 +9,7 @@ setuptools.setup(
     author="cnavarreteliz",
     author_email="cnavarreteliz@gmail.com",
     description="Python library for social choice theory and computational social choice",
+    license_files=("LICENSE.txt",),
     long_description=long_description,
     url="https://github.com/CenterForCollectiveLearning/comchoice",
     packages=setuptools.find_packages(),
