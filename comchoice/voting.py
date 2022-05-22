@@ -37,6 +37,7 @@ class Voting:
         self.df = df
         self.party = "party"
         self.rank = "rank"
+        self.rank_separator = ">"
         self.show_rank = True
         self.voter = "voter"
         self.voters = "voters"
@@ -107,7 +108,7 @@ class Voting:
             df["value"] = N - df[rank]
 
         if plural_voters:
-            df["value"] *= df[voters]
+            df["value"] *= df[voters].astype(int)
 
         tmp = df.groupby(candidate).agg(
             {"value": "sum"}).reset_index().sort_values("value", ascending=False)
@@ -395,7 +396,7 @@ class Voting:
             df = df[df["rank"] == 1].copy()
             df["value"] = 1
             if "voters" in list(df):
-                df["value"] *= df["voters"]
+                df["value"] *= df["voters"].astype(int)
 
             return df.groupby(candidate).agg({"value": "sum"}).reset_index()
 
@@ -448,7 +449,7 @@ class Voting:
 
         df["value"] = df[rank] <= k
         if plural_voters:
-            df["value"] *= df[voters]
+            df["value"] *= df[voters].astype(int)
 
         tmp = df.groupby(candidate).agg(
             {"value": "sum"}).reset_index().sort_values("value", ascending=False)
@@ -547,10 +548,11 @@ class Voting:
 
         if voters in list(df):
             df = self.__transform(df)
+
         df = df[df[rank] == 1]
         df["value"] = 1
         if voters in list(df):
-            df["value"] *= df[voters]
+            df["value"] *= df[voters].astype(int)
 
         tmp = df.groupby(candidate).agg(
             {"value": "sum"}).reset_index().sort_values("value", ascending=False)
@@ -693,6 +695,7 @@ class Voting:
     def __transform(self, data, unique_id=False) -> pd.DataFrame:
         df = data.copy()
         df["_id"] = range(df.shape[0])
+        df["rank"] = df["rank"].str.split(self.rank_separator)
         df = df.explode("rank")
         df = df.rename(columns={"rank": "candidate"})
         df["rank"] = df.groupby("_id").cumcount() + 1

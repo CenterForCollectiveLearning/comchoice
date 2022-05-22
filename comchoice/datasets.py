@@ -55,7 +55,8 @@ def load_synthetic_election(
     full_rank=True,
     n_candidates=3,
     n_voters=4,
-    random_state=None
+    random_state=None,
+    rank_separator=">"
 ) -> pd.DataFrame:
     """Generates synthetic voting data.
 
@@ -71,6 +72,7 @@ def load_synthetic_election(
         Number of voters. Must be a positive value.
     random_state : int, None, default=None
         Random state
+    rank_separator
 
     Returns
     -------
@@ -101,7 +103,7 @@ def load_synthetic_election(
             candidates, n_candidates) if full_rank else choice(candidates)
         output.append({
             "voters": 1,
-            "rank": ">".join(voted)
+            "rank": rank_separator.join(voted)
         })
 
     tmp = pd.DataFrame(output).groupby("rank").agg(
