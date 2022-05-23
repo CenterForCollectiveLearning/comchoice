@@ -42,6 +42,9 @@ class Voting:
         self.voter = "voter"
         self.voters = "voters"
 
+    def antiplurality(self) -> pd.DataFrame:
+        return self.plurality(ascending=True)
+
     def black(self) -> pd.DataFrame:
         """Black procedure (1958).
 
@@ -530,7 +533,7 @@ class Voting:
 
         return tmp
 
-    def plurality(self):
+    def plurality(self, ascending=False):
         """Plurality Rule.
 
         Each voter selects one candidate (or none if voters can abstain), and the candidate(s) with the most votes win.
@@ -555,7 +558,7 @@ class Voting:
             df["value"] *= df[voters].astype(int)
 
         tmp = df.groupby(candidate).agg(
-            {"value": "sum"}).reset_index().sort_values("value", ascending=False)
+            {"value": "sum"}).reset_index().sort_values("value", ascending=ascending)
         if self.show_rank:
             tmp[rank] = range(1, tmp.shape[0] + 1)
 
