@@ -602,9 +602,8 @@ class Voting:
             Candidates that are part of the Smith Set.
         """
 
-        df = self.df.copy()
         output = []
-        m = self.copeland_matrix(df)
+        m = self.copeland_matrix()
         __index = m.sum(axis="columns").sort_values(ascending=False).index
 
         m = m.reindex(__index, axis=0)
