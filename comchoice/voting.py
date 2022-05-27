@@ -122,12 +122,12 @@ class Voting:
     # def bootstraping(self, iter=1000) -> pd.DataFrame:
     #     return
 
-    def compare_methods(self, methods=["borda", "k-approval", "copeland", "plurality"]) -> pd.DataFrame:
+    def compare_methods(self, rules=["borda", "copeland", "plurality"]) -> pd.DataFrame:
         """Compares the ranking given to a candidate in different aggregation methods.
 
         Parameters
         ----------
-        methods : list of {"borda", "k-approval", "copeland", "plurality"}, optional: 
+        rules : list of {"borda", "k-approval", "copeland", "plurality"}, optional: 
             Methods to be compared. Values accepted are borda, k-approval, copeland, and plurality.
 
         Returns
@@ -138,10 +138,10 @@ class Voting:
         output = pd.DataFrame()
         candidate = self.candidate
 
-        for method in methods:
-            r = self.ranking(method=method, k=1)
-            r = r.rename(columns={"rank": method})
-            r = r[[candidate, method]]
+        for rule in rules:
+            r = self.ranking(method=rule, k=1)
+            r = r.rename(columns={"rank": rule})
+            r = r[[candidate, rule]]
             output = r.copy() if output.shape[0] == 0 else pd.merge(
                 output, r, on=candidate)
 
@@ -225,15 +225,17 @@ class Voting:
         rank = self.rank
         voter = self.voter
         voters = self.voters
+        rank_separator = self.rank_separator
 
         cols = ["_winner", "_loser"]
 
         def __transform(data, unique_id=False) -> pd.DataFrame:
             df = data.copy()
             df["_id"] = range(df.shape[0])
+            df[rank] = df[rank].str.split(rank_separator)
             df = df.explode("rank")
             df = df.rename(columns={"rank": "candidate"})
-            df["rank"] = df.groupby("_id").cumcount() + 1
+            df[rank] = df.groupby("_id").cumcount() + 1
             if not unique_id:
                 df = df.drop(columns=["_id"])
 
