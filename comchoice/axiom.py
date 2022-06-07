@@ -5,8 +5,8 @@ import pandas as pd
 class Axiom:
     """Axiom.
 
-    The class `Axiom` checks
-
+    The class `Axiom` checks whether the properties of the voting system,
+    data, and individual and collective rankings holds true. 
 
     """
 
