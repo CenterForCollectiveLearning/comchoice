@@ -97,8 +97,8 @@ class Voting:
         voters = self.voters
         plural_voters = voters in list(df)
 
-        if plural_voters:
-            df = self.__transform(df)
+        # if plural_voters:
+        df = self.__transform(df)
         N = len(df[candidate].unique())
 
         if score == "dowdall":
@@ -394,8 +394,8 @@ class Voting:
         rank = self.rank
         voters = self.voters
 
-        if voters in list(df):
-            df = self.__transform(df, unique_id=True)
+        # if voters in list(df):
+        df = self.__transform(df, unique_id=True)
 
         def __plurality(df):
             df = df[df["rank"] == 1].copy()
@@ -449,8 +449,8 @@ class Voting:
         voters = self.voters
         plural_voters = voters in list(df)
 
-        if plural_voters:
-            df = self.__transform(df)
+        # if plural_voters:
+        df = self.__transform(df)
 
         df["value"] = df[rank] <= k
         if plural_voters:
@@ -551,8 +551,8 @@ class Voting:
         rank = self.rank
         voters = self.voters
 
-        if voters in list(df):
-            df = self.__transform(df)
+        # if voters in list(df):
+        df = self.__transform(df)
 
         df = df[df[rank] == 1]
         df["value"] = 1
