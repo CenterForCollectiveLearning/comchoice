@@ -1,13 +1,14 @@
 from itertools import combinations, permutations
 import numpy as np
 import pandas as pd
+from math import floor
 
 
 class Voting:
     """Voting.
 
-    The class `Voting` defines rules to make collective decisions. 
-    It includes methods to calculate candidates' ranking and some 
+    The class `Voting` defines rules to make collective decisions.
+    It includes methods to calculate candidates' ranking and some
     axiomatic properties in social choice theory.
 
     Attributes
@@ -19,12 +20,12 @@ class Voting:
     rank: str, default="rank"
         Ranking of candidates selected by a voter.
     show_rank: bool, default=True
-        If the value is `true`, the ranking methods defined in `Voting` 
+        If the value is `true`, the ranking methods defined in `Voting`
         will include a column with the ranking of each candidate.
     voter: str, default="voter"
         Voter's unique identifier.
     voters: str, default="voters"
-        If `voter` is not defined, and each row represents more than one voter, 
+        If `voter` is not defined, and each row represents more than one voter,
         it includes the number of voters that selected the same ranking of candidates.
 
     """
@@ -34,7 +35,8 @@ class Voting:
         df = data.copy() if isinstance(data, pd.DataFrame) else pd.DataFrame(data)
 
         self.candidate = "candidate"
-        self.df = df
+        self.df = df.copy()
+        self.df_filtered = df.copy()
         self.party = "party"
         self.rank = "rank"
         self.rank_separator = ">"
@@ -64,16 +66,16 @@ class Voting:
         r = self.condorcet(weak=False)
         return r if r.shape[0] > 0 else self.winner(method="borda")
 
-    def borda(self, score="original") -> pd.DataFrame:
+    def borda(self, rmv=[], score="original") -> pd.DataFrame:
         """Borda Count (1784).
 
-        The Borda count is a voting method to rank candidates. 
-        In an election, each voter gives a ranked-ordered list of their preferences. 
-        Then, it assigns the lowest score to the lowest-ranked candidate, increasing 
-        the score assigned until the candidate ranks first. The winner is the candidate with the most points. 
+        The Borda count is a voting method to rank candidates.
+        In an election, each voter gives a ranked-ordered list of their preferences.
+        Then, it assigns the lowest score to the lowest-ranked candidate, increasing
+        the score assigned until the candidate ranks first. The winner is the candidate with the most points.
 
-        The original version proposed by Borda for an election of n candidates, assigns `n - 1` 
-        points to the candidate in the first place, `n - 2` to the candidate in the second place, 
+        The original version proposed by Borda for an election of n candidates, assigns `n - 1`
+        points to the candidate in the first place, `n - 2` to the candidate in the second place,
         and so on, until assigning 0 to the lowest-ranked candidate.
 
         Parameters
@@ -83,22 +85,22 @@ class Voting:
 
         Returns
         -------
-        pandas.DataFrame: 
-            Election results using Borda Count. 
+        pandas.DataFrame:
+            Election results using Borda Count.
 
         References
         ----------
-        Borda, J. D. (1784). Mémoire sur les élections au scrutin. Histoire de l'Academie 
+        Borda, J. D. (1784). Mémoire sur les élections au scrutin. Histoire de l'Academie
         Royale des Sciences pour 1781 (Paris, 1784).
         """
-        df = self.df.copy()
+        df = self.df_filtered.copy()
         candidate = self.candidate
         rank = self.rank
         voters = self.voters
         plural_voters = voters in list(df)
 
         # if plural_voters:
-        df = self.__transform(df)
+        df = self.__transform(df, rmv=rmv)
         N = len(df[candidate].unique())
 
         if score == "dowdall":
@@ -127,12 +129,12 @@ class Voting:
 
         Parameters
         ----------
-        rules : list of {"borda", "k-approval", "copeland", "plurality"}, optional: 
+        rules : list of {"borda", "k-approval", "copeland", "plurality"}, optional:
             Methods to be compared. Values accepted are borda, k-approval, copeland, and plurality.
 
         Returns
         -------
-        pandas.DataFrame: 
+        pandas.DataFrame:
             DataFrame with a comparison of the methods defined. The first column represents the candidate, and the following ones represent each method being compared.
         """
         output = pd.DataFrame()
@@ -150,15 +152,15 @@ class Voting:
     def completeness(self) -> bool:
         """Completeness of data.
 
-        Verifies if each voter sets a ranking of candidates. 
+        Verifies if each voter sets a ranking of candidates.
         Required in voting methods that need a ranking of candidates provided by each voter.
 
         Returns
         -------
-        bool: 
+        bool:
             Boolean variable to indicate if the data is complete.
         """
-        df = self.df.copy()
+        df = self.df_filtered.copy()
 
         candidate = self.candidate
         voter = self.voter
@@ -181,8 +183,8 @@ class Voting:
     def condorcet(self, weak=True):
         """Condorcet winner (1785).
 
-        A Condorcet winner is the candidate who wins 100% of 1v1 elections regarding all 
-        the other candidates running in the same election (under a plurality rule). 
+        A Condorcet winner is the candidate who wins 100% of 1v1 elections regarding all
+        the other candidates running in the same election (under a plurality rule).
 
         A weak Condorcet winner does not need to satisfy the rule of 100% of victories.
 
@@ -193,17 +195,17 @@ class Voting:
 
         Returns
         -------
-        pandas.DataFrame: 
+        pandas.DataFrame:
             Condorcet winner
 
         References
         ----------
-        de Condorcet, M. (1785), Essai sur l'Application de l'Analyse à la Probabilité des Décisions Rendues à la Pluralité des Voix. Paris: L'Imprimerie Royale. 
+        de Condorcet, M. (1785), Essai sur l'Application de l'Analyse à la Probabilité des Décisions Rendues à la Pluralité des Voix. Paris: L'Imprimerie Royale.
 
         Felsenthal, D.S., Tideman, N. Weak Condorcet winner(s) revisited. Public Choice 160, 313-326 (2014). https://doi.org/10.1007/s11127-014-0180-4
 
         """
-        df = self.df.copy()
+        df = self.df_filtered.copy()
         candidate = self.candidate
 
         m = self.copeland_matrix()
@@ -218,7 +220,7 @@ class Voting:
             return pd.DataFrame([]) if v[0] < 1 else tmp.head(1)
 
     def copeland_matrix(self, n_votes=False):
-        df = self.df.copy()
+        df = self.df_filtered.copy()
         output = []
 
         candidate = self.candidate
@@ -283,23 +285,23 @@ class Voting:
     def copeland(self) -> pd.DataFrame:
         """Copeland voting method (1951).
 
-        Each voter ranks candidates by preference. Next, we sort candidates by the 
-        number of times they beat another candidate in a pairwise comparison. 
-        The top-1 on Copeland's method is considered a weak Condorcet winner. 
-        Likewise, if in an election of `n` candidates, a candidate beats `n - 1` 
+        Each voter ranks candidates by preference. Next, we sort candidates by the
+        number of times they beat another candidate in a pairwise comparison.
+        The top-1 on Copeland's method is considered a weak Condorcet winner.
+        Likewise, if in an election of `n` candidates, a candidate beats `n - 1`
         candidates in pairwise comparison scenarios, it is also considered a Condorcet winner.
 
         Returns
         -------
-        pandas.DataFrame: 
-            Election results using Copeland method. 
+        pandas.DataFrame:
+            Election results using Copeland method.
 
         References
         ----------
         Copeland, A.H. (1951). A “reasonable” social welfare function, mimeographed. In: Seminar on applications of mathematics to the social sciences. Ann Arbor: Department of Mathematics, University of Michigan.
 
         """
-        df = self.df.copy()
+        df = self.df_filtered.copy()
         candidate = self.candidate
 
         m = self.copeland_matrix()
@@ -314,17 +316,17 @@ class Voting:
     def cumulative(self) -> pd.DataFrame:
         """Cumulative Voting.
 
-        Calculates the cumulative score of each candidate. 
+        Calculates the cumulative score of each candidate.
 
         Returns
         -------
-        pandas.DataFrame: 
+        pandas.DataFrame:
             Election results using Cumulative Voting
         """
         candidate = self.candidate
         rank = self.rank
         votes = self.votes
-        df = self.df.copy()
+        df = self.df_filtered.copy()
         tmp = df.groupby(candidate).agg({votes: "sum"}).reset_index().rename(
             columns={votes: "value"}).sort_values("value", ascending=False)
         if self.show_rank:
@@ -335,15 +337,15 @@ class Voting:
     def dowdall(self) -> pd.DataFrame:
         """Dowdall voting method (1971).
 
-        Dowdall is an alternative to Borda count, devised by Nauru's Secretary 
-        of Justice in 1971. As in Borda, each voter gives a ranking of candidates. 
-        The first candidate gets 1 point, the 2nd candidate 1/2 points, and so on 
+        Dowdall is an alternative to Borda count, devised by Nauru's Secretary
+        of Justice in 1971. As in Borda, each voter gives a ranking of candidates.
+        The first candidate gets 1 point, the 2nd candidate 1/2 points, and so on
         until the candidate ranked in the n position receives 1/n points.
 
         Returns
         -------
-        pandas.DataFrame: 
-            a ranking of candidates using Dowdall. 
+        pandas.DataFrame:
+            a ranking of candidates using Dowdall.
 
         References
         ----------
@@ -358,15 +360,15 @@ class Voting:
 
         Parameters
         ----------
-        seats : int, default=1, optional: 
+        seats : int, default=1, optional:
             Number of seats to be assigned in the election.
 
         Returns
         -------
-        pandas.DataFrame: 
+        pandas.DataFrame:
             Summary with the seats of each party.
         """
-        df = self.df.copy()
+        df = self.df_filtered.copy()
         party = self.party
         output = []
         for __party, df_tmp in df.groupby(party):
@@ -378,18 +380,18 @@ class Voting:
         return tmp.head(seats).groupby(party).count().reset_index().rename(columns={"quot": "seats"})
 
     def hare(self) -> pd.DataFrame:
-        """Hare Rule (also called as Instant Runoff, Ranked-Choice Voting, and Alternative Vote)
+        """Hare Rule (also called as Instant Runoff IRV, Ranked-Choice Voting, and Alternative Vote)
 
-        Calculates the winner of an election. In each iteration, 
-        removes the candidate with the lowest score in a plurality rule, 
+        Calculates the winner of an election. In each iteration,
+        removes the candidate with the lowest score in a plurality rule,
         until to have a majority winner.
 
         Returns
         -------
-        pandas.DataFrame: 
-            The election's winner using Hare Rule.
+        pandas.DataFrame:
+            The election's winner using IRV.
         """
-        df = self.df.copy()
+        df = self.df_filtered.copy()
         candidate = self.candidate
         rank = self.rank
         voters = self.voters
@@ -430,19 +432,19 @@ class Voting:
 
         Parameters
         ----------
-        k (int, default=1, optional): 
+        k (int, default=1, optional):
             Threshold to score candidates with a value of 1.
 
         Returns
         -------
-        pandas.DataFrame: 
+        pandas.DataFrame:
             Election results using the k-approval method.
 
         References
         ----------
 
         """
-        df = self.df.copy()
+        df = self.df_filtered.copy()
 
         candidate = self.candidate
         rank = self.rank
@@ -466,8 +468,8 @@ class Voting:
     def kemeny_young(self, score_matrix=False):
         """Kemeny-Young method.
 
-        The Kemeny-Young method is a voting method that uses preferential ballots 
-        and pairwise comparison to identify the most popular candidates in an election. 
+        The Kemeny-Young method is a voting method that uses preferential ballots
+        and pairwise comparison to identify the most popular candidates in an election.
 
         Parameters
         ----------
@@ -476,7 +478,7 @@ class Voting:
 
         Returns
         -------
-        pandas.DataFrame: 
+        pandas.DataFrame:
             Election results using Kemeny-Young method.
 
         References
@@ -512,6 +514,49 @@ class Voting:
 
         return tmp_r
 
+    def minimax(self, method="winning_votes"):
+        candidate = self.candidate
+        d = self.copeland_matrix(n_votes=True)
+
+        e = d / (d + d.T)
+
+        if method in ["winning_votes", "pairwise_opposition"]:
+            tmp = (1 - e).max(axis=1).to_frame(name="value")
+            tmp = tmp.reset_index().rename(columns={"_winner": candidate})
+            if method == "winning_votes":
+                tmp.loc[tmp["value"] < 0.5, "value"] = 0
+
+        elif method == "margins":
+            tmp = (-1 * (e.T - e).min(axis=0)).to_frame(name="value")
+            tmp = tmp.reset_index().rename(columns={"_winner": candidate})
+
+        tmp = tmp.sort_values("value", ascending=True)
+        tmp = tmp.reset_index(drop=True)
+
+        return tmp.head(1)
+
+    def nanson(self):
+        return self.nanson_baldwin(method="nanson")
+
+    def baldwin(self):
+        return self.nanson_baldwin(method="baldwin")
+
+    def nanson_baldwin(self, method="nanson") -> pd.DataFrame:
+        candidate = self.candidate
+
+        rmv = []
+        tmp = self.borda(rmv=rmv)
+
+        while tmp.shape[0] > 1:
+            mean = tmp["value"].mean()
+            if method == "baldwin":
+                rmv += list(tmp.tail(1)[candidate].unique())
+            elif method == "nanson":
+                rmv += list(tmp[tmp["value"] < mean][candidate].unique())
+            tmp = self.borda(rmv=rmv)
+
+        return tmp
+
     def negative(self) -> pd.DataFrame:
         """Negative Voting.
 
@@ -526,7 +571,7 @@ class Voting:
         candidate = self.candidate
         rank = self.rank
         votes = self.votes
-        df = self.df.copy()
+        df = self.df_filtered.copy()
 
         tmp = df.groupby(candidate).agg({votes: "sum"}).reset_index().rename(
             columns={votes: "value"}).sort_values("value", ascending=False)
@@ -545,7 +590,7 @@ class Voting:
         pandas.DataFrame:
             Election results using Plurality Rule.
         """
-        df = self.df.copy()
+        df = self.df_filtered.copy()
 
         candidate = self.candidate
         rank = self.rank
@@ -566,6 +611,17 @@ class Voting:
 
         return tmp
 
+    def quota(self, n_votes, seats, method="hare") -> int:
+        if method == "hare":
+            return floor(n_votes / seats)
+        elif method == "imperiali":
+            return round(n_votes / (seats + 2), 0)
+        elif method == "droop":
+            return floor(n_votes / (seats + 1)) + 1
+        elif method == "hagenbach-bischoff":
+            return floor(n_votes / (seats + 1))
+        return 1
+
     def score(self) -> pd.DataFrame:
         """Score Voting. (Also called as Range Voting, Utilitarian Voting).
 
@@ -581,11 +637,47 @@ class Voting:
         candidate = self.candidate
         rank = self.rank
         votes = self.votes
-        df = self.df.copy()
+        df = self.df_filtered.copy()
         tmp = df.groupby(candidate).agg({votes: "mean"}).reset_index().rename(
             columns={votes: "value"}).sort_values("value", ascending=False)
         if self.show_rank:
             tmp[rank] = range(1, tmp.shape[0] + 1)
+
+        return tmp
+
+    def schulze(self):
+        candidate = self.candidate
+
+        d = self.copeland_matrix(n_votes=True)
+        candidates = list(d)
+        n_candidates = len(candidates)
+
+        p = pd.DataFrame(
+            np.zeros((n_candidates, n_candidates)),
+            index=candidates,
+            columns=candidates
+        )
+
+        for i in candidates:
+            for j in candidates:
+                if i != j:
+                    if d[i][j] > d[j][i]:
+                        p[i][j] = d[i][j]
+
+        for i in candidates:
+            for j in candidates:
+                if i != j:
+                    for k in candidates:
+                        if i != k and j != k:
+                            p[j][k] = max(p[j][k], min(p[j][i], p[i][k]))
+
+        tmp = pd.DataFrame((p > p.T).astype(int).sum(axis=1)).reset_index()
+        tmp.columns = [candidate, "value"]
+
+        if self.show_rank:
+            tmp = tmp.sort_values("value", ascending=False)
+            tmp["rank"] = range(1, tmp.shape[0] + 1)
+            tmp = tmp.reset_index(drop=True)
 
         return tmp
 
@@ -696,12 +788,16 @@ class Voting:
         """
         return self.__get_items(method=method, ascending=False, n=n)
 
-    def __transform(self, data, unique_id=False) -> pd.DataFrame:
+    def __transform(self, data, rmv=[], unique_id=False) -> pd.DataFrame:
         df = data.copy()
         df["_id"] = range(df.shape[0])
         df["rank"] = df["rank"].str.split(self.rank_separator)
         df = df.explode("rank")
         df = df.rename(columns={"rank": "candidate"})
+
+        if len(rmv) > 0:
+            df = df[~df["candidate"].isin(rmv)].copy()
+
         df["rank"] = df.groupby("_id").cumcount() + 1
         if not unique_id:
             df = df.drop(columns=["_id"])

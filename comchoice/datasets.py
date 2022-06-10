@@ -51,6 +51,7 @@ def from_preflib(path):
 
 
 def load_synthetic_election(
+    aggregate=True,
     candidates=None,
     full_rank=True,
     n_candidates=3,
@@ -106,8 +107,14 @@ def load_synthetic_election(
             "rank": rank_separator.join(voted)
         })
 
-    tmp = pd.DataFrame(output).groupby("rank").agg(
-        {"voters": "sum"}).reset_index()
+    tmp = pd.DataFrame(output)
+
+    if aggregate:
+        tmp = tmp.groupby("rank").agg(
+            {"voters": "sum"}).reset_index()
+    else:
+        tmp = tmp.drop(columns=["voters"])
+        tmp["voter"] = range(1, tmp.shape[0] + 1)
 
     return tmp
 
@@ -117,7 +124,6 @@ def load_synthetic_pairwise(
     n_voters=10,
     random_state=None,
     ties=False,
-    transitive=True,
     weight_tie=0.1,
     candidates=None
 ) -> pd.DataFrame:
