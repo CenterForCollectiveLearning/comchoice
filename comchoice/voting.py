@@ -44,6 +44,11 @@ class Voting:
         self.voter = "voter"
         self.voters = "voters"
 
+    def __set_rank__(self, df, ascending=False):
+        df["rank"] = df["value"].rank(
+            method="min", ascending=ascending).astype(int)
+        return df
+
     def antiplurality(self) -> pd.DataFrame:
         return self.plurality(ascending=True)
 
@@ -118,7 +123,7 @@ class Voting:
         tmp = df.groupby(candidate).agg(
             {"value": "sum"}).reset_index().sort_values("value", ascending=False)
         if self.show_rank:
-            tmp["rank"] = range(1, tmp.shape[0] + 1)
+            tmp = self.__set_rank__(tmp)
         return tmp
 
     # def bootstraping(self, iter=1000) -> pd.DataFrame:
@@ -309,7 +314,7 @@ class Voting:
         tmp = pd.DataFrame([(a, b) for a, b in list(zip(list(m), np.nanmean(m, axis=1)))],
                            columns=[candidate, "value"]).sort_values("value", ascending=False)
         if self.show_rank:
-            tmp["rank"] = range(1, tmp.shape[0] + 1)
+            tmp = self.__set_rank__(tmp)
 
         return tmp
 
@@ -330,7 +335,7 @@ class Voting:
         tmp = df.groupby(candidate).agg({votes: "sum"}).reset_index().rename(
             columns={votes: "value"}).sort_values("value", ascending=False)
         if self.show_rank:
-            tmp[rank] = range(1, tmp.shape[0] + 1)
+            tmp = self.__set_rank__(tmp)
 
         return tmp
 
@@ -461,7 +466,7 @@ class Voting:
         tmp = df.groupby(candidate).agg(
             {"value": "sum"}).reset_index().sort_values("value", ascending=False)
         if self.show_rank:
-            tmp["rank"] = range(1, tmp.shape[0] + 1)
+            tmp = self.__set_rank__(tmp)
 
         return tmp
 
@@ -502,8 +507,8 @@ class Voting:
                 score += value
             output.append([list(permutation), score])
 
-        tmp = pd.DataFrame(output, columns=[rank, "score"]).sort_values(
-            "score", ascending=False).reset_index(drop=True)
+        tmp = pd.DataFrame(output, columns=[rank, "value"]).sort_values(
+            "value", ascending=False).reset_index(drop=True)
 
         if score_matrix:
             return tmp
@@ -511,6 +516,9 @@ class Voting:
         tmp_r = pd.DataFrame()
         tmp_r[candidate] = tmp.loc[0, "rank"]
         tmp_r[rank] = range(1, tmp_r.shape[0] + 1)
+
+        if self.show_rank:
+            tmp_r = self.__set_rank__(tmp_r)
 
         return tmp_r
 
@@ -576,7 +584,7 @@ class Voting:
         tmp = df.groupby(candidate).agg({votes: "sum"}).reset_index().rename(
             columns={votes: "value"}).sort_values("value", ascending=False)
         if self.show_rank:
-            tmp[rank] = range(1, tmp.shape[0] + 1)
+            tmp = self.__set_rank__(tmp)
 
         return tmp
 
@@ -607,7 +615,7 @@ class Voting:
         tmp = df.groupby(candidate).agg(
             {"value": "sum"}).reset_index().sort_values("value", ascending=ascending)
         if self.show_rank:
-            tmp[rank] = range(1, tmp.shape[0] + 1)
+            tmp = self.__set_rank__(tmp, ascending=ascending)
 
         return tmp
 
@@ -641,7 +649,7 @@ class Voting:
         tmp = df.groupby(candidate).agg({votes: "mean"}).reset_index().rename(
             columns={votes: "value"}).sort_values("value", ascending=False)
         if self.show_rank:
-            tmp[rank] = range(1, tmp.shape[0] + 1)
+            tmp = self.__set_rank__(tmp)
 
         return tmp
 
@@ -676,8 +684,8 @@ class Voting:
 
         if self.show_rank:
             tmp = tmp.sort_values("value", ascending=False)
-            tmp["rank"] = range(1, tmp.shape[0] + 1)
             tmp = tmp.reset_index(drop=True)
+            tmp = self.__set_rank__(tmp)
 
         return tmp
 
