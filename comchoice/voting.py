@@ -47,6 +47,8 @@ class Voting:
     def __set_rank__(self, df, ascending=False):
         df["rank"] = df["value"].rank(
             method="min", ascending=ascending).astype(int)
+
+        df = df.sort_values("rank")
         return df
 
     def antiplurality(self) -> pd.DataFrame:
@@ -121,7 +123,7 @@ class Voting:
             df["value"] *= df[voters].astype(int)
 
         tmp = df.groupby(candidate).agg(
-            {"value": "sum"}).reset_index().sort_values("value", ascending=False)
+            {"value": "sum"}).reset_index()
         if self.show_rank:
             tmp = self.__set_rank__(tmp)
         return tmp
@@ -312,7 +314,7 @@ class Voting:
         m = self.copeland_matrix()
 
         tmp = pd.DataFrame([(a, b) for a, b in list(zip(list(m), np.nanmean(m, axis=1)))],
-                           columns=[candidate, "value"]).sort_values("value", ascending=False)
+                           columns=[candidate, "value"])
         if self.show_rank:
             tmp = self.__set_rank__(tmp)
 
@@ -333,7 +335,7 @@ class Voting:
         votes = self.votes
         df = self.df_filtered.copy()
         tmp = df.groupby(candidate).agg({votes: "sum"}).reset_index().rename(
-            columns={votes: "value"}).sort_values("value", ascending=False)
+            columns={votes: "value"})
         if self.show_rank:
             tmp = self.__set_rank__(tmp)
 
@@ -464,7 +466,7 @@ class Voting:
             df["value"] *= df[voters].astype(int)
 
         tmp = df.groupby(candidate).agg(
-            {"value": "sum"}).reset_index().sort_values("value", ascending=False)
+            {"value": "sum"}).reset_index()
         if self.show_rank:
             tmp = self.__set_rank__(tmp)
 
@@ -517,8 +519,8 @@ class Voting:
         tmp_r[candidate] = tmp.loc[0, "rank"]
         tmp_r[rank] = range(1, tmp_r.shape[0] + 1)
 
-        if self.show_rank:
-            tmp_r = self.__set_rank__(tmp_r)
+        # if self.show_rank:
+        #     tmp_r = self.__set_rank__(tmp_r)
 
         return tmp_r
 
@@ -582,7 +584,7 @@ class Voting:
         df = self.df_filtered.copy()
 
         tmp = df.groupby(candidate).agg({votes: "sum"}).reset_index().rename(
-            columns={votes: "value"}).sort_values("value", ascending=False)
+            columns={votes: "value"})
         if self.show_rank:
             tmp = self.__set_rank__(tmp)
 
@@ -613,11 +615,49 @@ class Voting:
             df["value"] *= df[voters].astype(int)
 
         tmp = df.groupby(candidate).agg(
-            {"value": "sum"}).reset_index().sort_values("value", ascending=ascending)
+            {"value": "sum"}).reset_index()
         if self.show_rank:
             tmp = self.__set_rank__(tmp, ascending=ascending)
 
         return tmp
+
+    def dodgson_quick(self):
+        candidate = self.candidate
+        m = self.copeland_matrix(n_votes=True)
+        m = m - m.T
+        m[m < 0] = 0
+
+        m = np.ceil(m / 2)
+
+        tmp = m.sum(axis=1).to_frame(name="value")
+        tmp = tmp.reset_index().rename(columns={"_winner": candidate})
+        tmp = tmp.reset_index(drop=True)
+
+        if self.show_rank:
+            tmp = self.__set_rank__(tmp)
+
+        return tmp
+
+    def tideman(self):
+        candidate = self.candidate
+        m = self.copeland_matrix(n_votes=True)
+        m = m - m.T
+        m[m < 0] = 0
+
+        tmp = m.sum(axis=1).to_frame(name="value")
+        tmp = tmp.reset_index().rename(columns={"_winner": candidate})
+        tmp = tmp.reset_index(drop=True)
+
+        if self.show_rank:
+            tmp = self.__set_rank__(tmp)
+
+        return tmp
+
+    def dodgson(self, approximation="quick"):
+        if approximation == "quick":
+            return self.dodgson_quick()
+        elif approximation == "tideman":
+            return self.tideman()
 
     def quota(self, n_votes, seats, method="hare") -> int:
         if method == "hare":
@@ -647,7 +687,7 @@ class Voting:
         votes = self.votes
         df = self.df_filtered.copy()
         tmp = df.groupby(candidate).agg({votes: "mean"}).reset_index().rename(
-            columns={votes: "value"}).sort_values("value", ascending=False)
+            columns={votes: "value"})
         if self.show_rank:
             tmp = self.__set_rank__(tmp)
 
@@ -683,7 +723,6 @@ class Voting:
         tmp.columns = [candidate, "value"]
 
         if self.show_rank:
-            tmp = tmp.sort_values("value", ascending=False)
             tmp = tmp.reset_index(drop=True)
             tmp = self.__set_rank__(tmp)
 
