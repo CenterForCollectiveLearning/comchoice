@@ -644,12 +644,12 @@ class Voting:
         m = m - m.T
         m[m < 0] = 0
 
-        tmp = m.sum(axis=1).to_frame(name="value")
+        tmp = m.sum(axis=0).to_frame(name="value")
         tmp = tmp.reset_index().rename(columns={"_winner": candidate})
         tmp = tmp.reset_index(drop=True)
 
         if self.show_rank:
-            tmp = self.__set_rank__(tmp)
+            tmp = self.__set_rank__(tmp, ascending=True)
 
         return tmp
 
