@@ -35,11 +35,14 @@ class Voting:
         df = data.copy() if isinstance(data, pd.DataFrame) else pd.DataFrame(data)
 
         self.candidate = "candidate"
+        self.candidates = "candidates"
+        self.candidates_separator = ","
         self.df = df.copy()
         self.df_filtered = df.copy()
         self.party = "party"
         self.rank = "rank"
         self.rank_separator = ">"
+        self.score = "score"
         self.show_rank = True
         self.voter = "voter"
         self.voters = "voters"
@@ -49,6 +52,12 @@ class Voting:
             method="min", ascending=ascending).astype(int)
 
         df = df.sort_values("rank")
+        return df
+
+    def __set_voters(self, df):
+        voters = self.voters
+        if voters in list(df):
+            df["value"] *= df[voters]
         return df
 
     def antiplurality(self) -> pd.DataFrame:
@@ -330,16 +339,8 @@ class Voting:
         pandas.DataFrame:
             Election results using Cumulative Voting
         """
-        candidate = self.candidate
-        rank = self.rank
-        votes = self.votes
-        df = self.df_filtered.copy()
-        tmp = df.groupby(candidate).agg({votes: "sum"}).reset_index().rename(
-            columns={votes: "value"})
-        if self.show_rank:
-            tmp = self.__set_rank__(tmp)
 
-        return tmp
+        return self.score(aggregation="sum")
 
     def dowdall(self) -> pd.DataFrame:
         """Dowdall voting method (1971).
@@ -578,17 +579,7 @@ class Voting:
             Election results using Negative Voting.
 
         """
-        candidate = self.candidate
-        rank = self.rank
-        votes = self.votes
-        df = self.df_filtered.copy()
-
-        tmp = df.groupby(candidate).agg({votes: "sum"}).reset_index().rename(
-            columns={votes: "value"})
-        if self.show_rank:
-            tmp = self.__set_rank__(tmp)
-
-        return tmp
+        return self.score(aggregation="sum")
 
     def plurality(self, ascending=False):
         """Plurality Rule.
@@ -604,15 +595,13 @@ class Voting:
 
         candidate = self.candidate
         rank = self.rank
-        voters = self.voters
 
         # if voters in list(df):
         df = self.__transform(df)
 
         df = df[df[rank] == 1]
         df["value"] = 1
-        if voters in list(df):
-            df["value"] *= df[voters].astype(int)
+        df = self.__set_voters(df)
 
         tmp = df.groupby(candidate).agg(
             {"value": "sum"}).reset_index()
@@ -670,7 +659,7 @@ class Voting:
             return floor(n_votes / (seats + 1))
         return 1
 
-    def score(self) -> pd.DataFrame:
+    def score(self, aggregation="mean") -> pd.DataFrame:
         """Score Voting. (Also called as Range Voting, Utilitarian Voting).
 
         In this method, voters give a score to each candidate. We average the scores, 
@@ -683,11 +672,12 @@ class Voting:
 
         """
         candidate = self.candidate
-        rank = self.rank
-        votes = self.votes
+        score = self.score
         df = self.df_filtered.copy()
-        tmp = df.groupby(candidate).agg({votes: "mean"}).reset_index().rename(
-            columns={votes: "value"})
+        tmp = df.groupby(candidate).agg({score: aggregation}).reset_index().rename(
+            columns={score: "value"})
+
+        tmp = self.__set_voters(tmp)
         if self.show_rank:
             tmp = self.__set_rank__(tmp)
 
@@ -727,6 +717,48 @@ class Voting:
             tmp = self.__set_rank__(tmp)
 
         return tmp
+
+    def sav(self, n_seats=2):
+        return self.approval_voting(method="satisfaction", n_seats=n_seats)
+
+    def pav(self, n_seats=2):
+        return self.approval_voting(method="proportional", n_seats=n_seats)
+
+    def approval_voting(self, method="proportional", n_seats=2):
+        def harmonic(n):
+            if n == 0:
+                return 0
+            return 1 + sum([1 / i for i in range(2, n + 1)])
+
+        df = self.df.copy()
+        candidates_separator = self.candidates_separator
+        voters = self.voters
+        candidates = self.candidates
+
+        df[candidates] = df[candidates].str.split(candidates_separator)
+
+        output = []
+        for seats in combinations(df[candidates].explode().unique(), n_seats):
+            for i, tmp in df.iterrows():
+                n_items = len(set(tmp[candidates]) & set(seats))
+
+                if method == "classic":
+                    coef = 1  # TODO
+                elif method == "proportional":
+                    coef = harmonic(n_items)
+
+                elif method == "satisfaction":
+                    coef = n_items / \
+                        len(set(tmp[candidates])) if n_items > 0 else 0
+                    if coef > 1:
+                        coef = 1
+
+                output.append({
+                    candidates: seats,
+                    "value": coef * tmp[voters]
+                })
+
+        return pd.DataFrame(output).groupby(candidates).agg({"value": "sum"}).reset_index()
 
     def smith_set(self):
         """Smith Set.
