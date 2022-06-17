@@ -689,7 +689,7 @@ class Voting:
         im.columns = columns
         im = im.reset_index(drop=True)
 
-        while len(W) < n_seats:
+        while len(W) < n_seats and n_seats > 0:
             zeros_m = np.zeros((n_rows, len(columns)))
             mi = pd.DataFrame(zeros_m, columns=columns)
             for w in W:
