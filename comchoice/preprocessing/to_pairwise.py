@@ -1,17 +1,21 @@
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
+from itertools import combinations
 
 
 def to_pairwise(
     df,
     candidate="candidate",
-    option_a="option_a",
-    option_b="option_b",
+    delimiter=">",
+    candidate_a="candidate_a",
+    candidate_b="candidate_b",
     selected="selected",
+    rank="rank",
     value="value",
     voter="voter",
-    type="star",
+    voters="voters",
+    origin="star",
     verbose=True
 ) -> pd.DataFrame:
     """Converts a star rating dataset to a pairwise comparison dataset.
@@ -22,10 +26,10 @@ def to_pairwise(
         _description_
     candidate : str, optional
         _description_, by default "candidate"
-    option_a : str, optional
-        _description_, by default "option_a"
-    option_b : str, optional
-        _description_, by default "option_b"
+    candidate_a : str, optional
+        _description_, by default "candidate_a"
+    candidate_b : str, optional
+        _description_, by default "candidate_b"
     selected : str, optional
         _description_, by default "selected"
     value : str, optional
@@ -40,6 +44,25 @@ def to_pairwise(
     pd.DataFrame
         _description_
     """
+
+    if origin == "voting":
+        if voters in list(df):
+            output = []
+            for i, row in df.iterrows():
+                tmp = pd.DataFrame([row] * row[voters])
+                output.append(tmp)
+            df = pd.concat(output, ignore_index=True)
+            df[voter] = range(df.shape[0])
+
+            df[rank] = df[rank].str.split(delimiter).apply(
+                lambda x: list(combinations(x, 2)))
+            df = df.explode(rank)
+
+            df[candidate_a] = df[rank].map(lambda x: x[0])
+            df[candidate_b] = df[rank].map(lambda x: x[1])
+            df[selected] = df["candidate_a"]
+
+            return df[[voter, candidate_a, candidate_b, selected]]
 
     _data_tmp = df.groupby(voter)
     _iter = tqdm(
@@ -59,15 +82,15 @@ def to_pairwise(
     tmp = pd.concat(output)
     tmp = tmp.rename(
         columns={
-            f"{candidate}_x": option_a,
-            f"{candidate}_y": option_b
+            f"{candidate}_x": candidate_a,
+            f"{candidate}_y": candidate_b
         }
     )
 
     tmp[selected] = np.where(
         tmp[f"{value}_x"] == tmp[f"{value}_y"], 0,
         np.where(tmp[f"{value}_x"] > tmp[f"{value}_y"],
-                 tmp[option_a], tmp[option_b])
+                 tmp[candidate_a], tmp[candidate_b])
     )
 
-    return tmp[[voter, option_a, option_b, selected]]
+    return tmp[[voter, candidate_a, candidate_b, selected]]

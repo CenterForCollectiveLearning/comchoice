@@ -10,8 +10,8 @@ def bradley_terry(
     delimiter=">",
     candidate="candidate",
     rank="rank",
-    option_a="option_a",
-    option_b="option_b",
+    candidate_a="candidate_a",
+    candidate_b="candidate_b",
     iterations: int = 1,
     show_rank=True,
     voter="voter",
@@ -47,7 +47,7 @@ def bradley_terry(
 
     m = m.values
 
-    ids = set(df[option_a]) | set(df[option_b])
+    ids = set(df[candidate_a]) | set(df[candidate_b])
     N = len(ids)
 
     p = np.ones(N)

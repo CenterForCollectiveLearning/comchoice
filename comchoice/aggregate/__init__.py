@@ -2,8 +2,12 @@ from .ahp import ahp
 from .antiplurality import antiplurality
 from .approval import approval
 from .baldwin import baldwin
+from .black import black
 from .borda import borda
 from .bradley_terry import bradley_terry
+from .condorcet import condorcet
+from .cumulative import cumulative
+from .dhondt import dhondt
 from .divisiveness import divisiveness
 from .dodgson import dodgson
 from .dodgson_quick import dodgson_quick
@@ -23,3 +27,4 @@ from .schulze import schulze
 from .score import score
 from .smith_set import smith_set
 from .tideman import tideman
+from .quota import quota

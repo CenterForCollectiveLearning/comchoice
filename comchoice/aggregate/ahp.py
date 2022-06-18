@@ -2,19 +2,32 @@ import numpy as np
 import pandas as pd
 from scipy import linalg
 
+from .__set_rank import __set_rank
+from .__set_card_id import __set_card_id
+
 
 def ahp(
     df,
     ppal_eigval="approximation",
     criteria="criteria",
     origin="pairwise",
-    option_a="option_a",
-    option_b="option_b",
-    selected="selected"
+    candidate="candidate",
+    candidate_a="candidate_a",
+    candidate_b="candidate_b",
+    selected="selected",
+    show_rank=True
 ) -> pd.DataFrame:
 
-    option_a_sorted = f"{option_a}_sorted" if origin == "pairwise" else option_a
-    option_b_sorted = f"{option_b}_sorted" if origin == "pairwise" else option_b
+    df = __set_card_id(
+        df,
+        candidate_a=candidate_a,
+        candidate_b=candidate_b,
+        selected=selected,
+        concat="_"
+    )
+
+    option_a_sorted = f"{candidate_a}_sorted" if origin == "pairwise" else candidate_a
+    option_b_sorted = f"{candidate_b}_sorted" if origin == "pairwise" else candidate_b
 
     if selected in list(df):
         df["weight_a"] = np.where(
@@ -23,7 +36,7 @@ def ahp(
             df[option_b_sorted] == df[selected], 1, 0)
 
         df = df.groupby([option_a_sorted, option_b_sorted]).agg(
-            {"weight_a": "sum", "weight_b": "sum"}).reset_index(drop=True)
+            {"weight_a": "sum", "weight_b": "sum"}).reset_index()
 
     def __calc(df, ppal_eigval=ppal_eigval):
         df["value"] = df["weight_b"] / df["weight_a"]
@@ -51,7 +64,7 @@ def ahp(
             raise "Value provided to ppal_eigval parameter not valid. Values accepted are 'eigval', 'approximation'"
 
         priority = pd.DataFrame(priority).reset_index()
-        priority.columns = ["option", "value"]
+        priority.columns = ["candidate", "value"]
 
         # Calculates Consistency Index
         ci = (_lambda - n) / (n - 1)
@@ -79,4 +92,7 @@ def ahp(
 
     priority, ci, cr = __calc(df, ppal_eigval=ppal_eigval)
 
-    return priority, ci, cr
+    if show_rank:
+        priority = __set_rank(priority)
+
+    return priority  # , ci, cr

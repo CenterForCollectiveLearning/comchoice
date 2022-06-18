@@ -3,8 +3,8 @@ import pandas as pd
 
 def elo(
     df,
-    option_a="option_a",
-    option_b="option_b",
+    candidate_a="candidate_a",
+    candidate_b="candidate_b",
     candidate="candidate",
     selected="selected",
     rating: int = 400,
@@ -23,11 +23,11 @@ def elo(
 
     """
 
-    candidates = set(df[option_a]) | set(df[option_b])
+    candidates = set(df[candidate_a]) | set(df[candidate_b])
 
     ELO_RATING = {i: rating for i in candidates}
 
-    for item_a, item_b, item_selected in list(zip(df[option_a], df[option_b], df[selected])):
+    for item_a, item_b, item_selected in list(zip(df[candidate_a], df[candidate_b], df[selected])):
         r_a = ELO_RATING[item_a]
         r_b = ELO_RATING[item_b]
 
