@@ -1,7 +1,8 @@
 import pandas as pd
 
 
-from . import borda, condorcet
+from .borda import borda
+from .condorcet import condorcet
 
 
 def black(
@@ -44,6 +45,5 @@ def black(
         score="original",
         show_rank=True,
         voter=voter,
-        voters=voters,
-        weak=False
+        voters=voters
     ).head(1)

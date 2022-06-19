@@ -1,6 +1,6 @@
 import pandas as pd
 
-from . import pairwise_matrix
+from .pairwise_matrix import pairwise_matrix
 
 
 def minimax(
@@ -36,4 +36,4 @@ def minimax(
     tmp = tmp.sort_values("value", ascending=True)
     tmp = tmp.reset_index(drop=True)
 
-    return tmp.head(1)
+    return tmp

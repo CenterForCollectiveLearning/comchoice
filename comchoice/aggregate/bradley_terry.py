@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from . import pairwise_matrix
+from .pairwise_matrix import pairwise_matrix
 from .__set_rank import __set_rank
 
 

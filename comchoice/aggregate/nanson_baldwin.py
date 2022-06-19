@@ -1,5 +1,5 @@
 import pandas as pd
-from . import borda
+from .borda import borda
 
 
 def nanson_baldwin(

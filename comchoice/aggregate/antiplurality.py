@@ -1,5 +1,5 @@
 import pandas as pd
-from . import plurality
+from .plurality import plurality
 
 
 def antiplurality(

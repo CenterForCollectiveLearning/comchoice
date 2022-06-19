@@ -6,6 +6,8 @@ from .black import black
 from .borda import borda
 from .bradley_terry import bradley_terry
 from .condorcet import condorcet
+from .coombs import coombs
+from .copeland import copeland
 from .cumulative import cumulative
 from .dhondt import dhondt
 from .divisiveness import divisiveness
@@ -23,8 +25,8 @@ from .negative import negative
 from .pairwise_matrix import pairwise_matrix
 from .phragmen import phragmen
 from .plurality import plurality
+from .quota import quota
 from .schulze import schulze
 from .score import score
 from .smith_set import smith_set
 from .tideman import tideman
-from .quota import quota

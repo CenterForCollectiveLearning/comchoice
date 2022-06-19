@@ -1,6 +1,6 @@
 import pandas as pd
 
-from . import score
+from .score import score
 
 
 def negative(

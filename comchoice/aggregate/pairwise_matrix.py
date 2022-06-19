@@ -9,7 +9,8 @@ def pairwise_matrix(
     rank="rank",
     delimiter="delimiter",
     voter="voter",
-    voters="voters"
+    voters="voters",
+    return_candidates=False
 ):
     output = []
 
@@ -27,8 +28,8 @@ def pairwise_matrix(
 
         return df
 
+    df = __transform(df, unique_id=True)
     if voters in list(df):
-        df = __transform(df, unique_id=True)
         df = df.rename(columns={"_id": "voter"})
     else:
         df[voters] = 1
@@ -50,5 +51,8 @@ def pairwise_matrix(
     m = m.reindex(unique_candidates, axis=0)
     m = m.reindex(unique_candidates, axis=1)
     m = m.fillna(0)
+
+    if return_candidates:
+        return m, unique_candidates
 
     return m

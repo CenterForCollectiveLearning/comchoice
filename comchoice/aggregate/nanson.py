@@ -1,5 +1,5 @@
 import pandas as pd
-from . import nanson_baldwin
+from .nanson_baldwin import nanson_baldwin
 
 
 def nanson(

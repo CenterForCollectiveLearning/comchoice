@@ -5,6 +5,7 @@ from tqdm import tqdm
 from . import ahp
 from .__set_card_id import __set_card_id
 from .__set_rank import __set_rank
+from comchoice.preprocessing import to_pairwise
 
 
 def divisiveness(
@@ -14,6 +15,7 @@ def divisiveness(
     candidate_a="candidate_a",
     candidate_b="candidate_b",
     selected="selected",
+    convert_pairwise=False,
     show_rank=True,
     verbose=True,
     voter="voter"
@@ -44,27 +46,29 @@ def divisiveness(
     _type_
         _description_
     """
-    # df = df[(df[candidate_a] == df[selected]) | (
-    #     df[candidate_b] == df[selected])].copy()
+    tmp = df.copy()
+    df_original = df.copy()
+    if convert_pairwise:
+        tmp = to_pairwise(tmp, origin="voting")
 
-    df = __set_card_id(
-        df,
+    tmp = __set_card_id(
+        tmp,
         candidate_a=candidate_a,
         candidate_b=candidate_b,
         selected=selected,
         concat="_"
     )
 
-    dd = df.groupby(["card_id", selected, voter]).agg({"id": "count"})
-    _data = df.copy().set_index(voter)
+    dd = tmp.groupby(["card_id", selected, voter]).agg({"id": "count"})
+    # _data = df.copy().set_index(voter)
 
     def _f(idx, df_select):
         card_id = idx[0]
         s = idx[1]
         users = [item[2] for item in df_select.index.to_numpy()]
 
-        data_temp = _data.loc[users].reset_index()
-
+        # data_temp = _data.loc[users].reset_index()
+        data_temp = df_original[df_original[voter].isin(users)]
         r_tmp = method(data_temp).dropna()
         r_tmp["card_id"] = card_id
         r_tmp[selected] = s

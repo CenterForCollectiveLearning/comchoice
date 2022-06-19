@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from . import pairwise_matrix
+from .pairwise_matrix import pairwise_matrix
 
 from .__set_rank import __set_rank
 
@@ -13,7 +13,7 @@ def copeland(
     show_rank=True,
     voter="voter",
     voters="voters"
-) -> pd.DataFrame:
+):
     """Copeland voting method (1951).
 
     Each voter ranks candidates by preference. Next, we sort candidates by the
@@ -32,15 +32,14 @@ def copeland(
     Copeland, A.H. (1951). A “reasonable” social welfare function, mimeographed. In: Seminar on applications of mathematics to the social sciences. Ann Arbor: Department of Mathematics, University of Michigan.
 
     """
-    unique_candidates = df[candidate].unique()
-
-    m = pairwise_matrix(
+    m, unique_candidates = pairwise_matrix(
         df,
         candidate=candidate,
         rank=rank,
         delimiter=delimiter,
         voter=voter,
-        voters=voters
+        voters=voters,
+        return_candidates=True
     )
 
     r = m + m.T

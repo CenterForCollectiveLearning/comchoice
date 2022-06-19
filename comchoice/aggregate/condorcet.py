@@ -1,6 +1,6 @@
 import pandas as pd
 
-from . import copeland
+from .copeland import copeland
 
 
 def condorcet(
