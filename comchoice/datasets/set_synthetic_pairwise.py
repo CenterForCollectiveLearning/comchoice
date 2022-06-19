@@ -4,7 +4,7 @@ from string import ascii_lowercase
 import pandas as pd
 
 
-def load_synthetic_pairwise(
+def set_synthetic_pairwise(
     n_candidates=3,
     n_voters=10,
     random_state=None,
