@@ -1,6 +1,6 @@
 import pandas as pd
 
-from . import approval
+from comchoice.aggregate.approval import approval
 
 
 def pav(

@@ -1,5 +1,5 @@
 import pandas as pd
-from .nanson_baldwin import nanson_baldwin
+from comchoice.aggregate.nanson_baldwin import nanson_baldwin
 
 
 def baldwin(

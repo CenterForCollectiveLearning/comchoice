@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from .pairwise_matrix import pairwise_matrix
+from comchoice.aggregate.pairwise_matrix import pairwise_matrix
 
 
 def smith_set(

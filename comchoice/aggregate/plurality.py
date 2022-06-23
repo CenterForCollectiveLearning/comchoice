@@ -1,9 +1,9 @@
 import pandas as pd
 
-from .__aggregate import __aggregate
-from .__set_rank import __set_rank
-from .__set_voters import __set_voters
-from .__transform import __transform
+from comchoice.aggregate.__aggregate import __aggregate
+from comchoice.aggregate.__set_rank import __set_rank
+from comchoice.aggregate.__set_voters import __set_voters
+from comchoice.aggregate.__transform import __transform
 
 
 def plurality(
@@ -30,9 +30,11 @@ def plurality(
     df = df[df[rank] == 1].copy()
     df["value"] = 1
     df = __set_voters(df, voters=voters)
+    candidates = df[candidate].unique()
+    tmp = df.groupby(candidate).agg({"value": "sum"})\
+        .reindex(candidates).fillna(0)\
+        .reset_index()
 
-    tmp = df.groupby(candidate).agg(
-        {"value": "sum"}).reset_index()
     if show_rank:
         tmp = __set_rank(tmp, ascending=ascending)
 

@@ -1,6 +1,6 @@
 import pandas as pd
 
-from .score import score
+from comchoice.aggregate.score import score
 
 
 def negative(

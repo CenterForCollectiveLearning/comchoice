@@ -1,6 +1,6 @@
 import pandas as pd
 
-from .__transform import __transform
+from comchoice.aggregate.__transform import __transform
 
 
 def coombs(

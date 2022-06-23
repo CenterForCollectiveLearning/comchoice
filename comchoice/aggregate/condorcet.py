@@ -1,6 +1,6 @@
 import pandas as pd
 
-from .copeland import copeland
+from comchoice.aggregate.copeland import copeland
 
 
 def condorcet(

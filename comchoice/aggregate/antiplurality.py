@@ -1,5 +1,5 @@
 import pandas as pd
-from .plurality import plurality
+from comchoice.aggregate.plurality import plurality
 
 
 def antiplurality(

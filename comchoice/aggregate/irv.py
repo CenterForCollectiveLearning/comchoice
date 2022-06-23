@@ -1,8 +1,8 @@
 import pandas as pd
 
-from .__transform import __transform
-from .__set_voters import __set_voters
-from .__aggregate import __aggregate
+from comchoice.aggregate.__transform import __transform
+from comchoice.aggregate.__set_voters import __set_voters
+from comchoice.aggregate.__aggregate import __aggregate
 
 
 def irv(

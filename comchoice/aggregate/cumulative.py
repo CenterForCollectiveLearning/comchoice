@@ -1,6 +1,6 @@
 import pandas as pd
 
-from . import score
+from comchoice.aggregate.score import score
 
 
 def cumulative(

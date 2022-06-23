@@ -1,5 +1,5 @@
 import pandas as pd
-from .borda import borda
+from comchoice.aggregate.borda import borda
 
 
 def nanson_baldwin(

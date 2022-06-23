@@ -1,5 +1,5 @@
 import pandas as pd
-from . import borda
+from comchoice.aggregate.borda import borda
 
 
 def dowdall(

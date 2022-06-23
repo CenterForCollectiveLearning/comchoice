@@ -1,8 +1,8 @@
 import pandas as pd
 
 
-from .borda import borda
-from .condorcet import condorcet
+from comchoice.aggregate.borda import borda
+from comchoice.aggregate.condorcet import condorcet
 
 
 def black(

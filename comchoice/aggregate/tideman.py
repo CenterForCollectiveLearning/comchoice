@@ -1,8 +1,8 @@
 import numpy as np
 import pandas as pd
 
-from .pairwise_matrix import pairwise_matrix
-from .__set_rank import __set_rank
+from comchoice.aggregate.pairwise_matrix import pairwise_matrix
+from comchoice.aggregate.__set_rank import __set_rank
 
 
 def tideman(
@@ -27,7 +27,7 @@ def tideman(
     m[m < 0] = 0
 
     tmp = m.sum(axis=0).to_frame(name="value")
-    tmp = tmp.reset_index().rename(columns={"_winner": candidate})
+    tmp = tmp.reset_index().rename(columns={"_loser": candidate})
     tmp = tmp.reset_index(drop=True)
 
     if show_rank:

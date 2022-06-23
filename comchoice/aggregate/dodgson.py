@@ -1,6 +1,7 @@
 import pandas as pd
 
-from . import dodgson_quick, tideman
+from comchoice.aggregate.dodgson_quick import dodgson_quick
+from comchoice.aggregate.tideman import tideman
 
 
 def dodgson(

@@ -1,6 +1,7 @@
 import pandas as pd
 
-from .pairwise_matrix import pairwise_matrix
+from comchoice.aggregate.pairwise_matrix import pairwise_matrix
+from comchoice.aggregate.__set_rank import __set_rank
 
 
 def minimax(
@@ -9,6 +10,7 @@ def minimax(
     candidate="candidate",
     rank="rank",
     delimiter=">",
+    show_rank=True,
     voter="voter",
     voters="voters"
 ):
@@ -35,5 +37,8 @@ def minimax(
 
     tmp = tmp.sort_values("value", ascending=True)
     tmp = tmp.reset_index(drop=True)
+
+    if show_rank:
+        tmp = __set_rank(tmp, ascending=True)
 
     return tmp

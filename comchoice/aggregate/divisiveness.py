@@ -3,8 +3,8 @@ import pandas as pd
 from tqdm import tqdm
 
 from . import ahp
-from .__set_card_id import __set_card_id
-from .__set_rank import __set_rank
+from comchoice.aggregate.__set_card_id import __set_card_id
+from comchoice.aggregate.__set_rank import __set_rank
 from comchoice.preprocessing import to_pairwise
 
 
