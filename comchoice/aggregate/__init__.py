@@ -15,6 +15,7 @@ from .dodgson import dodgson
 from .dodgson_quick import dodgson_quick
 from .dowdall import dowdall
 from .elo import elo
+from .fallback import fallback
 from .irv import irv
 from .k_approval import k_approval
 from .kemeny_young import kemeny_young
