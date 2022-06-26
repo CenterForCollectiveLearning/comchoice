@@ -28,5 +28,6 @@ from .plurality import plurality
 from .quota import quota
 from .schulze import schulze
 from .score import score
+from .simpson import simpson
 from .smith_set import smith_set
 from .tideman import tideman
