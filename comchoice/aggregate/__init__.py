@@ -24,9 +24,11 @@ from .nanson import nanson
 from .nanson_baldwin import nanson_baldwin
 from .negative import negative
 from .pairwise_matrix import pairwise_matrix
+from .pav import pav
 from .phragmen import phragmen
 from .plurality import plurality
 from .quota import quota
+from .sav import sav
 from .schulze import schulze
 from .score import score
 from .simpson import simpson
