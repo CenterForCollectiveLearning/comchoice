@@ -57,27 +57,3 @@ class Axiom:
             Boolean variable to indicate if the data is complete.
         """
         return Axiom.condocert(data, user_id_col='voter', selected_col='selected')
-
-    def pareto(data, user_id_col='voter', selected_col='selected'):
-        """
-            Pareto: Dominated alternatives can not win.
-            There are multiple winners. 
-            Other utility function should be used to find a unique winner.
-
-        Returns
-        -------
-        bool: 
-            Boolean variable to indicate if the data is complete.
-        """
-
-        if Axiom.condocert(data):
-            return False
-
-        aux = data.groupby(user_id_col)[
-            selected_col].value_counts(normalize=True)
-        n_unique_winners = aux.nlargest(1, keep='all').reset_index(name='perc')[
-            selected_col].nunique()
-        if n_unique_winners > 1:
-            return True
-
-        return False
