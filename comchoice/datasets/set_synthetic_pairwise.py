@@ -54,14 +54,14 @@ def set_synthetic_pairwise(
 
     for voter in voters:
         rank_order = combinations(sample(candidates, n_candidates), 2)
-        for candidate_a, candidate_b in rank_order:
+        for alternative_a, alternative_b in rank_order:
 
-            options = sample([candidate_a, candidate_b], 2)
+            options = sample([alternative_a, alternative_b], 2)
             option_a = options[0]
             option_b = options[1]
 
-            selected = choices([candidate_a, 0], weights=[
-                               1 - weight_tie, weight_tie])[0] if ties else candidate_a
+            selected = choices([alternative_a, 0], weights=[
+                               1 - weight_tie, weight_tie])[0] if ties else alternative_a
 
             output.append({
                 "voter": voter,

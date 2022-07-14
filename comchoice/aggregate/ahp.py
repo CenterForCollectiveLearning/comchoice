@@ -12,22 +12,22 @@ def ahp(
     criteria="criteria",
     origin="pairwise",
     candidate="candidate",
-    candidate_a="candidate_a",
-    candidate_b="candidate_b",
+    alternative_a="alternative_a",
+    alternative_b="alternative_b",
     selected="selected",
     show_rank=True
 ) -> pd.DataFrame:
 
     df = __set_card_id(
         df,
-        candidate_a=candidate_a,
-        candidate_b=candidate_b,
+        alternative_a=alternative_a,
+        alternative_b=alternative_b,
         selected=selected,
         concat="_"
     )
 
-    option_a_sorted = f"{candidate_a}_sorted" if origin == "pairwise" else candidate_a
-    option_b_sorted = f"{candidate_b}_sorted" if origin == "pairwise" else candidate_b
+    option_a_sorted = f"{alternative_a}_sorted" if origin == "pairwise" else alternative_a
+    option_b_sorted = f"{alternative_b}_sorted" if origin == "pairwise" else alternative_b
 
     if selected in list(df):
         df["weight_a"] = np.where(

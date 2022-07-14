@@ -8,8 +8,8 @@ def to_pairwise(
     df,
     candidate="candidate",
     delimiter=">",
-    candidate_a="candidate_a",
-    candidate_b="candidate_b",
+    alternative_a="alternative_a",
+    alternative_b="alternative_b",
     selected="selected",
     rank="rank",
     value="value",
@@ -26,10 +26,10 @@ def to_pairwise(
         _description_
     candidate : str, optional
         _description_, by default "candidate"
-    candidate_a : str, optional
-        _description_, by default "candidate_a"
-    candidate_b : str, optional
-        _description_, by default "candidate_b"
+    alternative_a : str, optional
+        _description_, by default "alternative_a"
+    alternative_b : str, optional
+        _description_, by default "alternative_b"
     selected : str, optional
         _description_, by default "selected"
     value : str, optional
@@ -58,11 +58,11 @@ def to_pairwise(
             lambda x: list(combinations(x, 2)))
         df = df.explode(rank)
 
-        df[candidate_a] = df[rank].map(lambda x: x[0])
-        df[candidate_b] = df[rank].map(lambda x: x[1])
-        df[selected] = df["candidate_a"]
+        df[alternative_a] = df[rank].map(lambda x: x[0])
+        df[alternative_b] = df[rank].map(lambda x: x[1])
+        df[selected] = df["alternative_a"]
 
-        return df[[voter, candidate_a, candidate_b, selected]]
+        return df[[voter, alternative_a, alternative_b, selected]]
 
     _data_tmp = df.groupby(voter)
     _iter = tqdm(
@@ -82,15 +82,15 @@ def to_pairwise(
     tmp = pd.concat(output)
     tmp = tmp.rename(
         columns={
-            f"{candidate}_x": candidate_a,
-            f"{candidate}_y": candidate_b
+            f"{candidate}_x": alternative_a,
+            f"{candidate}_y": alternative_b
         }
     )
 
     tmp[selected] = np.where(
         tmp[f"{value}_x"] == tmp[f"{value}_y"], 0,
         np.where(tmp[f"{value}_x"] > tmp[f"{value}_y"],
-                 tmp[candidate_a], tmp[candidate_b])
+                 tmp[alternative_a], tmp[alternative_b])
     )
 
-    return tmp[[voter, candidate_a, candidate_b, selected]]
+    return tmp[[voter, alternative_a, alternative_b, selected]]

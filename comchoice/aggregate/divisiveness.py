@@ -12,8 +12,8 @@ def divisiveness(
     df,
     candidate="candidate",
     method=ahp,
-    candidate_a="candidate_a",
-    candidate_b="candidate_b",
+    alternative_a="alternative_a",
+    alternative_b="alternative_b",
     selected="selected",
     convert_pairwise=False,
     show_rank=True,
@@ -30,10 +30,10 @@ def divisiveness(
         _description_, by default "id"
     method : _type_, optional
         _description_, by default borda
-    candidate_a : str, optional
-        _description_, by default "candidate_a"
-    candidate_b : str, optional
-        _description_, by default "candidate_b"
+    alternative_a : str, optional
+        _description_, by default "alternative_a"
+    alternative_b : str, optional
+        _description_, by default "alternative_b"
     selected : str, optional
         _description_, by default "selected"
     verbose : bool, optional
@@ -53,8 +53,8 @@ def divisiveness(
 
     tmp = __set_card_id(
         tmp,
-        candidate_a=candidate_a,
-        candidate_b=candidate_b,
+        alternative_a=alternative_a,
+        alternative_b=alternative_b,
         selected=selected,
         concat="_"
     )
@@ -89,9 +89,9 @@ def divisiveness(
 
     tmp = pd.concat(tmp_list, ignore_index=True)
 
-    tmp[[f"{candidate_a}_sorted", f"{candidate_b}_sorted"]
+    tmp[[f"{alternative_a}_sorted", f"{alternative_b}_sorted"]
         ] = tmp["card_id"].str.split("_", expand=True)
-    tmp["group"] = tmp[f"{candidate_a}_sorted"].astype(
+    tmp["group"] = tmp[f"{alternative_a}_sorted"].astype(
         str) == tmp[selected].astype(str)
     tmp["group"] = tmp["group"].replace({True: "A", False: "B"})
 
@@ -99,7 +99,7 @@ def divisiveness(
     tmp_b = tmp[tmp["group"] == "B"]
 
     tmp_dv = pd.merge(tmp_a, tmp_b, on=[
-                      "card_id", candidate, f"{candidate_a}_sorted", f"{candidate_b}_sorted"])
+                      "card_id", candidate, f"{alternative_a}_sorted", f"{alternative_b}_sorted"])
 
     tmp_dv = tmp_dv[[candidate, "card_id", "value_x",
                      "value_y", f"{selected}_x", f"{selected}_y"]]

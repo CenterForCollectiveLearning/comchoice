@@ -4,8 +4,8 @@ import pandas as pd
 
 def __set_card_id(
     df,
-    candidate_a="candidate_a",
-    candidate_b="candidate_b",
+    alternative_a="alternative_a",
+    alternative_b="alternative_b",
     selected="selected",
     concat: str = "_"
 ) -> pd.DataFrame:
@@ -25,10 +25,10 @@ def __set_card_id(
         A pairwise comparison DataFrame with card_id column.
     """
 
-    option_a_sorted = f"{candidate_a}_sorted"
-    option_b_sorted = f"{candidate_b}_sorted"
+    option_a_sorted = f"{alternative_a}_sorted"
+    option_b_sorted = f"{alternative_b}_sorted"
 
-    cols = [candidate_a, candidate_b, selected]
+    cols = [alternative_a, alternative_b, selected]
     a = df[cols].values
 
     # Sorts options, always lower value on left column
@@ -50,8 +50,8 @@ def __set_card_id(
 
     # Creates option_source / option_target
     selected_zero = df[selected] == 0
-    df.loc[selected_zero, "option_source"] = df.loc[selected_zero, candidate_a]
-    df.loc[selected_zero, "option_target"] = df.loc[selected_zero, candidate_b]
+    df.loc[selected_zero, "option_source"] = df.loc[selected_zero, alternative_a]
+    df.loc[selected_zero, "option_target"] = df.loc[selected_zero, alternative_b]
 
     df["id"] = range(1, df.shape[0] + 1)
 
