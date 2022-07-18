@@ -4,7 +4,7 @@ from comchoice.aggregate.plurality import plurality
 
 def antiplurality(
     df,
-    candidate="candidate",
+    alternative="alternative",
     delimiter=">",
     rank="rank",
     show_rank=True,
@@ -12,7 +12,7 @@ def antiplurality(
 ) -> pd.DataFrame:
     return plurality(
         df,
-        candidate=candidate,
+        alternative=alternative,
         delimiter=delimiter,
         rank=rank,
         show_rank=show_rank,

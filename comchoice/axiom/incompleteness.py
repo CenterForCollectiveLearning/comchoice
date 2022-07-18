@@ -7,13 +7,13 @@ def incompleteness(
     df,
     alternative_a="alternative_a",
     alternative_b="alternative_b",
-    n_candidates=2,
+    n_alternatives=2,
     n_preferences=2,
     voter="voter"
 ) -> bool:
     """
-    Incompleteness: a data is incomplete if any candidate does not provided their
-    entire pairwise preferences between all the candidates.
+    Incompleteness: a data is incomplete if any alternative does not provided their
+    entire pairwise preferences between all the alternatives.
 
     Returns
     -------
@@ -24,7 +24,7 @@ def incompleteness(
         df,
         alternative_a=alternative_a,
         alternative_b=alternative_b,
-        n_candidates=n_candidates,
+        n_alternatives=n_alternatives,
         n_preferences=n_preferences,
         voter=voter
     )

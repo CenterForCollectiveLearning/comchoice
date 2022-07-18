@@ -5,13 +5,13 @@ from comchoice.aggregate.score import score
 
 def negative(
     df,
-    candidate="candidate",
+    alternative="alternative",
     score="score",
     show_rank=True
 ) -> pd.DataFrame:
     """Negative Voting.
 
-    Calculates the score of each candidate using Negative Voting.
+    Calculates the score of each alternative using Negative Voting.
 
     Returns
     -------
@@ -22,7 +22,7 @@ def negative(
     return score(
         df,
         aggregation="sum",
-        candidate=candidate,
+        alternative=alternative,
         score=score,
         show_rank=show_rank
     )

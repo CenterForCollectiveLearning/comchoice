@@ -11,7 +11,7 @@ def ahp(
     ppal_eigval="approximation",
     criteria="criteria",
     origin="pairwise",
-    candidate="candidate",
+    alternative="alternative",
     alternative_a="alternative_a",
     alternative_b="alternative_b",
     selected="selected",
@@ -64,7 +64,7 @@ def ahp(
             raise "Value provided to ppal_eigval parameter not valid. Values accepted are 'eigval', 'approximation'"
 
         priority = pd.DataFrame(priority).reset_index()
-        priority.columns = ["candidate", "value"]
+        priority.columns = ["alternative", "value"]
 
         # Calculates Consistency Index
         ci = (_lambda - n) / (n - 1)

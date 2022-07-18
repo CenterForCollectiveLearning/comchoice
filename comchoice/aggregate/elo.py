@@ -5,27 +5,27 @@ def elo(
     df,
     alternative_a="alternative_a",
     alternative_b="alternative_b",
-    candidate="candidate",
+    alternative="alternative",
     selected="selected",
     rating: int = 400,
     K: int = 10
 ):
     """Elo score.
 
-    Calculates a ranking of candidates using Elo rating.
+    Calculates a ranking of alternatives using Elo rating.
 
     Parameters
     ----------
     rating : int, default=400
-        Initial rating of each candidate.
+        Initial rating of each alternative.
     K : int, default=10
         The K-factor estimates the score that a player can win in a game.
 
     """
 
-    candidates = set(df[alternative_a]) | set(df[alternative_b])
+    alternatives = set(df[alternative_a]) | set(df[alternative_b])
 
-    ELO_RATING = {i: rating for i in candidates}
+    ELO_RATING = {i: rating for i in alternatives}
 
     for item_a, item_b, item_selected in list(zip(df[alternative_a], df[alternative_b], df[selected])):
         r_a = ELO_RATING[item_a]
@@ -51,5 +51,5 @@ def elo(
 
     return pd.DataFrame(
         ELO_RATING.items(),
-        columns=[candidate, "value"]
+        columns=[alternative, "value"]
     )

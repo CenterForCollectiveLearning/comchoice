@@ -14,6 +14,7 @@ setuptools.setup(
     url="https://github.com/CenterForCollectiveLearning/comchoice",
     packages=setuptools.find_packages(),
     install_requires=[
+        "fastapi",
         "numpy",
         "pandas",
         "requests"

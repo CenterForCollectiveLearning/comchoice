@@ -9,18 +9,18 @@ class Axiom:
 
     """
 
-    def compute_ranking(data, n_candidates, columns=['option_source', 'option_target']):
-        ranking = ((data[columns[0]].value_counts().reindex(range(1, n_candidates+1), fill_value=0)*-1)
+    def compute_ranking(data, n_alternatives, columns=['option_source', 'option_target']):
+        ranking = ((data[columns[0]].value_counts().reindex(range(1, n_alternatives+1), fill_value=0)*-1)
                    +
-                   (data[columns[1]].value_counts().reindex(range(1, n_candidates+1), fill_value=0)*(n_candidates-1))).reset_index()
+                   (data[columns[1]].value_counts().reindex(range(1, n_alternatives+1), fill_value=0)*(n_alternatives-1))).reset_index()
         ranking[1] = ranking[0].rank(
             ascending=False, method='first').astype(int)
         return list(ranking.sort_values(by='index', ascending=True)[1].values), list(ranking.sort_values(by='index', ascending=True)[0].values)
 
-    def compute_ranking_ties(data, n_candidates, columns=['option_source', 'option_target']):
-        ranking = ((data[columns[0]].value_counts().reindex(range(1, n_candidates+1), fill_value=0)*-1)
+    def compute_ranking_ties(data, n_alternatives, columns=['option_source', 'option_target']):
+        ranking = ((data[columns[0]].value_counts().reindex(range(1, n_alternatives+1), fill_value=0)*-1)
                    +
-                   (data[columns[1]].value_counts().reindex(range(1, n_candidates+1), fill_value=0)*(n_candidates-1))).reset_index()
+                   (data[columns[1]].value_counts().reindex(range(1, n_alternatives+1), fill_value=0)*(n_alternatives-1))).reset_index()
         ranking[1] = ranking[0].rank(
             ascending=False, method='average').astype(int)
         return list(ranking.sort_values(by='index', ascending=True)[1].values), list(ranking.sort_values(by='index', ascending=True)[0].values)
@@ -47,7 +47,7 @@ class Axiom:
 
     def reinforcement(data, user_id_col='voter', selected_col='selected'):
         """
-            Reinforcement: a candidate that it is selected by different voters 
+            Reinforcement: a alternative that it is selected by different voters 
             must also be the one voted by their votes together. 
             Same of Condocert, but here you do not need to take into account the whole population.
 

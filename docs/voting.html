@@ -1,32 +1,507 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.10.0" />
-<title>comchoice.voting API documentation</title>
-<meta name="description" content="" />
-<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
-<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
-<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
-<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
-<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
-<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+    <meta name="generator" content="pdoc 0.10.0" />
+    <title>comchoice.voting API documentation</title>
+    <meta name="description" content="" />
+    <link rel="preload stylesheet" as="style"
+        href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css"
+        integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+    <link rel="preload stylesheet" as="style"
+        href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css"
+        integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+    <link rel="stylesheet preload" as="style"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+    <style>
+        :root {
+            --highlight-color: #fe9
+        }
+
+        .flex {
+            display: flex !important
+        }
+
+        body {
+            line-height: 1.5em
+        }
+
+        #content {
+            padding: 20px
+        }
+
+        #sidebar {
+            padding: 30px;
+            overflow: hidden
+        }
+
+        #sidebar>*:last-child {
+            margin-bottom: 2cm
+        }
+
+        .http-server-breadcrumbs {
+            font-size: 130%;
+            margin: 0 0 15px 0
+        }
+
+        #footer {
+            font-size: .75em;
+            padding: 5px 30px;
+            border-top: 1px solid #ddd;
+            text-align: right
+        }
+
+        #footer p {
+            margin: 0 0 0 1em;
+            display: inline-block
+        }
+
+        #footer p:last-child {
+            margin-right: 30px
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5 {
+            font-weight: 300
+        }
+
+        h1 {
+            font-size: 2.5em;
+            line-height: 1.1em
+        }
+
+        h2 {
+            font-size: 1.75em;
+            margin: 1em 0 .50em 0
+        }
+
+        h3 {
+            font-size: 1.4em;
+            margin: 25px 0 10px 0
+        }
+
+        h4 {
+            margin: 0;
+            font-size: 105%
+        }
+
+        h1:target,
+        h2:target,
+        h3:target,
+        h4:target,
+        h5:target,
+        h6:target {
+            background: var(--highlight-color);
+            padding: .2em 0
+        }
+
+        a {
+            color: #058;
+            text-decoration: none;
+            transition: color .3s ease-in-out
+        }
+
+        a:hover {
+            color: #e82
+        }
+
+        .title code {
+            font-weight: bold
+        }
+
+        h2[id^="header-"] {
+            margin-top: 2em
+        }
+
+        .ident {
+            color: #900
+        }
+
+        pre code {
+            background: #f8f8f8;
+            font-size: .8em;
+            line-height: 1.4em
+        }
+
+        code {
+            background: #f2f2f1;
+            padding: 1px 4px;
+            overflow-wrap: break-word
+        }
+
+        h1 code {
+            background: transparent
+        }
+
+        pre {
+            background: #f8f8f8;
+            border: 0;
+            border-top: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+            margin: 1em 0;
+            padding: 1ex
+        }
+
+        #http-server-module-list {
+            display: flex;
+            flex-flow: column
+        }
+
+        #http-server-module-list div {
+            display: flex
+        }
+
+        #http-server-module-list dt {
+            min-width: 10%
+        }
+
+        #http-server-module-list p {
+            margin-top: 0
+        }
+
+        .toc ul,
+        #index {
+            list-style-type: none;
+            margin: 0;
+            padding: 0
+        }
+
+        #index code {
+            background: transparent
+        }
+
+        #index h3 {
+            border-bottom: 1px solid #ddd
+        }
+
+        #index ul {
+            padding: 0
+        }
+
+        #index h4 {
+            margin-top: .6em;
+            font-weight: bold
+        }
+
+        @media (min-width:200ex) {
+            #index .two-column {
+                column-count: 2
+            }
+        }
+
+        @media (min-width:300ex) {
+            #index .two-column {
+                column-count: 3
+            }
+        }
+
+        dl {
+            margin-bottom: 2em
+        }
+
+        dl dl:last-child {
+            margin-bottom: 4em
+        }
+
+        dd {
+            margin: 0 0 1em 3em
+        }
+
+        #header-classes+dl>dd {
+            margin-bottom: 3em
+        }
+
+        dd dd {
+            margin-left: 2em
+        }
+
+        dd p {
+            margin: 10px 0
+        }
+
+        .name {
+            background: #eee;
+            font-weight: bold;
+            font-size: .85em;
+            padding: 5px 10px;
+            display: inline-block;
+            min-width: 40%
+        }
+
+        .name:hover {
+            background: #e0e0e0
+        }
+
+        dt:target .name {
+            background: var(--highlight-color)
+        }
+
+        .name>span:first-child {
+            white-space: nowrap
+        }
+
+        .name.class>span:nth-child(2) {
+            margin-left: .4em
+        }
+
+        .inherited {
+            color: #999;
+            border-left: 5px solid #eee;
+            padding-left: 1em
+        }
+
+        .inheritance em {
+            font-style: normal;
+            font-weight: bold
+        }
+
+        .desc h2 {
+            font-weight: 400;
+            font-size: 1.25em
+        }
+
+        .desc h3 {
+            font-size: 1em
+        }
+
+        .desc dt code {
+            background: inherit
+        }
+
+        .source summary,
+        .git-link-div {
+            color: #666;
+            text-align: right;
+            font-weight: 400;
+            font-size: .8em;
+            text-transform: uppercase
+        }
+
+        .source summary>* {
+            white-space: nowrap;
+            cursor: pointer
+        }
+
+        .git-link {
+            color: inherit;
+            margin-left: 1em
+        }
+
+        .source pre {
+            max-height: 500px;
+            overflow: auto;
+            margin: 0
+        }
+
+        .source pre code {
+            font-size: 12px;
+            overflow: visible
+        }
+
+        .hlist {
+            list-style: none
+        }
+
+        .hlist li {
+            display: inline
+        }
+
+        .hlist li:after {
+            content: ',\2002'
+        }
+
+        .hlist li:last-child:after {
+            content: none
+        }
+
+        .hlist .hlist {
+            display: inline;
+            padding-left: 1em
+        }
+
+        img {
+            max-width: 100%
+        }
+
+        td {
+            padding: 0 .5em
+        }
+
+        .admonition {
+            padding: .1em .5em;
+            margin-bottom: 1em
+        }
+
+        .admonition-title {
+            font-weight: bold
+        }
+
+        .admonition.note,
+        .admonition.info,
+        .admonition.important {
+            background: #aef
+        }
+
+        .admonition.todo,
+        .admonition.versionadded,
+        .admonition.tip,
+        .admonition.hint {
+            background: #dfd
+        }
+
+        .admonition.warning,
+        .admonition.versionchanged,
+        .admonition.deprecated {
+            background: #fd4
+        }
+
+        .admonition.error,
+        .admonition.danger,
+        .admonition.caution {
+            background: lightpink
+        }
+    </style>
+    <style media="screen and (min-width: 700px)">
+        @media screen and (min-width:700px) {
+            #sidebar {
+                width: 30%;
+                height: 100vh;
+                overflow: auto;
+                position: sticky;
+                top: 0
+            }
+
+            #content {
+                width: 70%;
+                max-width: 100ch;
+                padding: 3em 4em;
+                border-left: 1px solid #ddd
+            }
+
+            pre code {
+                font-size: 1em
+            }
+
+            .item .name {
+                font-size: 1em
+            }
+
+            main {
+                display: flex;
+                flex-direction: row-reverse;
+                justify-content: flex-end
+            }
+
+            .toc ul ul,
+            #index ul {
+                padding-left: 1.5em
+            }
+
+            .toc>ul>li {
+                margin-top: .5em
+            }
+        }
+    </style>
+    <style media="print">
+        @media print {
+            #sidebar h1 {
+                page-break-before: always
+            }
+
+            .source {
+                display: none
+            }
+        }
+
+        @media print {
+            * {
+                background: transparent !important;
+                color: #000 !important;
+                box-shadow: none !important;
+                text-shadow: none !important
+            }
+
+            a[href]:after {
+                content: " (" attr(href) ")";
+                font-size: 90%
+            }
+
+            a[href][title]:after {
+                content: none
+            }
+
+            abbr[title]:after {
+                content: " (" attr(title) ")"
+            }
+
+            .ir a:after,
+            a[href^="javascript:"]:after,
+            a[href^="#"]:after {
+                content: ""
+            }
+
+            pre,
+            blockquote {
+                border: 1px solid #999;
+                page-break-inside: avoid
+            }
+
+            thead {
+                display: table-header-group
+            }
+
+            tr,
+            img {
+                page-break-inside: avoid
+            }
+
+            img {
+                max-width: 100% !important
+            }
+
+            @page {
+                margin: 0.5cm
+            }
+
+            p,
+            h2,
+            h3 {
+                orphans: 3;
+                widows: 3
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6 {
+                page-break-after: avoid
+            }
+        }
+    </style>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"
+        integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+    <script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
 </head>
+
 <body>
-<main>
-<article id="content">
-<header>
-<h1 class="title">Module <code>comchoice.voting</code></h1>
-</header>
-<section id="section-intro">
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">from itertools import combinations, permutations
+    <main>
+        <article id="content">
+            <header>
+                <h1 class="title">Module <code>comchoice.voting</code></h1>
+            </header>
+            <section id="section-intro">
+                <details class="source">
+                    <summary>
+                        <span>Expand source code</span>
+                    </summary>
+                    <pre><code class="python">from itertools import combinations, permutations
 import numpy as np
 import pandas as pd
 
@@ -35,25 +510,25 @@ class Voting:
     &#34;&#34;&#34;Voting.
 
     The class `Voting` defines rules to make collective decisions. 
-    It includes methods to calculate candidates&#39; ranking and some 
+    It includes methods to calculate alternatives&#39; ranking and some 
     axiomatic properties in social choice theory.
 
     Attributes
     ----------
-    candidate: str, default=&#34;candidate&#34;
-        Candidates&#39; unique identifier.
+    alternative: str, default=&#34;alternative&#34;
+        alternatives&#39; unique identifier.
     party: str, default=&#34;party&#34;
         Party&#39;s unique identifier. (Attribute used for proportional methods).
     rank: str, default=&#34;rank&#34;
-        Ranking of candidates selected by a voter.
+        Ranking of alternatives selected by a voter.
     show_rank: bool, default=True
         If the value is `true`, the ranking methods defined in `Voting` 
-        will include a column with the ranking of each candidate.
+        will include a column with the ranking of each alternative.
     voter: str, default=&#34;voter&#34;
         Voter&#39;s unique identifier.
     voters: str, default=&#34;voters&#34;
         If `voter` is not defined, and each row represents more than one voter, 
-        it includes the number of voters that selected the same ranking of candidates.
+        it includes the number of voters that selected the same ranking of alternatives.
 
     &#34;&#34;&#34;
 
@@ -61,7 +536,7 @@ class Voting:
         # If data is not a DataFrame, converts it data into a DataFrame
         df = data.copy() if isinstance(data, pd.DataFrame) else pd.DataFrame(data)
 
-        self.candidate = &#34;candidate&#34;
+        self.alternative = &#34;alternative&#34;
         self.df = df
         self.party = &#34;party&#34;
         self.rank = &#34;rank&#34;
@@ -73,7 +548,7 @@ class Voting:
         &#34;&#34;&#34;Black procedure (1958).
 
         Calculates winner of an election using Black procedure. First, the method calculates if there is a
-        Condorcet winner. If there is a Condorcet winner, that candidate is the winner. Otherwise, the winner
+        Condorcet winner. If there is a Condorcet winner, that alternative is the winner. Otherwise, the winner
         using Borda count is the winner.
 
         Returns
@@ -91,14 +566,14 @@ class Voting:
     def borda(self, score=&#34;original&#34;) -&gt; pd.DataFrame:
         &#34;&#34;&#34;Borda Count (1784).
 
-        The Borda count is a voting method to rank candidates. 
+        The Borda count is a voting method to rank alternatives. 
         In an election, each voter gives a ranked-ordered list of their preferences. 
-        Then, it assigns the lowest score to the lowest-ranked candidate, increasing 
-        the score assigned until the candidate ranks first. The winner is the candidate with the most points. 
+        Then, it assigns the lowest score to the lowest-ranked alternative, increasing 
+        the score assigned until the alternative ranks first. The winner is the alternative with the most points. 
 
-        The original version proposed by Borda for an election of n candidates, assigns `n - 1` 
-        points to the candidate in the first place, `n - 2` to the candidate in the second place, 
-        and so on, until assigning 0 to the lowest-ranked candidate.
+        The original version proposed by Borda for an election of n alternatives, assigns `n - 1` 
+        points to the alternative in the first place, `n - 2` to the alternative in the second place, 
+        and so on, until assigning 0 to the lowest-ranked alternative.
 
         Parameters
         ----------
@@ -116,14 +591,14 @@ class Voting:
         Royale des Sciences pour 1781 (Paris, 1784).
         &#34;&#34;&#34;
         df = self.df.copy()
-        candidate = self.candidate
+        alternative = self.alternative
         rank = self.rank
         voters = self.voters
         plural_voters = voters in list(df)
 
         if plural_voters:
             df = self.__transform(df)
-        N = len(df[candidate].unique())
+        N = len(df[alternative].unique())
 
         if score == &#34;dowdall&#34;:
             df[&#34;value&#34;] = 1 / df[rank]
@@ -137,7 +612,7 @@ class Voting:
         if plural_voters:
             df[&#34;value&#34;] *= df[voters]
 
-        tmp = df.groupby(candidate).agg(
+        tmp = df.groupby(alternative).agg(
             {&#34;value&#34;: &#34;sum&#34;}).reset_index().sort_values(&#34;value&#34;, ascending=False)
         if self.show_rank:
             tmp[&#34;rank&#34;] = range(1, tmp.shape[0] + 1)
@@ -147,7 +622,7 @@ class Voting:
     #     return
 
     def compare_methods(self, methods=[&#34;borda&#34;, &#34;k-approval&#34;, &#34;copeland&#34;, &#34;plurality&#34;]) -&gt; pd.DataFrame:
-        &#34;&#34;&#34;Compares the ranking given to a candidate in different aggregation methods.
+        &#34;&#34;&#34;Compares the ranking given to a alternative in different aggregation methods.
 
         Parameters
         ----------
@@ -157,25 +632,25 @@ class Voting:
         Returns
         -------
         pandas.DataFrame: 
-            DataFrame with a comparison of the methods defined. The first column represents the candidate, and the following ones represent each method being compared.
+            DataFrame with a comparison of the methods defined. The first column represents the alternative, and the following ones represent each method being compared.
         &#34;&#34;&#34;
         output = pd.DataFrame()
-        candidate = self.candidate
+        alternative = self.alternative
 
         for method in methods:
             r = self.ranking(method=method, k=1)
             r = r.rename(columns={&#34;rank&#34;: method})
-            r = r[[candidate, method]]
+            r = r[[alternative, method]]
             output = r.copy() if output.shape[0] == 0 else pd.merge(
-                output, r, on=candidate)
+                output, r, on=alternative)
 
         return output
 
     def completeness(self) -&gt; bool:
         &#34;&#34;&#34;Completeness of data.
 
-        Verifies if each voter sets a ranking of candidates. 
-        Required in voting methods that need a ranking of candidates provided by each voter.
+        Verifies if each voter sets a ranking of alternatives. 
+        Required in voting methods that need a ranking of alternatives provided by each voter.
 
         Returns
         -------
@@ -184,7 +659,7 @@ class Voting:
         &#34;&#34;&#34;
         df = self.df.copy()
 
-        candidate = self.candidate
+        alternative = self.alternative
         voter = self.voter
         voters = self.voters
 
@@ -194,10 +669,10 @@ class Voting:
         else:
             df[voters] = 1
 
-        unique_candidates = df[candidate].unique()
+        unique_alternatives = df[alternative].unique()
 
         for idx, df_tmp in df.groupby([voter, voters]):
-            if len(df_tmp[candidate].unique()) != len(unique_candidates):
+            if len(df_tmp[alternative].unique()) != len(unique_alternatives):
                 return False
 
         return True
@@ -205,8 +680,8 @@ class Voting:
     def condorcet(self, weak=True):
         &#34;&#34;&#34;Condorcet winner (1785).
 
-        A Condorcet winner is the candidate who wins 100% of 1v1 elections regarding all 
-        the other candidates running in the same election (under a plurality rule). 
+        A Condorcet winner is the alternative who wins 100% of 1v1 elections regarding all 
+        the other alternatives running in the same election (under a plurality rule). 
 
         A weak Condorcet winner does not need to satisfy the rule of 100% of victories.
 
@@ -228,12 +703,12 @@ class Voting:
 
         &#34;&#34;&#34;
         df = self.df.copy()
-        candidate = self.candidate
+        alternative = self.alternative
 
         m = self.copeland_matrix()
 
         tmp = pd.DataFrame([(a, b) for a, b in list(zip(list(m), np.nanmean(m, axis=1)))],
-                           columns=[candidate, &#34;value&#34;]).sort_values(&#34;value&#34;, ascending=False)
+                           columns=[alternative, &#34;value&#34;]).sort_values(&#34;value&#34;, ascending=False)
 
         if weak:
             return tmp.head(1)
@@ -245,7 +720,7 @@ class Voting:
         df = self.df.copy()
         output = []
 
-        candidate = self.candidate
+        alternative = self.alternative
         rank = self.rank
         voter = self.voter
         voters = self.voters
@@ -256,7 +731,7 @@ class Voting:
             df = data.copy()
             df[&#34;_id&#34;] = range(df.shape[0])
             df = df.explode(&#34;rank&#34;)
-            df = df.rename(columns={&#34;rank&#34;: &#34;candidate&#34;})
+            df = df.rename(columns={&#34;rank&#34;: &#34;alternative&#34;})
             df[&#34;rank&#34;] = df.groupby(&#34;_id&#34;).cumcount() + 1
             if not unique_id:
                 df = df.drop(columns=[&#34;_id&#34;])
@@ -269,12 +744,12 @@ class Voting:
         else:
             df[voters] = 1
 
-        unique_candidates = df[candidate].unique()
+        unique_alternatives = df[alternative].unique()
         for idx, df_tmp in df.groupby([voter, voters]):
             _voter, _voters = idx
 
             df_tmp = df_tmp.sort_values(rank)
-            items = df_tmp[candidate].values
+            items = df_tmp[alternative].values
 
             tmp = pd.DataFrame(list(combinations(items, 2)), columns=cols)
             tmp[&#34;value&#34;] = _voters
@@ -283,8 +758,8 @@ class Voting:
         m = pd.concat(output).groupby(cols).agg({&#34;value&#34;: &#34;sum&#34;}).reset_index()
 
         m = m.pivot(index=cols[0], columns=cols[1], values=&#34;value&#34;)
-        m = m.reindex(unique_candidates, axis=0)
-        m = m.reindex(unique_candidates, axis=1)
+        m = m.reindex(unique_alternatives, axis=0)
+        m = m.reindex(unique_alternatives, axis=1)
         m = m.fillna(0)
 
         if n_votes:
@@ -294,9 +769,9 @@ class Voting:
         m = m / r
 
         m = np.where(m &gt; 0.5, 1, np.where(m == 0.5, 0.5, 0))
-        m = pd.DataFrame(m, index=unique_candidates, columns=unique_candidates)
-        m = m.reindex(unique_candidates, axis=0)
-        m = m.reindex(unique_candidates, axis=1)
+        m = pd.DataFrame(m, index=unique_alternatives, columns=unique_alternatives)
+        m = m.reindex(unique_alternatives, axis=0)
+        m = m.reindex(unique_alternatives, axis=1)
         m = m.astype(float)
         np.fill_diagonal(m.values, np.nan)
 
@@ -305,11 +780,11 @@ class Voting:
     def copeland(self) -&gt; pd.DataFrame:
         &#34;&#34;&#34;Copeland voting method (1951).
 
-        Each voter ranks candidates by preference. Next, we sort candidates by the 
-        number of times they beat another candidate in a pairwise comparison. 
+        Each voter ranks alternatives by preference. Next, we sort alternatives by the 
+        number of times they beat another alternative in a pairwise comparison. 
         The top-1 on Copeland&#39;s method is considered a weak Condorcet winner. 
-        Likewise, if in an election of `n` candidates, a candidate beats `n - 1` 
-        candidates in pairwise comparison scenarios, it is also considered a Condorcet winner.
+        Likewise, if in an election of `n` alternatives, a alternative beats `n - 1` 
+        alternatives in pairwise comparison scenarios, it is also considered a Condorcet winner.
 
         Returns
         -------
@@ -322,12 +797,12 @@ class Voting:
 
         &#34;&#34;&#34;
         df = self.df.copy()
-        candidate = self.candidate
+        alternative = self.alternative
 
         m = self.copeland_matrix()
 
         tmp = pd.DataFrame([(a, b) for a, b in list(zip(list(m), np.nanmean(m, axis=1)))],
-                           columns=[candidate, &#34;value&#34;]).sort_values(&#34;value&#34;, ascending=False)
+                           columns=[alternative, &#34;value&#34;]).sort_values(&#34;value&#34;, ascending=False)
         if self.show_rank:
             tmp[&#34;rank&#34;] = range(1, tmp.shape[0] + 1)
 
@@ -336,18 +811,18 @@ class Voting:
     def cumulative(self) -&gt; pd.DataFrame:
         &#34;&#34;&#34;Cumulative Voting.
 
-        Calculates the cumulative score of each candidate. 
+        Calculates the cumulative score of each alternative. 
 
         Returns
         -------
         pandas.DataFrame: 
             Election results using Cumulative Voting
         &#34;&#34;&#34;
-        candidate = self.candidate
+        alternative = self.alternative
         rank = self.rank
         votes = self.votes
         df = self.df.copy()
-        tmp = df.groupby(candidate).agg({votes: &#34;sum&#34;}).reset_index().rename(
+        tmp = df.groupby(alternative).agg({votes: &#34;sum&#34;}).reset_index().rename(
             columns={votes: &#34;value&#34;}).sort_values(&#34;value&#34;, ascending=False)
         if self.show_rank:
             tmp[rank] = range(1, tmp.shape[0] + 1)
@@ -358,14 +833,14 @@ class Voting:
         &#34;&#34;&#34;Dowdall voting method (1971).
 
         Dowdall is an alternative to Borda count, devised by Nauru&#39;s Secretary 
-        of Justice in 1971. As in Borda, each voter gives a ranking of candidates. 
-        The first candidate gets 1 point, the 2nd candidate 1/2 points, and so on 
-        until the candidate ranked in the n position receives 1/n points.
+        of Justice in 1971. As in Borda, each voter gives a ranking of alternatives. 
+        The first alternative gets 1 point, the 2nd alternative 1/2 points, and so on 
+        until the alternative ranked in the n position receives 1/n points.
 
         Returns
         -------
         pandas.DataFrame: 
-            a ranking of candidates using Dowdall. 
+            a ranking of alternatives using Dowdall. 
 
         References
         ----------
@@ -376,7 +851,7 @@ class Voting:
     def dhondt(self, seats=1) -&gt; pd.DataFrame:
         &#34;&#34;&#34;D&#39;Hondt (or Jefferson) method.
 
-        Calculates the number of elected candidates of each party using the D&#39;Hondt (or Jefferson) method.
+        Calculates the number of elected alternatives of each party using the D&#39;Hondt (or Jefferson) method.
 
         Parameters
         ----------
@@ -403,7 +878,7 @@ class Voting:
         &#34;&#34;&#34;Hare Rule (also called as Instant Runoff, Ranked-Choice Voting, and Alternative Vote)
 
         Calculates the winner of an election. In each iteration, 
-        removes the candidate with the lowest score in a plurality rule, 
+        removes the alternative with the lowest score in a plurality rule, 
         until to have a majority winner.
 
         Returns
@@ -412,7 +887,7 @@ class Voting:
             The election&#39;s winner using Hare Rule.
         &#34;&#34;&#34;
         df = self.df.copy()
-        candidate = self.candidate
+        alternative = self.alternative
         rank = self.rank
         voters = self.voters
 
@@ -425,16 +900,16 @@ class Voting:
             if &#34;voters&#34; in list(df):
                 df[&#34;value&#34;] *= df[&#34;voters&#34;]
 
-            return df.groupby(candidate).agg({&#34;value&#34;: &#34;sum&#34;}).reset_index()
+            return df.groupby(alternative).agg({&#34;value&#34;: &#34;sum&#34;}).reset_index()
 
         tmp = __plurality(df)
         tmp[&#34;value&#34;] /= tmp[&#34;value&#34;].sum()
         tmp = tmp.sort_values(&#34;value&#34;, ascending=False).reset_index(drop=True)
 
         while tmp.loc[0, &#34;value&#34;] &lt;= 0.5:
-            rmv = tmp.loc[tmp.shape[0] - 1, candidate]
+            rmv = tmp.loc[tmp.shape[0] - 1, alternative]
 
-            df = df[df[candidate] != rmv].copy()
+            df = df[df[alternative] != rmv].copy()
             df = df.sort_values([&#34;_id&#34;, rank], ascending=[True, True])
             df[rank] = df.groupby(&#34;_id&#34;).cumcount() + 1
 
@@ -448,12 +923,12 @@ class Voting:
     def k_approval(self, k=1) -&gt; pd.DataFrame:
         &#34;&#34;&#34;k-Approval voting method.
 
-        The method gives 1 if the candidate is ranked over or equal to k. Otherwise, the value given is 0.
+        The method gives 1 if the alternative is ranked over or equal to k. Otherwise, the value given is 0.
 
         Parameters
         ----------
         k (int, optional): 
-            Threshold to score candidates with a value of 1.
+            Threshold to score alternatives with a value of 1.
 
         Returns
         -------
@@ -466,7 +941,7 @@ class Voting:
         &#34;&#34;&#34;
         df = self.df.copy()
 
-        candidate = self.candidate
+        alternative = self.alternative
         rank = self.rank
         voters = self.voters
         plural_voters = voters in list(df)
@@ -478,7 +953,7 @@ class Voting:
         if plural_voters:
             df[&#34;value&#34;] *= df[voters]
 
-        tmp = df.groupby(candidate).agg(
+        tmp = df.groupby(alternative).agg(
             {&#34;value&#34;: &#34;sum&#34;}).reset_index().sort_values(&#34;value&#34;, ascending=False)
         if self.show_rank:
             tmp[&#34;rank&#34;] = range(1, tmp.shape[0] + 1)
@@ -489,7 +964,7 @@ class Voting:
         &#34;&#34;&#34;Kemeny-Young method.
 
         The Kemeny-Young method is a voting method that uses preferential ballots 
-        and pairwise comparison to identify the most popular candidates in an election. 
+        and pairwise comparison to identify the most popular alternatives in an election. 
 
         Parameters
         ----------
@@ -510,7 +985,7 @@ class Voting:
         H. P. Young and A. Levenglick, &#34;A Consistent Extension of Condorcet&#39;s Election Principle&#34;, SIAM Journal on Applied Mathematics 35, no. 2 (1978), pp. 285-300.
         &#34;&#34;&#34;
         m = self.copeland_matrix(n_votes=True)
-        candidate = self.candidate
+        alternative = self.alternative
         rank = self.rank
 
         output = []
@@ -529,7 +1004,7 @@ class Voting:
             return tmp
 
         tmp_r = pd.DataFrame()
-        tmp_r[candidate] = tmp.loc[0, &#34;rank&#34;]
+        tmp_r[alternative] = tmp.loc[0, &#34;rank&#34;]
         tmp_r[rank] = range(1, tmp_r.shape[0] + 1)
 
         return tmp_r
@@ -537,7 +1012,7 @@ class Voting:
     def negative(self) -&gt; pd.DataFrame:
         &#34;&#34;&#34;Negative Voting.
 
-        Calculates the score of each candidate using Negative Voting.
+        Calculates the score of each alternative using Negative Voting.
 
         Returns
         -------
@@ -545,12 +1020,12 @@ class Voting:
             Election results using Negative Voting.
 
         &#34;&#34;&#34;
-        candidate = self.candidate
+        alternative = self.alternative
         rank = self.rank
         votes = self.votes
         df = self.df.copy()
 
-        tmp = df.groupby(candidate).agg({votes: &#34;sum&#34;}).reset_index().rename(
+        tmp = df.groupby(alternative).agg({votes: &#34;sum&#34;}).reset_index().rename(
             columns={votes: &#34;value&#34;}).sort_values(&#34;value&#34;, ascending=False)
         if self.show_rank:
             tmp[rank] = range(1, tmp.shape[0] + 1)
@@ -560,7 +1035,7 @@ class Voting:
     def plurality(self):
         &#34;&#34;&#34;Plurality Rule.
 
-        Each voter selects one candidate (or none if voters can abstain), and the candidate(s) with the most votes win.
+        Each voter selects one alternative (or none if voters can abstain), and the alternative(s) with the most votes win.
 
         Returns
         -------
@@ -569,7 +1044,7 @@ class Voting:
         &#34;&#34;&#34;
         df = self.df.copy()
 
-        candidate = self.candidate
+        alternative = self.alternative
         rank = self.rank
         voters = self.voters
 
@@ -580,7 +1055,7 @@ class Voting:
         if voters in list(df):
             df[&#34;value&#34;] *= df[voters]
 
-        tmp = df.groupby(candidate).agg(
+        tmp = df.groupby(alternative).agg(
             {&#34;value&#34;: &#34;sum&#34;}).reset_index().sort_values(&#34;value&#34;, ascending=False)
         if self.show_rank:
             tmp[rank] = range(1, tmp.shape[0] + 1)
@@ -590,8 +1065,8 @@ class Voting:
     def score(self) -&gt; pd.DataFrame:
         &#34;&#34;&#34;Score Voting. (Also called as Range Voting, Utilitarian Voting).
 
-        In this method, voters give a score to each candidate. We average the scores, 
-        and the winner is the candidate with the highest score.
+        In this method, voters give a score to each alternative. We average the scores, 
+        and the winner is the alternative with the highest score.
 
         Returns
         -------
@@ -599,11 +1074,11 @@ class Voting:
             Election results using Score Voting.
 
         &#34;&#34;&#34;
-        candidate = self.candidate
+        alternative = self.alternative
         rank = self.rank
         votes = self.votes
         df = self.df.copy()
-        tmp = df.groupby(candidate).agg({votes: &#34;mean&#34;}).reset_index().rename(
+        tmp = df.groupby(alternative).agg({votes: &#34;mean&#34;}).reset_index().rename(
             columns={votes: &#34;value&#34;}).sort_values(&#34;value&#34;, ascending=False)
         if self.show_rank:
             tmp[rank] = range(1, tmp.shape[0] + 1)
@@ -614,13 +1089,13 @@ class Voting:
         &#34;&#34;&#34;Smith Set.
 
         The Smith Set, Generalized Top-Choice Assumption (GETCHA), or Top Cycle, 
-        is the smallest non-empty set of candidates in an election. 
-        Each member defeats every candidate outside the set in a pairwise election. 
+        is the smallest non-empty set of alternatives in an election. 
+        Each member defeats every alternative outside the set in a pairwise election. 
 
         Returns
         -------
         list:
-            Candidates that are part of the Smith Set.
+            alternatives that are part of the Smith Set.
         &#34;&#34;&#34;
 
         df = self.df.copy()
@@ -631,16 +1106,16 @@ class Voting:
         m = m.reindex(__index, axis=0)
         m = m.reindex(__index, axis=1)
 
-        _candidates = list(m)
+        _alternatives = list(m)
         m_values = m.values
 
-        _col = _candidates[0]
+        _col = _alternatives[0]
 
         while _col:
             _col_p = _col
-            for _row in _candidates:
-                i_row = _candidates.index(_row)
-                i_col = _candidates.index(_col)
+            for _row in _alternatives:
+                i_row = _alternatives.index(_row)
+                i_col = _alternatives.index(_col)
 
                 if i_row &gt; i_col:
                     _value = m_values[i_row, i_col]
@@ -651,10 +1126,10 @@ class Voting:
             if _col_p == _col:
                 _col = False
 
-        return _candidates[:i_col + 1]
+        return _alternatives[:i_col + 1]
 
     def ranking(self, method=&#34;plurality&#34;, **args) -&gt; pd.DataFrame:
-        &#34;&#34;&#34;Calculates the ranking of candidates usen a given voting method.
+        &#34;&#34;&#34;Calculates the ranking of alternatives usen a given voting method.
 
         Parameters
         ----------
@@ -668,7 +1143,7 @@ class Voting:
         Returns
         -------
         pandas.DataFrame: 
-            Ranking of candidates calculated with the method defined.
+            Ranking of alternatives calculated with the method defined.
 
         &#34;&#34;&#34;
         methods = {
@@ -716,76 +1191,88 @@ class Voting:
         df = data.copy()
         df[&#34;_id&#34;] = range(df.shape[0])
         df = df.explode(&#34;rank&#34;)
-        df = df.rename(columns={&#34;rank&#34;: &#34;candidate&#34;})
+        df = df.rename(columns={&#34;rank&#34;: &#34;alternative&#34;})
         df[&#34;rank&#34;] = df.groupby(&#34;_id&#34;).cumcount() + 1
         if not unique_id:
             df = df.drop(columns=[&#34;_id&#34;])
 
         return df</code></pre>
-</details>
-</section>
-<section>
-</section>
-<section>
-</section>
-<section>
-</section>
-<section>
-<h2 class="section-title" id="header-classes">Classes</h2>
-<dl>
-<dt id="comchoice.voting.Voting"><code class="flex name class">
+                </details>
+            </section>
+            <section>
+            </section>
+            <section>
+            </section>
+            <section>
+            </section>
+            <section>
+                <h2 class="section-title" id="header-classes">Classes</h2>
+                <dl>
+                    <dt id="comchoice.voting.Voting"><code class="flex name class">
 <span>class <span class="ident">Voting</span></span>
 <span>(</span><span>data)</span>
 </code></dt>
-<dd>
-<div class="desc"><p>Voting.</p>
-<p>The class <code><a title="comchoice.voting.Voting" href="#comchoice.voting.Voting">Voting</a></code> defines rules to make collective decisions.
-It includes methods to calculate candidates' ranking and some
-axiomatic properties in social choice theory.</p>
-<h2 id="attributes">Attributes</h2>
-<dl>
-<dt><strong><code>candidate</code></strong> :&ensp;<code>str</code>, default=<code>"candidate"</code></dt>
-<dd>Candidates' unique identifier.</dd>
-<dt><strong><code>party</code></strong> :&ensp;<code>str</code>, default=<code>"party"</code></dt>
-<dd>Party's unique identifier. (Attribute used for proportional methods).</dd>
-<dt><strong><code>rank</code></strong> :&ensp;<code>str</code>, default=<code>"rank"</code></dt>
-<dd>Ranking of candidates selected by a voter.</dd>
-<dt><strong><code>show_rank</code></strong> :&ensp;<code>bool</code>, default=<code>True</code></dt>
-<dd>If the value is <code>true</code>, the ranking methods defined in <code><a title="comchoice.voting.Voting" href="#comchoice.voting.Voting">Voting</a></code>
-will include a column with the ranking of each candidate.</dd>
-<dt><strong><code>voter</code></strong> :&ensp;<code>str</code>, default=<code>"voter"</code></dt>
-<dd>Voter's unique identifier.</dd>
-<dt><strong><code>voters</code></strong> :&ensp;<code>str</code>, default=<code>"voters"</code></dt>
-<dd>If <code>voter</code> is not defined, and each row represents more than one voter,
-it includes the number of voters that selected the same ranking of candidates.</dd>
-</dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class Voting:
+                    <dd>
+                        <div class="desc">
+                            <p>Voting.</p>
+                            <p>The class
+                                <code><a title="comchoice.voting.Voting" href="#comchoice.voting.Voting">Voting</a></code>
+                                defines rules to make collective decisions.
+                                It includes methods to calculate alternatives' ranking and some
+                                axiomatic properties in social choice theory.</p>
+                            <h2 id="attributes">Attributes</h2>
+                            <dl>
+                                <dt><strong><code>alternative</code></strong> :&ensp;<code>str</code>,
+                                    default=<code>"alternative"</code></dt>
+                                <dd>alternatives' unique identifier.</dd>
+                                <dt><strong><code>party</code></strong> :&ensp;<code>str</code>,
+                                    default=<code>"party"</code></dt>
+                                <dd>Party's unique identifier. (Attribute used for proportional methods).</dd>
+                                <dt><strong><code>rank</code></strong> :&ensp;<code>str</code>,
+                                    default=<code>"rank"</code></dt>
+                                <dd>Ranking of alternatives selected by a voter.</dd>
+                                <dt><strong><code>show_rank</code></strong> :&ensp;<code>bool</code>,
+                                    default=<code>True</code></dt>
+                                <dd>If the value is <code>true</code>, the ranking methods defined in
+                                    <code><a title="comchoice.voting.Voting" href="#comchoice.voting.Voting">Voting</a></code>
+                                    will include a column with the ranking of each alternative.</dd>
+                                <dt><strong><code>voter</code></strong> :&ensp;<code>str</code>,
+                                    default=<code>"voter"</code></dt>
+                                <dd>Voter's unique identifier.</dd>
+                                <dt><strong><code>voters</code></strong> :&ensp;<code>str</code>,
+                                    default=<code>"voters"</code></dt>
+                                <dd>If <code>voter</code> is not defined, and each row represents more than one voter,
+                                    it includes the number of voters that selected the same ranking of alternatives.
+                                </dd>
+                            </dl>
+                        </div>
+                        <details class="source">
+                            <summary>
+                                <span>Expand source code</span>
+                            </summary>
+                            <pre><code class="python">class Voting:
     &#34;&#34;&#34;Voting.
 
     The class `Voting` defines rules to make collective decisions. 
-    It includes methods to calculate candidates&#39; ranking and some 
+    It includes methods to calculate alternatives&#39; ranking and some 
     axiomatic properties in social choice theory.
 
     Attributes
     ----------
-    candidate: str, default=&#34;candidate&#34;
-        Candidates&#39; unique identifier.
+    alternative: str, default=&#34;alternative&#34;
+        alternatives&#39; unique identifier.
     party: str, default=&#34;party&#34;
         Party&#39;s unique identifier. (Attribute used for proportional methods).
     rank: str, default=&#34;rank&#34;
-        Ranking of candidates selected by a voter.
+        Ranking of alternatives selected by a voter.
     show_rank: bool, default=True
         If the value is `true`, the ranking methods defined in `Voting` 
-        will include a column with the ranking of each candidate.
+        will include a column with the ranking of each alternative.
     voter: str, default=&#34;voter&#34;
         Voter&#39;s unique identifier.
     voters: str, default=&#34;voters&#34;
         If `voter` is not defined, and each row represents more than one voter, 
-        it includes the number of voters that selected the same ranking of candidates.
+        it includes the number of voters that selected the same ranking of alternatives.
 
     &#34;&#34;&#34;
 
@@ -793,7 +1280,7 @@ it includes the number of voters that selected the same ranking of candidates.</
         # If data is not a DataFrame, converts it data into a DataFrame
         df = data.copy() if isinstance(data, pd.DataFrame) else pd.DataFrame(data)
 
-        self.candidate = &#34;candidate&#34;
+        self.alternative = &#34;alternative&#34;
         self.df = df
         self.party = &#34;party&#34;
         self.rank = &#34;rank&#34;
@@ -805,7 +1292,7 @@ it includes the number of voters that selected the same ranking of candidates.</
         &#34;&#34;&#34;Black procedure (1958).
 
         Calculates winner of an election using Black procedure. First, the method calculates if there is a
-        Condorcet winner. If there is a Condorcet winner, that candidate is the winner. Otherwise, the winner
+        Condorcet winner. If there is a Condorcet winner, that alternative is the winner. Otherwise, the winner
         using Borda count is the winner.
 
         Returns
@@ -823,14 +1310,14 @@ it includes the number of voters that selected the same ranking of candidates.</
     def borda(self, score=&#34;original&#34;) -&gt; pd.DataFrame:
         &#34;&#34;&#34;Borda Count (1784).
 
-        The Borda count is a voting method to rank candidates. 
+        The Borda count is a voting method to rank alternatives. 
         In an election, each voter gives a ranked-ordered list of their preferences. 
-        Then, it assigns the lowest score to the lowest-ranked candidate, increasing 
-        the score assigned until the candidate ranks first. The winner is the candidate with the most points. 
+        Then, it assigns the lowest score to the lowest-ranked alternative, increasing 
+        the score assigned until the alternative ranks first. The winner is the alternative with the most points. 
 
-        The original version proposed by Borda for an election of n candidates, assigns `n - 1` 
-        points to the candidate in the first place, `n - 2` to the candidate in the second place, 
-        and so on, until assigning 0 to the lowest-ranked candidate.
+        The original version proposed by Borda for an election of n alternatives, assigns `n - 1` 
+        points to the alternative in the first place, `n - 2` to the alternative in the second place, 
+        and so on, until assigning 0 to the lowest-ranked alternative.
 
         Parameters
         ----------
@@ -848,14 +1335,14 @@ it includes the number of voters that selected the same ranking of candidates.</
         Royale des Sciences pour 1781 (Paris, 1784).
         &#34;&#34;&#34;
         df = self.df.copy()
-        candidate = self.candidate
+        alternative = self.alternative
         rank = self.rank
         voters = self.voters
         plural_voters = voters in list(df)
 
         if plural_voters:
             df = self.__transform(df)
-        N = len(df[candidate].unique())
+        N = len(df[alternative].unique())
 
         if score == &#34;dowdall&#34;:
             df[&#34;value&#34;] = 1 / df[rank]
@@ -869,7 +1356,7 @@ it includes the number of voters that selected the same ranking of candidates.</
         if plural_voters:
             df[&#34;value&#34;] *= df[voters]
 
-        tmp = df.groupby(candidate).agg(
+        tmp = df.groupby(alternative).agg(
             {&#34;value&#34;: &#34;sum&#34;}).reset_index().sort_values(&#34;value&#34;, ascending=False)
         if self.show_rank:
             tmp[&#34;rank&#34;] = range(1, tmp.shape[0] + 1)
@@ -879,7 +1366,7 @@ it includes the number of voters that selected the same ranking of candidates.</
     #     return
 
     def compare_methods(self, methods=[&#34;borda&#34;, &#34;k-approval&#34;, &#34;copeland&#34;, &#34;plurality&#34;]) -&gt; pd.DataFrame:
-        &#34;&#34;&#34;Compares the ranking given to a candidate in different aggregation methods.
+        &#34;&#34;&#34;Compares the ranking given to a alternative in different aggregation methods.
 
         Parameters
         ----------
@@ -889,25 +1376,25 @@ it includes the number of voters that selected the same ranking of candidates.</
         Returns
         -------
         pandas.DataFrame: 
-            DataFrame with a comparison of the methods defined. The first column represents the candidate, and the following ones represent each method being compared.
+            DataFrame with a comparison of the methods defined. The first column represents the alternative, and the following ones represent each method being compared.
         &#34;&#34;&#34;
         output = pd.DataFrame()
-        candidate = self.candidate
+        alternative = self.alternative
 
         for method in methods:
             r = self.ranking(method=method, k=1)
             r = r.rename(columns={&#34;rank&#34;: method})
-            r = r[[candidate, method]]
+            r = r[[alternative, method]]
             output = r.copy() if output.shape[0] == 0 else pd.merge(
-                output, r, on=candidate)
+                output, r, on=alternative)
 
         return output
 
     def completeness(self) -&gt; bool:
         &#34;&#34;&#34;Completeness of data.
 
-        Verifies if each voter sets a ranking of candidates. 
-        Required in voting methods that need a ranking of candidates provided by each voter.
+        Verifies if each voter sets a ranking of alternatives. 
+        Required in voting methods that need a ranking of alternatives provided by each voter.
 
         Returns
         -------
@@ -916,7 +1403,7 @@ it includes the number of voters that selected the same ranking of candidates.</
         &#34;&#34;&#34;
         df = self.df.copy()
 
-        candidate = self.candidate
+        alternative = self.alternative
         voter = self.voter
         voters = self.voters
 
@@ -926,10 +1413,10 @@ it includes the number of voters that selected the same ranking of candidates.</
         else:
             df[voters] = 1
 
-        unique_candidates = df[candidate].unique()
+        unique_alternatives = df[alternative].unique()
 
         for idx, df_tmp in df.groupby([voter, voters]):
-            if len(df_tmp[candidate].unique()) != len(unique_candidates):
+            if len(df_tmp[alternative].unique()) != len(unique_alternatives):
                 return False
 
         return True
@@ -937,8 +1424,8 @@ it includes the number of voters that selected the same ranking of candidates.</
     def condorcet(self, weak=True):
         &#34;&#34;&#34;Condorcet winner (1785).
 
-        A Condorcet winner is the candidate who wins 100% of 1v1 elections regarding all 
-        the other candidates running in the same election (under a plurality rule). 
+        A Condorcet winner is the alternative who wins 100% of 1v1 elections regarding all 
+        the other alternatives running in the same election (under a plurality rule). 
 
         A weak Condorcet winner does not need to satisfy the rule of 100% of victories.
 
@@ -960,12 +1447,12 @@ it includes the number of voters that selected the same ranking of candidates.</
 
         &#34;&#34;&#34;
         df = self.df.copy()
-        candidate = self.candidate
+        alternative = self.alternative
 
         m = self.copeland_matrix()
 
         tmp = pd.DataFrame([(a, b) for a, b in list(zip(list(m), np.nanmean(m, axis=1)))],
-                           columns=[candidate, &#34;value&#34;]).sort_values(&#34;value&#34;, ascending=False)
+                           columns=[alternative, &#34;value&#34;]).sort_values(&#34;value&#34;, ascending=False)
 
         if weak:
             return tmp.head(1)
@@ -977,7 +1464,7 @@ it includes the number of voters that selected the same ranking of candidates.</
         df = self.df.copy()
         output = []
 
-        candidate = self.candidate
+        alternative = self.alternative
         rank = self.rank
         voter = self.voter
         voters = self.voters
@@ -988,7 +1475,7 @@ it includes the number of voters that selected the same ranking of candidates.</
             df = data.copy()
             df[&#34;_id&#34;] = range(df.shape[0])
             df = df.explode(&#34;rank&#34;)
-            df = df.rename(columns={&#34;rank&#34;: &#34;candidate&#34;})
+            df = df.rename(columns={&#34;rank&#34;: &#34;alternative&#34;})
             df[&#34;rank&#34;] = df.groupby(&#34;_id&#34;).cumcount() + 1
             if not unique_id:
                 df = df.drop(columns=[&#34;_id&#34;])
@@ -1001,12 +1488,12 @@ it includes the number of voters that selected the same ranking of candidates.</
         else:
             df[voters] = 1
 
-        unique_candidates = df[candidate].unique()
+        unique_alternatives = df[alternative].unique()
         for idx, df_tmp in df.groupby([voter, voters]):
             _voter, _voters = idx
 
             df_tmp = df_tmp.sort_values(rank)
-            items = df_tmp[candidate].values
+            items = df_tmp[alternative].values
 
             tmp = pd.DataFrame(list(combinations(items, 2)), columns=cols)
             tmp[&#34;value&#34;] = _voters
@@ -1015,8 +1502,8 @@ it includes the number of voters that selected the same ranking of candidates.</
         m = pd.concat(output).groupby(cols).agg({&#34;value&#34;: &#34;sum&#34;}).reset_index()
 
         m = m.pivot(index=cols[0], columns=cols[1], values=&#34;value&#34;)
-        m = m.reindex(unique_candidates, axis=0)
-        m = m.reindex(unique_candidates, axis=1)
+        m = m.reindex(unique_alternatives, axis=0)
+        m = m.reindex(unique_alternatives, axis=1)
         m = m.fillna(0)
 
         if n_votes:
@@ -1026,9 +1513,9 @@ it includes the number of voters that selected the same ranking of candidates.</
         m = m / r
 
         m = np.where(m &gt; 0.5, 1, np.where(m == 0.5, 0.5, 0))
-        m = pd.DataFrame(m, index=unique_candidates, columns=unique_candidates)
-        m = m.reindex(unique_candidates, axis=0)
-        m = m.reindex(unique_candidates, axis=1)
+        m = pd.DataFrame(m, index=unique_alternatives, columns=unique_alternatives)
+        m = m.reindex(unique_alternatives, axis=0)
+        m = m.reindex(unique_alternatives, axis=1)
         m = m.astype(float)
         np.fill_diagonal(m.values, np.nan)
 
@@ -1037,11 +1524,11 @@ it includes the number of voters that selected the same ranking of candidates.</
     def copeland(self) -&gt; pd.DataFrame:
         &#34;&#34;&#34;Copeland voting method (1951).
 
-        Each voter ranks candidates by preference. Next, we sort candidates by the 
-        number of times they beat another candidate in a pairwise comparison. 
+        Each voter ranks alternatives by preference. Next, we sort alternatives by the 
+        number of times they beat another alternative in a pairwise comparison. 
         The top-1 on Copeland&#39;s method is considered a weak Condorcet winner. 
-        Likewise, if in an election of `n` candidates, a candidate beats `n - 1` 
-        candidates in pairwise comparison scenarios, it is also considered a Condorcet winner.
+        Likewise, if in an election of `n` alternatives, a alternative beats `n - 1` 
+        alternatives in pairwise comparison scenarios, it is also considered a Condorcet winner.
 
         Returns
         -------
@@ -1054,12 +1541,12 @@ it includes the number of voters that selected the same ranking of candidates.</
 
         &#34;&#34;&#34;
         df = self.df.copy()
-        candidate = self.candidate
+        alternative = self.alternative
 
         m = self.copeland_matrix()
 
         tmp = pd.DataFrame([(a, b) for a, b in list(zip(list(m), np.nanmean(m, axis=1)))],
-                           columns=[candidate, &#34;value&#34;]).sort_values(&#34;value&#34;, ascending=False)
+                           columns=[alternative, &#34;value&#34;]).sort_values(&#34;value&#34;, ascending=False)
         if self.show_rank:
             tmp[&#34;rank&#34;] = range(1, tmp.shape[0] + 1)
 
@@ -1068,18 +1555,18 @@ it includes the number of voters that selected the same ranking of candidates.</
     def cumulative(self) -&gt; pd.DataFrame:
         &#34;&#34;&#34;Cumulative Voting.
 
-        Calculates the cumulative score of each candidate. 
+        Calculates the cumulative score of each alternative. 
 
         Returns
         -------
         pandas.DataFrame: 
             Election results using Cumulative Voting
         &#34;&#34;&#34;
-        candidate = self.candidate
+        alternative = self.alternative
         rank = self.rank
         votes = self.votes
         df = self.df.copy()
-        tmp = df.groupby(candidate).agg({votes: &#34;sum&#34;}).reset_index().rename(
+        tmp = df.groupby(alternative).agg({votes: &#34;sum&#34;}).reset_index().rename(
             columns={votes: &#34;value&#34;}).sort_values(&#34;value&#34;, ascending=False)
         if self.show_rank:
             tmp[rank] = range(1, tmp.shape[0] + 1)
@@ -1090,14 +1577,14 @@ it includes the number of voters that selected the same ranking of candidates.</
         &#34;&#34;&#34;Dowdall voting method (1971).
 
         Dowdall is an alternative to Borda count, devised by Nauru&#39;s Secretary 
-        of Justice in 1971. As in Borda, each voter gives a ranking of candidates. 
-        The first candidate gets 1 point, the 2nd candidate 1/2 points, and so on 
-        until the candidate ranked in the n position receives 1/n points.
+        of Justice in 1971. As in Borda, each voter gives a ranking of alternatives. 
+        The first alternative gets 1 point, the 2nd alternative 1/2 points, and so on 
+        until the alternative ranked in the n position receives 1/n points.
 
         Returns
         -------
         pandas.DataFrame: 
-            a ranking of candidates using Dowdall. 
+            a ranking of alternatives using Dowdall. 
 
         References
         ----------
@@ -1108,7 +1595,7 @@ it includes the number of voters that selected the same ranking of candidates.</
     def dhondt(self, seats=1) -&gt; pd.DataFrame:
         &#34;&#34;&#34;D&#39;Hondt (or Jefferson) method.
 
-        Calculates the number of elected candidates of each party using the D&#39;Hondt (or Jefferson) method.
+        Calculates the number of elected alternatives of each party using the D&#39;Hondt (or Jefferson) method.
 
         Parameters
         ----------
@@ -1135,7 +1622,7 @@ it includes the number of voters that selected the same ranking of candidates.</
         &#34;&#34;&#34;Hare Rule (also called as Instant Runoff, Ranked-Choice Voting, and Alternative Vote)
 
         Calculates the winner of an election. In each iteration, 
-        removes the candidate with the lowest score in a plurality rule, 
+        removes the alternative with the lowest score in a plurality rule, 
         until to have a majority winner.
 
         Returns
@@ -1144,7 +1631,7 @@ it includes the number of voters that selected the same ranking of candidates.</
             The election&#39;s winner using Hare Rule.
         &#34;&#34;&#34;
         df = self.df.copy()
-        candidate = self.candidate
+        alternative = self.alternative
         rank = self.rank
         voters = self.voters
 
@@ -1157,16 +1644,16 @@ it includes the number of voters that selected the same ranking of candidates.</
             if &#34;voters&#34; in list(df):
                 df[&#34;value&#34;] *= df[&#34;voters&#34;]
 
-            return df.groupby(candidate).agg({&#34;value&#34;: &#34;sum&#34;}).reset_index()
+            return df.groupby(alternative).agg({&#34;value&#34;: &#34;sum&#34;}).reset_index()
 
         tmp = __plurality(df)
         tmp[&#34;value&#34;] /= tmp[&#34;value&#34;].sum()
         tmp = tmp.sort_values(&#34;value&#34;, ascending=False).reset_index(drop=True)
 
         while tmp.loc[0, &#34;value&#34;] &lt;= 0.5:
-            rmv = tmp.loc[tmp.shape[0] - 1, candidate]
+            rmv = tmp.loc[tmp.shape[0] - 1, alternative]
 
-            df = df[df[candidate] != rmv].copy()
+            df = df[df[alternative] != rmv].copy()
             df = df.sort_values([&#34;_id&#34;, rank], ascending=[True, True])
             df[rank] = df.groupby(&#34;_id&#34;).cumcount() + 1
 
@@ -1180,12 +1667,12 @@ it includes the number of voters that selected the same ranking of candidates.</
     def k_approval(self, k=1) -&gt; pd.DataFrame:
         &#34;&#34;&#34;k-Approval voting method.
 
-        The method gives 1 if the candidate is ranked over or equal to k. Otherwise, the value given is 0.
+        The method gives 1 if the alternative is ranked over or equal to k. Otherwise, the value given is 0.
 
         Parameters
         ----------
         k (int, optional): 
-            Threshold to score candidates with a value of 1.
+            Threshold to score alternatives with a value of 1.
 
         Returns
         -------
@@ -1198,7 +1685,7 @@ it includes the number of voters that selected the same ranking of candidates.</
         &#34;&#34;&#34;
         df = self.df.copy()
 
-        candidate = self.candidate
+        alternative = self.alternative
         rank = self.rank
         voters = self.voters
         plural_voters = voters in list(df)
@@ -1210,7 +1697,7 @@ it includes the number of voters that selected the same ranking of candidates.</
         if plural_voters:
             df[&#34;value&#34;] *= df[voters]
 
-        tmp = df.groupby(candidate).agg(
+        tmp = df.groupby(alternative).agg(
             {&#34;value&#34;: &#34;sum&#34;}).reset_index().sort_values(&#34;value&#34;, ascending=False)
         if self.show_rank:
             tmp[&#34;rank&#34;] = range(1, tmp.shape[0] + 1)
@@ -1221,7 +1708,7 @@ it includes the number of voters that selected the same ranking of candidates.</
         &#34;&#34;&#34;Kemeny-Young method.
 
         The Kemeny-Young method is a voting method that uses preferential ballots 
-        and pairwise comparison to identify the most popular candidates in an election. 
+        and pairwise comparison to identify the most popular alternatives in an election. 
 
         Parameters
         ----------
@@ -1242,7 +1729,7 @@ it includes the number of voters that selected the same ranking of candidates.</
         H. P. Young and A. Levenglick, &#34;A Consistent Extension of Condorcet&#39;s Election Principle&#34;, SIAM Journal on Applied Mathematics 35, no. 2 (1978), pp. 285-300.
         &#34;&#34;&#34;
         m = self.copeland_matrix(n_votes=True)
-        candidate = self.candidate
+        alternative = self.alternative
         rank = self.rank
 
         output = []
@@ -1261,7 +1748,7 @@ it includes the number of voters that selected the same ranking of candidates.</
             return tmp
 
         tmp_r = pd.DataFrame()
-        tmp_r[candidate] = tmp.loc[0, &#34;rank&#34;]
+        tmp_r[alternative] = tmp.loc[0, &#34;rank&#34;]
         tmp_r[rank] = range(1, tmp_r.shape[0] + 1)
 
         return tmp_r
@@ -1269,7 +1756,7 @@ it includes the number of voters that selected the same ranking of candidates.</
     def negative(self) -&gt; pd.DataFrame:
         &#34;&#34;&#34;Negative Voting.
 
-        Calculates the score of each candidate using Negative Voting.
+        Calculates the score of each alternative using Negative Voting.
 
         Returns
         -------
@@ -1277,12 +1764,12 @@ it includes the number of voters that selected the same ranking of candidates.</
             Election results using Negative Voting.
 
         &#34;&#34;&#34;
-        candidate = self.candidate
+        alternative = self.alternative
         rank = self.rank
         votes = self.votes
         df = self.df.copy()
 
-        tmp = df.groupby(candidate).agg({votes: &#34;sum&#34;}).reset_index().rename(
+        tmp = df.groupby(alternative).agg({votes: &#34;sum&#34;}).reset_index().rename(
             columns={votes: &#34;value&#34;}).sort_values(&#34;value&#34;, ascending=False)
         if self.show_rank:
             tmp[rank] = range(1, tmp.shape[0] + 1)
@@ -1292,7 +1779,7 @@ it includes the number of voters that selected the same ranking of candidates.</
     def plurality(self):
         &#34;&#34;&#34;Plurality Rule.
 
-        Each voter selects one candidate (or none if voters can abstain), and the candidate(s) with the most votes win.
+        Each voter selects one alternative (or none if voters can abstain), and the alternative(s) with the most votes win.
 
         Returns
         -------
@@ -1301,7 +1788,7 @@ it includes the number of voters that selected the same ranking of candidates.</
         &#34;&#34;&#34;
         df = self.df.copy()
 
-        candidate = self.candidate
+        alternative = self.alternative
         rank = self.rank
         voters = self.voters
 
@@ -1312,7 +1799,7 @@ it includes the number of voters that selected the same ranking of candidates.</
         if voters in list(df):
             df[&#34;value&#34;] *= df[voters]
 
-        tmp = df.groupby(candidate).agg(
+        tmp = df.groupby(alternative).agg(
             {&#34;value&#34;: &#34;sum&#34;}).reset_index().sort_values(&#34;value&#34;, ascending=False)
         if self.show_rank:
             tmp[rank] = range(1, tmp.shape[0] + 1)
@@ -1322,8 +1809,8 @@ it includes the number of voters that selected the same ranking of candidates.</
     def score(self) -&gt; pd.DataFrame:
         &#34;&#34;&#34;Score Voting. (Also called as Range Voting, Utilitarian Voting).
 
-        In this method, voters give a score to each candidate. We average the scores, 
-        and the winner is the candidate with the highest score.
+        In this method, voters give a score to each alternative. We average the scores, 
+        and the winner is the alternative with the highest score.
 
         Returns
         -------
@@ -1331,11 +1818,11 @@ it includes the number of voters that selected the same ranking of candidates.</
             Election results using Score Voting.
 
         &#34;&#34;&#34;
-        candidate = self.candidate
+        alternative = self.alternative
         rank = self.rank
         votes = self.votes
         df = self.df.copy()
-        tmp = df.groupby(candidate).agg({votes: &#34;mean&#34;}).reset_index().rename(
+        tmp = df.groupby(alternative).agg({votes: &#34;mean&#34;}).reset_index().rename(
             columns={votes: &#34;value&#34;}).sort_values(&#34;value&#34;, ascending=False)
         if self.show_rank:
             tmp[rank] = range(1, tmp.shape[0] + 1)
@@ -1346,13 +1833,13 @@ it includes the number of voters that selected the same ranking of candidates.</
         &#34;&#34;&#34;Smith Set.
 
         The Smith Set, Generalized Top-Choice Assumption (GETCHA), or Top Cycle, 
-        is the smallest non-empty set of candidates in an election. 
-        Each member defeats every candidate outside the set in a pairwise election. 
+        is the smallest non-empty set of alternatives in an election. 
+        Each member defeats every alternative outside the set in a pairwise election. 
 
         Returns
         -------
         list:
-            Candidates that are part of the Smith Set.
+            alternatives that are part of the Smith Set.
         &#34;&#34;&#34;
 
         df = self.df.copy()
@@ -1363,16 +1850,16 @@ it includes the number of voters that selected the same ranking of candidates.</
         m = m.reindex(__index, axis=0)
         m = m.reindex(__index, axis=1)
 
-        _candidates = list(m)
+        _alternatives = list(m)
         m_values = m.values
 
-        _col = _candidates[0]
+        _col = _alternatives[0]
 
         while _col:
             _col_p = _col
-            for _row in _candidates:
-                i_row = _candidates.index(_row)
-                i_col = _candidates.index(_col)
+            for _row in _alternatives:
+                i_row = _alternatives.index(_row)
+                i_col = _alternatives.index(_col)
 
                 if i_row &gt; i_col:
                     _value = m_values[i_row, i_col]
@@ -1383,10 +1870,10 @@ it includes the number of voters that selected the same ranking of candidates.</
             if _col_p == _col:
                 _col = False
 
-        return _candidates[:i_col + 1]
+        return _alternatives[:i_col + 1]
 
     def ranking(self, method=&#34;plurality&#34;, **args) -&gt; pd.DataFrame:
-        &#34;&#34;&#34;Calculates the ranking of candidates usen a given voting method.
+        &#34;&#34;&#34;Calculates the ranking of alternatives usen a given voting method.
 
         Parameters
         ----------
@@ -1400,7 +1887,7 @@ it includes the number of voters that selected the same ranking of candidates.</
         Returns
         -------
         pandas.DataFrame: 
-            Ranking of candidates calculated with the method defined.
+            Ranking of alternatives calculated with the method defined.
 
         &#34;&#34;&#34;
         methods = {
@@ -1448,39 +1935,44 @@ it includes the number of voters that selected the same ranking of candidates.</
         df = data.copy()
         df[&#34;_id&#34;] = range(df.shape[0])
         df = df.explode(&#34;rank&#34;)
-        df = df.rename(columns={&#34;rank&#34;: &#34;candidate&#34;})
+        df = df.rename(columns={&#34;rank&#34;: &#34;alternative&#34;})
         df[&#34;rank&#34;] = df.groupby(&#34;_id&#34;).cumcount() + 1
         if not unique_id:
             df = df.drop(columns=[&#34;_id&#34;])
 
         return df</code></pre>
-</details>
-<h3>Methods</h3>
-<dl>
-<dt id="comchoice.voting.Voting.black"><code class="name flex">
+                        </details>
+                        <h3>Methods</h3>
+                        <dl>
+                            <dt id="comchoice.voting.Voting.black"><code class="name flex">
 <span>def <span class="ident">black</span></span>(<span>self) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
-<dd>
-<div class="desc"><p>Black procedure (1958).</p>
-<p>Calculates winner of an election using Black procedure. First, the method calculates if there is a
-Condorcet winner. If there is a Condorcet winner, that candidate is the winner. Otherwise, the winner
-using Borda count is the winner.</p>
-<h2 id="returns">Returns</h2>
-<dl>
-<dt><code>pandas.DataFrame:</code></dt>
-<dd>Election's winner using Black procedure.</dd>
-</dl>
-<h2 id="references">References</h2>
-<p>Black, Duncan (1958). The theory of committees and elections. Cambridge: University Press.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def black(self) -&gt; pd.DataFrame:
+                            <dd>
+                                <div class="desc">
+                                    <p>Black procedure (1958).</p>
+                                    <p>Calculates winner of an election using Black procedure. First, the method
+                                        calculates if there is a
+                                        Condorcet winner. If there is a Condorcet winner, that alternative is the
+                                        winner. Otherwise, the winner
+                                        using Borda count is the winner.</p>
+                                    <h2 id="returns">Returns</h2>
+                                    <dl>
+                                        <dt><code>pandas.DataFrame:</code></dt>
+                                        <dd>Election's winner using Black procedure.</dd>
+                                    </dl>
+                                    <h2 id="references">References</h2>
+                                    <p>Black, Duncan (1958). The theory of committees and elections. Cambridge:
+                                        University Press.</p>
+                                </div>
+                                <details class="source">
+                                    <summary>
+                                        <span>Expand source code</span>
+                                    </summary>
+                                    <pre><code class="python">def black(self) -&gt; pd.DataFrame:
     &#34;&#34;&#34;Black procedure (1958).
 
     Calculates winner of an election using Black procedure. First, the method calculates if there is a
-    Condorcet winner. If there is a Condorcet winner, that candidate is the winner. Otherwise, the winner
+    Condorcet winner. If there is a Condorcet winner, that alternative is the winner. Otherwise, the winner
     using Borda count is the winner.
 
     Returns
@@ -1494,48 +1986,55 @@ using Borda count is the winner.</p>
     &#34;&#34;&#34;
     r = self.condorcet(weak=False)
     return r if r.shape[0] &gt; 0 else self.winner(method=&#34;borda&#34;)</code></pre>
-</details>
-</dd>
-<dt id="comchoice.voting.Voting.borda"><code class="name flex">
+                                </details>
+                            </dd>
+                            <dt id="comchoice.voting.Voting.borda"><code class="name flex">
 <span>def <span class="ident">borda</span></span>(<span>self, score='original') ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
-<dd>
-<div class="desc"><p>Borda Count (1784).</p>
-<p>The Borda count is a voting method to rank candidates.
-In an election, each voter gives a ranked-ordered list of their preferences.
-Then, it assigns the lowest score to the lowest-ranked candidate, increasing
-the score assigned until the candidate ranks first. The winner is the candidate with the most points. </p>
-<p>The original version proposed by Borda for an election of n candidates, assigns <code>n - 1</code>
-points to the candidate in the first place, <code>n - 2</code> to the candidate in the second place,
-and so on, until assigning 0 to the lowest-ranked candidate.</p>
-<h2 id="parameters">Parameters</h2>
-<dl>
-<dt><strong><code>score</code></strong> :&ensp;<code>{"original", "score_n", "dowdall"}</code>, default=<code>"original"</code></dt>
-<dd>Method to calculate Borda score.</dd>
-</dl>
-<h2 id="returns">Returns</h2>
-<dl>
-<dt><code>pandas.DataFrame:</code></dt>
-<dd>Election results using Borda Count.</dd>
-</dl>
-<h2 id="references">References</h2>
-<p>Borda, J. D. (1784). Mémoire sur les élections au scrutin. Histoire de l'Academie
-Royale des Sciences pour 1781 (Paris, 1784).</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def borda(self, score=&#34;original&#34;) -&gt; pd.DataFrame:
+                            <dd>
+                                <div class="desc">
+                                    <p>Borda Count (1784).</p>
+                                    <p>The Borda count is a voting method to rank alternatives.
+                                        In an election, each voter gives a ranked-ordered list of their preferences.
+                                        Then, it assigns the lowest score to the lowest-ranked alternative, increasing
+                                        the score assigned until the alternative ranks first. The winner is the
+                                        alternative with the most points. </p>
+                                    <p>The original version proposed by Borda for an election of n alternatives, assigns
+                                        <code>n - 1</code>
+                                        points to the alternative in the first place, <code>n - 2</code> to the
+                                        alternative in the second place,
+                                        and so on, until assigning 0 to the lowest-ranked alternative.</p>
+                                    <h2 id="parameters">Parameters</h2>
+                                    <dl>
+                                        <dt><strong><code>score</code></strong>
+                                            :&ensp;<code>{"original", "score_n", "dowdall"}</code>,
+                                            default=<code>"original"</code></dt>
+                                        <dd>Method to calculate Borda score.</dd>
+                                    </dl>
+                                    <h2 id="returns">Returns</h2>
+                                    <dl>
+                                        <dt><code>pandas.DataFrame:</code></dt>
+                                        <dd>Election results using Borda Count.</dd>
+                                    </dl>
+                                    <h2 id="references">References</h2>
+                                    <p>Borda, J. D. (1784). Mémoire sur les élections au scrutin. Histoire de l'Academie
+                                        Royale des Sciences pour 1781 (Paris, 1784).</p>
+                                </div>
+                                <details class="source">
+                                    <summary>
+                                        <span>Expand source code</span>
+                                    </summary>
+                                    <pre><code class="python">def borda(self, score=&#34;original&#34;) -&gt; pd.DataFrame:
     &#34;&#34;&#34;Borda Count (1784).
 
-    The Borda count is a voting method to rank candidates. 
+    The Borda count is a voting method to rank alternatives. 
     In an election, each voter gives a ranked-ordered list of their preferences. 
-    Then, it assigns the lowest score to the lowest-ranked candidate, increasing 
-    the score assigned until the candidate ranks first. The winner is the candidate with the most points. 
+    Then, it assigns the lowest score to the lowest-ranked alternative, increasing 
+    the score assigned until the alternative ranks first. The winner is the alternative with the most points. 
 
-    The original version proposed by Borda for an election of n candidates, assigns `n - 1` 
-    points to the candidate in the first place, `n - 2` to the candidate in the second place, 
-    and so on, until assigning 0 to the lowest-ranked candidate.
+    The original version proposed by Borda for an election of n alternatives, assigns `n - 1` 
+    points to the alternative in the first place, `n - 2` to the alternative in the second place, 
+    and so on, until assigning 0 to the lowest-ranked alternative.
 
     Parameters
     ----------
@@ -1553,14 +2052,14 @@ Royale des Sciences pour 1781 (Paris, 1784).</p></div>
     Royale des Sciences pour 1781 (Paris, 1784).
     &#34;&#34;&#34;
     df = self.df.copy()
-    candidate = self.candidate
+    alternative = self.alternative
     rank = self.rank
     voters = self.voters
     plural_voters = voters in list(df)
 
     if plural_voters:
         df = self.__transform(df)
-    N = len(df[candidate].unique())
+    N = len(df[alternative].unique())
 
     if score == &#34;dowdall&#34;:
         df[&#34;value&#34;] = 1 / df[rank]
@@ -1574,34 +2073,41 @@ Royale des Sciences pour 1781 (Paris, 1784).</p></div>
     if plural_voters:
         df[&#34;value&#34;] *= df[voters]
 
-    tmp = df.groupby(candidate).agg(
+    tmp = df.groupby(alternative).agg(
         {&#34;value&#34;: &#34;sum&#34;}).reset_index().sort_values(&#34;value&#34;, ascending=False)
     if self.show_rank:
         tmp[&#34;rank&#34;] = range(1, tmp.shape[0] + 1)
     return tmp</code></pre>
-</details>
-</dd>
-<dt id="comchoice.voting.Voting.compare_methods"><code class="name flex">
+                                </details>
+                            </dd>
+                            <dt id="comchoice.voting.Voting.compare_methods"><code class="name flex">
 <span>def <span class="ident">compare_methods</span></span>(<span>self, methods=['borda', 'k-approval', 'copeland', 'plurality']) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
-<dd>
-<div class="desc"><p>Compares the ranking given to a candidate in different aggregation methods.</p>
-<h2 id="parameters">Parameters</h2>
-<dl>
-<dt><strong><code>methods</code></strong> :&ensp;<code>list</code> of <code>{"borda", "k-approval", "copeland", "plurality"}</code>, optional<code>:</code></dt>
-<dd>Methods to be compared. Values accepted are borda, k-approval, copeland, and plurality.</dd>
-</dl>
-<h2 id="returns">Returns</h2>
-<dl>
-<dt><code>pandas.DataFrame:</code></dt>
-<dd>DataFrame with a comparison of the methods defined. The first column represents the candidate, and the following ones represent each method being compared.</dd>
-</dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def compare_methods(self, methods=[&#34;borda&#34;, &#34;k-approval&#34;, &#34;copeland&#34;, &#34;plurality&#34;]) -&gt; pd.DataFrame:
-    &#34;&#34;&#34;Compares the ranking given to a candidate in different aggregation methods.
+                            <dd>
+                                <div class="desc">
+                                    <p>Compares the ranking given to a alternative in different aggregation methods.</p>
+                                    <h2 id="parameters">Parameters</h2>
+                                    <dl>
+                                        <dt><strong><code>methods</code></strong> :&ensp;<code>list</code> of
+                                            <code>{"borda", "k-approval", "copeland", "plurality"}</code>,
+                                            optional<code>:</code></dt>
+                                        <dd>Methods to be compared. Values accepted are borda, k-approval, copeland, and
+                                            plurality.</dd>
+                                    </dl>
+                                    <h2 id="returns">Returns</h2>
+                                    <dl>
+                                        <dt><code>pandas.DataFrame:</code></dt>
+                                        <dd>DataFrame with a comparison of the methods defined. The first column
+                                            represents the alternative, and the following ones represent each method
+                                            being compared.</dd>
+                                    </dl>
+                                </div>
+                                <details class="source">
+                                    <summary>
+                                        <span>Expand source code</span>
+                                    </summary>
+                                    <pre><code class="python">def compare_methods(self, methods=[&#34;borda&#34;, &#34;k-approval&#34;, &#34;copeland&#34;, &#34;plurality&#34;]) -&gt; pd.DataFrame:
+    &#34;&#34;&#34;Compares the ranking given to a alternative in different aggregation methods.
 
     Parameters
     ----------
@@ -1611,42 +2117,45 @@ Royale des Sciences pour 1781 (Paris, 1784).</p></div>
     Returns
     -------
     pandas.DataFrame: 
-        DataFrame with a comparison of the methods defined. The first column represents the candidate, and the following ones represent each method being compared.
+        DataFrame with a comparison of the methods defined. The first column represents the alternative, and the following ones represent each method being compared.
     &#34;&#34;&#34;
     output = pd.DataFrame()
-    candidate = self.candidate
+    alternative = self.alternative
 
     for method in methods:
         r = self.ranking(method=method, k=1)
         r = r.rename(columns={&#34;rank&#34;: method})
-        r = r[[candidate, method]]
+        r = r[[alternative, method]]
         output = r.copy() if output.shape[0] == 0 else pd.merge(
-            output, r, on=candidate)
+            output, r, on=alternative)
 
     return output</code></pre>
-</details>
-</dd>
-<dt id="comchoice.voting.Voting.completeness"><code class="name flex">
+                                </details>
+                            </dd>
+                            <dt id="comchoice.voting.Voting.completeness"><code class="name flex">
 <span>def <span class="ident">completeness</span></span>(<span>self) ‑> bool</span>
 </code></dt>
-<dd>
-<div class="desc"><p>Completeness of data.</p>
-<p>Verifies if each voter sets a ranking of candidates.
-Required in voting methods that need a ranking of candidates provided by each voter.</p>
-<h2 id="returns">Returns</h2>
-<dl>
-<dt><strong><code>bool</code></strong></dt>
-<dd>Boolean variable to indicate if the data is complete.</dd>
-</dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def completeness(self) -&gt; bool:
+                            <dd>
+                                <div class="desc">
+                                    <p>Completeness of data.</p>
+                                    <p>Verifies if each voter sets a ranking of alternatives.
+                                        Required in voting methods that need a ranking of alternatives provided by each
+                                        voter.</p>
+                                    <h2 id="returns">Returns</h2>
+                                    <dl>
+                                        <dt><strong><code>bool</code></strong></dt>
+                                        <dd>Boolean variable to indicate if the data is complete.</dd>
+                                    </dl>
+                                </div>
+                                <details class="source">
+                                    <summary>
+                                        <span>Expand source code</span>
+                                    </summary>
+                                    <pre><code class="python">def completeness(self) -&gt; bool:
     &#34;&#34;&#34;Completeness of data.
 
-    Verifies if each voter sets a ranking of candidates. 
-    Required in voting methods that need a ranking of candidates provided by each voter.
+    Verifies if each voter sets a ranking of alternatives. 
+    Required in voting methods that need a ranking of alternatives provided by each voter.
 
     Returns
     -------
@@ -1655,7 +2164,7 @@ Required in voting methods that need a ranking of candidates provided by each vo
     &#34;&#34;&#34;
     df = self.df.copy()
 
-    candidate = self.candidate
+    alternative = self.alternative
     voter = self.voter
     voters = self.voters
 
@@ -1665,45 +2174,55 @@ Required in voting methods that need a ranking of candidates provided by each vo
     else:
         df[voters] = 1
 
-    unique_candidates = df[candidate].unique()
+    unique_alternatives = df[alternative].unique()
 
     for idx, df_tmp in df.groupby([voter, voters]):
-        if len(df_tmp[candidate].unique()) != len(unique_candidates):
+        if len(df_tmp[alternative].unique()) != len(unique_alternatives):
             return False
 
     return True</code></pre>
-</details>
-</dd>
-<dt id="comchoice.voting.Voting.condorcet"><code class="name flex">
+                                </details>
+                            </dd>
+                            <dt id="comchoice.voting.Voting.condorcet"><code class="name flex">
 <span>def <span class="ident">condorcet</span></span>(<span>self, weak=True)</span>
 </code></dt>
-<dd>
-<div class="desc"><p>Condorcet winner (1785).</p>
-<p>A Condorcet winner is the candidate who wins 100% of 1v1 elections regarding all
-the other candidates running in the same election (under a plurality rule). </p>
-<p>A weak Condorcet winner does not need to satisfy the rule of 100% of victories.</p>
-<h2 id="parameters">Parameters</h2>
-<dl>
-<dt><strong><code>weak</code></strong> :&ensp;<code>bool</code>, default=<code>True</code></dt>
-<dd>If the value is <code>true</code>, returns a weak Condorcet winner.</dd>
-</dl>
-<h2 id="returns">Returns</h2>
-<dl>
-<dt><code>pandas.DataFrame:</code></dt>
-<dd>Condorcet winner</dd>
-</dl>
-<h2 id="references">References</h2>
-<p>de Condorcet, M. (1785), Essai sur l'Application de l'Analyse à la Probabilité des Décisions Rendues à la Pluralité des Voix. Paris: L'Imprimerie Royale. </p>
-<p>Felsenthal, D.S., Tideman, N. Weak Condorcet winner(s) revisited. Public Choice 160, 313-326 (2014). <a href="https://doi.org/10.1007/s11127-014-0180-4">https://doi.org/10.1007/s11127-014-0180-4</a></p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def condorcet(self, weak=True):
+                            <dd>
+                                <div class="desc">
+                                    <p>Condorcet winner (1785).</p>
+                                    <p>A Condorcet winner is the alternative who wins 100% of 1v1 elections regarding
+                                        all
+                                        the other alternatives running in the same election (under a plurality rule).
+                                    </p>
+                                    <p>A weak Condorcet winner does not need to satisfy the rule of 100% of victories.
+                                    </p>
+                                    <h2 id="parameters">Parameters</h2>
+                                    <dl>
+                                        <dt><strong><code>weak</code></strong> :&ensp;<code>bool</code>,
+                                            default=<code>True</code></dt>
+                                        <dd>If the value is <code>true</code>, returns a weak Condorcet winner.</dd>
+                                    </dl>
+                                    <h2 id="returns">Returns</h2>
+                                    <dl>
+                                        <dt><code>pandas.DataFrame:</code></dt>
+                                        <dd>Condorcet winner</dd>
+                                    </dl>
+                                    <h2 id="references">References</h2>
+                                    <p>de Condorcet, M. (1785), Essai sur l'Application de l'Analyse à la Probabilité
+                                        des Décisions Rendues à la Pluralité des Voix. Paris: L'Imprimerie Royale. </p>
+                                    <p>Felsenthal, D.S., Tideman, N. Weak Condorcet winner(s) revisited. Public Choice
+                                        160, 313-326 (2014). <a
+                                            href="https://doi.org/10.1007/s11127-014-0180-4">https://doi.org/10.1007/s11127-014-0180-4</a>
+                                    </p>
+                                </div>
+                                <details class="source">
+                                    <summary>
+                                        <span>Expand source code</span>
+                                    </summary>
+                                    <pre><code class="python">def condorcet(self, weak=True):
     &#34;&#34;&#34;Condorcet winner (1785).
 
-    A Condorcet winner is the candidate who wins 100% of 1v1 elections regarding all 
-    the other candidates running in the same election (under a plurality rule). 
+    A Condorcet winner is the alternative who wins 100% of 1v1 elections regarding all 
+    the other alternatives running in the same election (under a plurality rule). 
 
     A weak Condorcet winner does not need to satisfy the rule of 100% of victories.
 
@@ -1725,49 +2244,55 @@ the other candidates running in the same election (under a plurality rule). </p>
 
     &#34;&#34;&#34;
     df = self.df.copy()
-    candidate = self.candidate
+    alternative = self.alternative
 
     m = self.copeland_matrix()
 
     tmp = pd.DataFrame([(a, b) for a, b in list(zip(list(m), np.nanmean(m, axis=1)))],
-                       columns=[candidate, &#34;value&#34;]).sort_values(&#34;value&#34;, ascending=False)
+                       columns=[alternative, &#34;value&#34;]).sort_values(&#34;value&#34;, ascending=False)
 
     if weak:
         return tmp.head(1)
     else:
         v = list(tmp[&#34;value&#34;].values)
         return pd.DataFrame([]) if v[0] &lt; 1 else tmp.head(1)</code></pre>
-</details>
-</dd>
-<dt id="comchoice.voting.Voting.copeland"><code class="name flex">
+                                </details>
+                            </dd>
+                            <dt id="comchoice.voting.Voting.copeland"><code class="name flex">
 <span>def <span class="ident">copeland</span></span>(<span>self) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
-<dd>
-<div class="desc"><p>Copeland voting method (1951).</p>
-<p>Each voter ranks candidates by preference. Next, we sort candidates by the
-number of times they beat another candidate in a pairwise comparison.
-The top-1 on Copeland's method is considered a weak Condorcet winner.
-Likewise, if in an election of <code>n</code> candidates, a candidate beats <code>n - 1</code>
-candidates in pairwise comparison scenarios, it is also considered a Condorcet winner.</p>
-<h2 id="returns">Returns</h2>
-<dl>
-<dt><code>pandas.DataFrame:</code></dt>
-<dd>Election results using Copeland method.</dd>
-</dl>
-<h2 id="references">References</h2>
-<p>Copeland, A.H. (1951). A “reasonable” social welfare function, mimeographed. In: Seminar on applications of mathematics to the social sciences. Ann Arbor: Department of Mathematics, University of Michigan.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def copeland(self) -&gt; pd.DataFrame:
+                            <dd>
+                                <div class="desc">
+                                    <p>Copeland voting method (1951).</p>
+                                    <p>Each voter ranks alternatives by preference. Next, we sort alternatives by the
+                                        number of times they beat another alternative in a pairwise comparison.
+                                        The top-1 on Copeland's method is considered a weak Condorcet winner.
+                                        Likewise, if in an election of <code>n</code> alternatives, a alternative beats
+                                        <code>n - 1</code>
+                                        alternatives in pairwise comparison scenarios, it is also considered a Condorcet
+                                        winner.</p>
+                                    <h2 id="returns">Returns</h2>
+                                    <dl>
+                                        <dt><code>pandas.DataFrame:</code></dt>
+                                        <dd>Election results using Copeland method.</dd>
+                                    </dl>
+                                    <h2 id="references">References</h2>
+                                    <p>Copeland, A.H. (1951). A “reasonable” social welfare function, mimeographed. In:
+                                        Seminar on applications of mathematics to the social sciences. Ann Arbor:
+                                        Department of Mathematics, University of Michigan.</p>
+                                </div>
+                                <details class="source">
+                                    <summary>
+                                        <span>Expand source code</span>
+                                    </summary>
+                                    <pre><code class="python">def copeland(self) -&gt; pd.DataFrame:
     &#34;&#34;&#34;Copeland voting method (1951).
 
-    Each voter ranks candidates by preference. Next, we sort candidates by the 
-    number of times they beat another candidate in a pairwise comparison. 
+    Each voter ranks alternatives by preference. Next, we sort alternatives by the 
+    number of times they beat another alternative in a pairwise comparison. 
     The top-1 on Copeland&#39;s method is considered a weak Condorcet winner. 
-    Likewise, if in an election of `n` candidates, a candidate beats `n - 1` 
-    candidates in pairwise comparison scenarios, it is also considered a Condorcet winner.
+    Likewise, if in an election of `n` alternatives, a alternative beats `n - 1` 
+    alternatives in pairwise comparison scenarios, it is also considered a Condorcet winner.
 
     Returns
     -------
@@ -1780,32 +2305,32 @@ candidates in pairwise comparison scenarios, it is also considered a Condorcet w
 
     &#34;&#34;&#34;
     df = self.df.copy()
-    candidate = self.candidate
+    alternative = self.alternative
 
     m = self.copeland_matrix()
 
     tmp = pd.DataFrame([(a, b) for a, b in list(zip(list(m), np.nanmean(m, axis=1)))],
-                       columns=[candidate, &#34;value&#34;]).sort_values(&#34;value&#34;, ascending=False)
+                       columns=[alternative, &#34;value&#34;]).sort_values(&#34;value&#34;, ascending=False)
     if self.show_rank:
         tmp[&#34;rank&#34;] = range(1, tmp.shape[0] + 1)
 
     return tmp</code></pre>
-</details>
-</dd>
-<dt id="comchoice.voting.Voting.copeland_matrix"><code class="name flex">
+                                </details>
+                            </dd>
+                            <dt id="comchoice.voting.Voting.copeland_matrix"><code class="name flex">
 <span>def <span class="ident">copeland_matrix</span></span>(<span>self, n_votes=False)</span>
 </code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def copeland_matrix(self, n_votes=False):
+                            <dd>
+                                <div class="desc"></div>
+                                <details class="source">
+                                    <summary>
+                                        <span>Expand source code</span>
+                                    </summary>
+                                    <pre><code class="python">def copeland_matrix(self, n_votes=False):
     df = self.df.copy()
     output = []
 
-    candidate = self.candidate
+    alternative = self.alternative
     rank = self.rank
     voter = self.voter
     voters = self.voters
@@ -1816,7 +2341,7 @@ candidates in pairwise comparison scenarios, it is also considered a Condorcet w
         df = data.copy()
         df[&#34;_id&#34;] = range(df.shape[0])
         df = df.explode(&#34;rank&#34;)
-        df = df.rename(columns={&#34;rank&#34;: &#34;candidate&#34;})
+        df = df.rename(columns={&#34;rank&#34;: &#34;alternative&#34;})
         df[&#34;rank&#34;] = df.groupby(&#34;_id&#34;).cumcount() + 1
         if not unique_id:
             df = df.drop(columns=[&#34;_id&#34;])
@@ -1829,12 +2354,12 @@ candidates in pairwise comparison scenarios, it is also considered a Condorcet w
     else:
         df[voters] = 1
 
-    unique_candidates = df[candidate].unique()
+    unique_alternatives = df[alternative].unique()
     for idx, df_tmp in df.groupby([voter, voters]):
         _voter, _voters = idx
 
         df_tmp = df_tmp.sort_values(rank)
-        items = df_tmp[candidate].values
+        items = df_tmp[alternative].values
 
         tmp = pd.DataFrame(list(combinations(items, 2)), columns=cols)
         tmp[&#34;value&#34;] = _voters
@@ -1843,8 +2368,8 @@ candidates in pairwise comparison scenarios, it is also considered a Condorcet w
     m = pd.concat(output).groupby(cols).agg({&#34;value&#34;: &#34;sum&#34;}).reset_index()
 
     m = m.pivot(index=cols[0], columns=cols[1], values=&#34;value&#34;)
-    m = m.reindex(unique_candidates, axis=0)
-    m = m.reindex(unique_candidates, axis=1)
+    m = m.reindex(unique_alternatives, axis=0)
+    m = m.reindex(unique_alternatives, axis=1)
     m = m.fillna(0)
 
     if n_votes:
@@ -1854,76 +2379,82 @@ candidates in pairwise comparison scenarios, it is also considered a Condorcet w
     m = m / r
 
     m = np.where(m &gt; 0.5, 1, np.where(m == 0.5, 0.5, 0))
-    m = pd.DataFrame(m, index=unique_candidates, columns=unique_candidates)
-    m = m.reindex(unique_candidates, axis=0)
-    m = m.reindex(unique_candidates, axis=1)
+    m = pd.DataFrame(m, index=unique_alternatives, columns=unique_alternatives)
+    m = m.reindex(unique_alternatives, axis=0)
+    m = m.reindex(unique_alternatives, axis=1)
     m = m.astype(float)
     np.fill_diagonal(m.values, np.nan)
 
     return m</code></pre>
-</details>
-</dd>
-<dt id="comchoice.voting.Voting.cumulative"><code class="name flex">
+                                </details>
+                            </dd>
+                            <dt id="comchoice.voting.Voting.cumulative"><code class="name flex">
 <span>def <span class="ident">cumulative</span></span>(<span>self) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
-<dd>
-<div class="desc"><p>Cumulative Voting.</p>
-<p>Calculates the cumulative score of each candidate. </p>
-<h2 id="returns">Returns</h2>
-<dl>
-<dt><code>pandas.DataFrame:</code></dt>
-<dd>Election results using Cumulative Voting</dd>
-</dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def cumulative(self) -&gt; pd.DataFrame:
+                            <dd>
+                                <div class="desc">
+                                    <p>Cumulative Voting.</p>
+                                    <p>Calculates the cumulative score of each alternative. </p>
+                                    <h2 id="returns">Returns</h2>
+                                    <dl>
+                                        <dt><code>pandas.DataFrame:</code></dt>
+                                        <dd>Election results using Cumulative Voting</dd>
+                                    </dl>
+                                </div>
+                                <details class="source">
+                                    <summary>
+                                        <span>Expand source code</span>
+                                    </summary>
+                                    <pre><code class="python">def cumulative(self) -&gt; pd.DataFrame:
     &#34;&#34;&#34;Cumulative Voting.
 
-    Calculates the cumulative score of each candidate. 
+    Calculates the cumulative score of each alternative. 
 
     Returns
     -------
     pandas.DataFrame: 
         Election results using Cumulative Voting
     &#34;&#34;&#34;
-    candidate = self.candidate
+    alternative = self.alternative
     rank = self.rank
     votes = self.votes
     df = self.df.copy()
-    tmp = df.groupby(candidate).agg({votes: &#34;sum&#34;}).reset_index().rename(
+    tmp = df.groupby(alternative).agg({votes: &#34;sum&#34;}).reset_index().rename(
         columns={votes: &#34;value&#34;}).sort_values(&#34;value&#34;, ascending=False)
     if self.show_rank:
         tmp[rank] = range(1, tmp.shape[0] + 1)
 
     return tmp</code></pre>
-</details>
-</dd>
-<dt id="comchoice.voting.Voting.dhondt"><code class="name flex">
+                                </details>
+                            </dd>
+                            <dt id="comchoice.voting.Voting.dhondt"><code class="name flex">
 <span>def <span class="ident">dhondt</span></span>(<span>self, seats=1) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
-<dd>
-<div class="desc"><p>D'Hondt (or Jefferson) method.</p>
-<p>Calculates the number of elected candidates of each party using the D'Hondt (or Jefferson) method.</p>
-<h2 id="parameters">Parameters</h2>
-<dl>
-<dt><strong><code>seats</code></strong> :&ensp;<code>int</code>, default=<code>1</code>, optional<code>:</code></dt>
-<dd>Number of seats to be assigned in the election.</dd>
-</dl>
-<h2 id="returns">Returns</h2>
-<dl>
-<dt><code>pandas.DataFrame:</code></dt>
-<dd>Summary with the seats of each party.</dd>
-</dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def dhondt(self, seats=1) -&gt; pd.DataFrame:
+                            <dd>
+                                <div class="desc">
+                                    <p>D'Hondt (or Jefferson) method.</p>
+                                    <p>Calculates the number of elected alternatives of each party using the D'Hondt (or
+                                        Jefferson) method.</p>
+                                    <h2 id="parameters">Parameters</h2>
+                                    <dl>
+                                        <dt><strong><code>seats</code></strong> :&ensp;<code>int</code>,
+                                            default=<code>1</code>, optional<code>:</code></dt>
+                                        <dd>Number of seats to be assigned in the election.</dd>
+                                    </dl>
+                                    <h2 id="returns">Returns</h2>
+                                    <dl>
+                                        <dt><code>pandas.DataFrame:</code></dt>
+                                        <dd>Summary with the seats of each party.</dd>
+                                    </dl>
+                                </div>
+                                <details class="source">
+                                    <summary>
+                                        <span>Expand source code</span>
+                                    </summary>
+                                    <pre><code class="python">def dhondt(self, seats=1) -&gt; pd.DataFrame:
     &#34;&#34;&#34;D&#39;Hondt (or Jefferson) method.
 
-    Calculates the number of elected candidates of each party using the D&#39;Hondt (or Jefferson) method.
+    Calculates the number of elected alternatives of each party using the D&#39;Hondt (or Jefferson) method.
 
     Parameters
     ----------
@@ -1945,70 +2476,78 @@ candidates in pairwise comparison scenarios, it is also considered a Condorcet w
 
     tmp = pd.DataFrame(output).sort_values(&#34;quot&#34;, ascending=False)
     return tmp.head(seats).groupby(party).count().reset_index().rename(columns={&#34;quot&#34;: &#34;seats&#34;})</code></pre>
-</details>
-</dd>
-<dt id="comchoice.voting.Voting.dowdall"><code class="name flex">
+                                </details>
+                            </dd>
+                            <dt id="comchoice.voting.Voting.dowdall"><code class="name flex">
 <span>def <span class="ident">dowdall</span></span>(<span>self) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
-<dd>
-<div class="desc"><p>Dowdall voting method (1971).</p>
-<p>Dowdall is an alternative to Borda count, devised by Nauru's Secretary
-of Justice in 1971. As in Borda, each voter gives a ranking of candidates.
-The first candidate gets 1 point, the 2nd candidate 1/2 points, and so on
-until the candidate ranked in the n position receives 1/n points.</p>
-<h2 id="returns">Returns</h2>
-<dl>
-<dt><code>pandas.DataFrame:</code></dt>
-<dd>a ranking of candidates using Dowdall.</dd>
-</dl>
-<h2 id="references">References</h2>
-<p>Fraenkel, Jon; Grofman, Bernard (3 April 2014). "The Borda Count and its real-world alternatives: Comparing scoring rules in Nauru and Slovenia". Australian Journal of Political Science. 49 (2): 186-205. doi:10.1080/10361146.2014.900530</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def dowdall(self) -&gt; pd.DataFrame:
+                            <dd>
+                                <div class="desc">
+                                    <p>Dowdall voting method (1971).</p>
+                                    <p>Dowdall is an alternative to Borda count, devised by Nauru's Secretary
+                                        of Justice in 1971. As in Borda, each voter gives a ranking of alternatives.
+                                        The first alternative gets 1 point, the 2nd alternative 1/2 points, and so on
+                                        until the alternative ranked in the n position receives 1/n points.</p>
+                                    <h2 id="returns">Returns</h2>
+                                    <dl>
+                                        <dt><code>pandas.DataFrame:</code></dt>
+                                        <dd>a ranking of alternatives using Dowdall.</dd>
+                                    </dl>
+                                    <h2 id="references">References</h2>
+                                    <p>Fraenkel, Jon; Grofman, Bernard (3 April 2014). "The Borda Count and its
+                                        real-world alternatives: Comparing scoring rules in Nauru and Slovenia".
+                                        Australian Journal of Political Science. 49 (2): 186-205.
+                                        doi:10.1080/10361146.2014.900530</p>
+                                </div>
+                                <details class="source">
+                                    <summary>
+                                        <span>Expand source code</span>
+                                    </summary>
+                                    <pre><code class="python">def dowdall(self) -&gt; pd.DataFrame:
     &#34;&#34;&#34;Dowdall voting method (1971).
 
     Dowdall is an alternative to Borda count, devised by Nauru&#39;s Secretary 
-    of Justice in 1971. As in Borda, each voter gives a ranking of candidates. 
-    The first candidate gets 1 point, the 2nd candidate 1/2 points, and so on 
-    until the candidate ranked in the n position receives 1/n points.
+    of Justice in 1971. As in Borda, each voter gives a ranking of alternatives. 
+    The first alternative gets 1 point, the 2nd alternative 1/2 points, and so on 
+    until the alternative ranked in the n position receives 1/n points.
 
     Returns
     -------
     pandas.DataFrame: 
-        a ranking of candidates using Dowdall. 
+        a ranking of alternatives using Dowdall. 
 
     References
     ----------
     Fraenkel, Jon; Grofman, Bernard (3 April 2014). &#34;The Borda Count and its real-world alternatives: Comparing scoring rules in Nauru and Slovenia&#34;. Australian Journal of Political Science. 49 (2): 186-205. doi:10.1080/10361146.2014.900530
     &#34;&#34;&#34;
     return self.borda(score=&#34;dowdall&#34;)</code></pre>
-</details>
-</dd>
-<dt id="comchoice.voting.Voting.hare"><code class="name flex">
+                                </details>
+                            </dd>
+                            <dt id="comchoice.voting.Voting.hare"><code class="name flex">
 <span>def <span class="ident">hare</span></span>(<span>self) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
-<dd>
-<div class="desc"><p>Hare Rule (also called as Instant Runoff, Ranked-Choice Voting, and Alternative Vote)</p>
-<p>Calculates the winner of an election. In each iteration,
-removes the candidate with the lowest score in a plurality rule,
-until to have a majority winner.</p>
-<h2 id="returns">Returns</h2>
-<dl>
-<dt><code>pandas.DataFrame:</code></dt>
-<dd>The election's winner using Hare Rule.</dd>
-</dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def hare(self) -&gt; pd.DataFrame:
+                            <dd>
+                                <div class="desc">
+                                    <p>Hare Rule (also called as Instant Runoff, Ranked-Choice Voting, and Alternative
+                                        Vote)</p>
+                                    <p>Calculates the winner of an election. In each iteration,
+                                        removes the alternative with the lowest score in a plurality rule,
+                                        until to have a majority winner.</p>
+                                    <h2 id="returns">Returns</h2>
+                                    <dl>
+                                        <dt><code>pandas.DataFrame:</code></dt>
+                                        <dd>The election's winner using Hare Rule.</dd>
+                                    </dl>
+                                </div>
+                                <details class="source">
+                                    <summary>
+                                        <span>Expand source code</span>
+                                    </summary>
+                                    <pre><code class="python">def hare(self) -&gt; pd.DataFrame:
     &#34;&#34;&#34;Hare Rule (also called as Instant Runoff, Ranked-Choice Voting, and Alternative Vote)
 
     Calculates the winner of an election. In each iteration, 
-    removes the candidate with the lowest score in a plurality rule, 
+    removes the alternative with the lowest score in a plurality rule, 
     until to have a majority winner.
 
     Returns
@@ -2017,7 +2556,7 @@ until to have a majority winner.</p>
         The election&#39;s winner using Hare Rule.
     &#34;&#34;&#34;
     df = self.df.copy()
-    candidate = self.candidate
+    alternative = self.alternative
     rank = self.rank
     voters = self.voters
 
@@ -2030,16 +2569,16 @@ until to have a majority winner.</p>
         if &#34;voters&#34; in list(df):
             df[&#34;value&#34;] *= df[&#34;voters&#34;]
 
-        return df.groupby(candidate).agg({&#34;value&#34;: &#34;sum&#34;}).reset_index()
+        return df.groupby(alternative).agg({&#34;value&#34;: &#34;sum&#34;}).reset_index()
 
     tmp = __plurality(df)
     tmp[&#34;value&#34;] /= tmp[&#34;value&#34;].sum()
     tmp = tmp.sort_values(&#34;value&#34;, ascending=False).reset_index(drop=True)
 
     while tmp.loc[0, &#34;value&#34;] &lt;= 0.5:
-        rmv = tmp.loc[tmp.shape[0] - 1, candidate]
+        rmv = tmp.loc[tmp.shape[0] - 1, alternative]
 
-        df = df[df[candidate] != rmv].copy()
+        df = df[df[alternative] != rmv].copy()
         df = df.sort_values([&#34;_id&#34;, rank], ascending=[True, True])
         df[rank] = df.groupby(&#34;_id&#34;).cumcount() + 1
 
@@ -2049,36 +2588,39 @@ until to have a majority winner.</p>
             &#34;value&#34;, ascending=False).reset_index(drop=True)
 
     return tmp.head(1)</code></pre>
-</details>
-</dd>
-<dt id="comchoice.voting.Voting.k_approval"><code class="name flex">
+                                </details>
+                            </dd>
+                            <dt id="comchoice.voting.Voting.k_approval"><code class="name flex">
 <span>def <span class="ident">k_approval</span></span>(<span>self, k=1) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
-<dd>
-<div class="desc"><p>k-Approval voting method.</p>
-<p>The method gives 1 if the candidate is ranked over or equal to k. Otherwise, the value given is 0.</p>
-<h2 id="parameters">Parameters</h2>
-<p>k (int, optional):
-Threshold to score candidates with a value of 1.</p>
-<h2 id="returns">Returns</h2>
-<dl>
-<dt><code>pandas.DataFrame:</code></dt>
-<dd>Election results using the k-approval method.</dd>
-</dl>
-<h2 id="references">References</h2></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def k_approval(self, k=1) -&gt; pd.DataFrame:
+                            <dd>
+                                <div class="desc">
+                                    <p>k-Approval voting method.</p>
+                                    <p>The method gives 1 if the alternative is ranked over or equal to k. Otherwise,
+                                        the value given is 0.</p>
+                                    <h2 id="parameters">Parameters</h2>
+                                    <p>k (int, optional):
+                                        Threshold to score alternatives with a value of 1.</p>
+                                    <h2 id="returns">Returns</h2>
+                                    <dl>
+                                        <dt><code>pandas.DataFrame:</code></dt>
+                                        <dd>Election results using the k-approval method.</dd>
+                                    </dl>
+                                    <h2 id="references">References</h2>
+                                </div>
+                                <details class="source">
+                                    <summary>
+                                        <span>Expand source code</span>
+                                    </summary>
+                                    <pre><code class="python">def k_approval(self, k=1) -&gt; pd.DataFrame:
     &#34;&#34;&#34;k-Approval voting method.
 
-    The method gives 1 if the candidate is ranked over or equal to k. Otherwise, the value given is 0.
+    The method gives 1 if the alternative is ranked over or equal to k. Otherwise, the value given is 0.
 
     Parameters
     ----------
     k (int, optional): 
-        Threshold to score candidates with a value of 1.
+        Threshold to score alternatives with a value of 1.
 
     Returns
     -------
@@ -2091,7 +2633,7 @@ Threshold to score candidates with a value of 1.</p>
     &#34;&#34;&#34;
     df = self.df.copy()
 
-    candidate = self.candidate
+    alternative = self.alternative
     rank = self.rank
     voters = self.voters
     plural_voters = voters in list(df)
@@ -2103,44 +2645,52 @@ Threshold to score candidates with a value of 1.</p>
     if plural_voters:
         df[&#34;value&#34;] *= df[voters]
 
-    tmp = df.groupby(candidate).agg(
+    tmp = df.groupby(alternative).agg(
         {&#34;value&#34;: &#34;sum&#34;}).reset_index().sort_values(&#34;value&#34;, ascending=False)
     if self.show_rank:
         tmp[&#34;rank&#34;] = range(1, tmp.shape[0] + 1)
 
     return tmp</code></pre>
-</details>
-</dd>
-<dt id="comchoice.voting.Voting.kemeny_young"><code class="name flex">
+                                </details>
+                            </dd>
+                            <dt id="comchoice.voting.Voting.kemeny_young"><code class="name flex">
 <span>def <span class="ident">kemeny_young</span></span>(<span>self, score_matrix=False)</span>
 </code></dt>
-<dd>
-<div class="desc"><p>Kemeny-Young method.</p>
-<p>The Kemeny-Young method is a voting method that uses preferential ballots
-and pairwise comparison to identify the most popular candidates in an election. </p>
-<h2 id="parameters">Parameters</h2>
-<dl>
-<dt><strong><code>score_matrix</code></strong> :&ensp;<code>bool</code>, default <code>= False</code></dt>
-<dd>If the value is <code>true</code>, returns the score matrix.</dd>
-</dl>
-<h2 id="returns">Returns</h2>
-<dl>
-<dt><code>pandas.DataFrame:</code></dt>
-<dd>Election results using Kemeny-Young method.</dd>
-</dl>
-<h2 id="references">References</h2>
-<p>John Kemeny, "Mathematics without numbers", Daedalus 88 (1959), pp. 577-591.</p>
-<p>H. P. Young, "Optimal ranking and choice from pairwise comparisons", in Information pooling and group decision making edited by B. Grofman and G. Owen (1986), JAI Press, pp. 113-122.</p>
-<p>H. P. Young and A. Levenglick, "A Consistent Extension of Condorcet's Election Principle", SIAM Journal on Applied Mathematics 35, no. 2 (1978), pp. 285-300.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def kemeny_young(self, score_matrix=False):
+                            <dd>
+                                <div class="desc">
+                                    <p>Kemeny-Young method.</p>
+                                    <p>The Kemeny-Young method is a voting method that uses preferential ballots
+                                        and pairwise comparison to identify the most popular alternatives in an
+                                        election. </p>
+                                    <h2 id="parameters">Parameters</h2>
+                                    <dl>
+                                        <dt><strong><code>score_matrix</code></strong> :&ensp;<code>bool</code>, default
+                                            <code>= False</code></dt>
+                                        <dd>If the value is <code>true</code>, returns the score matrix.</dd>
+                                    </dl>
+                                    <h2 id="returns">Returns</h2>
+                                    <dl>
+                                        <dt><code>pandas.DataFrame:</code></dt>
+                                        <dd>Election results using Kemeny-Young method.</dd>
+                                    </dl>
+                                    <h2 id="references">References</h2>
+                                    <p>John Kemeny, "Mathematics without numbers", Daedalus 88 (1959), pp. 577-591.</p>
+                                    <p>H. P. Young, "Optimal ranking and choice from pairwise comparisons", in
+                                        Information pooling and group decision making edited by B. Grofman and G. Owen
+                                        (1986), JAI Press, pp. 113-122.</p>
+                                    <p>H. P. Young and A. Levenglick, "A Consistent Extension of Condorcet's Election
+                                        Principle", SIAM Journal on Applied Mathematics 35, no. 2 (1978), pp. 285-300.
+                                    </p>
+                                </div>
+                                <details class="source">
+                                    <summary>
+                                        <span>Expand source code</span>
+                                    </summary>
+                                    <pre><code class="python">def kemeny_young(self, score_matrix=False):
     &#34;&#34;&#34;Kemeny-Young method.
 
     The Kemeny-Young method is a voting method that uses preferential ballots 
-    and pairwise comparison to identify the most popular candidates in an election. 
+    and pairwise comparison to identify the most popular alternatives in an election. 
 
     Parameters
     ----------
@@ -2161,7 +2711,7 @@ and pairwise comparison to identify the most popular candidates in an election. 
     H. P. Young and A. Levenglick, &#34;A Consistent Extension of Condorcet&#39;s Election Principle&#34;, SIAM Journal on Applied Mathematics 35, no. 2 (1978), pp. 285-300.
     &#34;&#34;&#34;
     m = self.copeland_matrix(n_votes=True)
-    candidate = self.candidate
+    alternative = self.alternative
     rank = self.rank
 
     output = []
@@ -2180,34 +2730,38 @@ and pairwise comparison to identify the most popular candidates in an election. 
         return tmp
 
     tmp_r = pd.DataFrame()
-    tmp_r[candidate] = tmp.loc[0, &#34;rank&#34;]
+    tmp_r[alternative] = tmp.loc[0, &#34;rank&#34;]
     tmp_r[rank] = range(1, tmp_r.shape[0] + 1)
 
     return tmp_r</code></pre>
-</details>
-</dd>
-<dt id="comchoice.voting.Voting.loser"><code class="name flex">
+                                </details>
+                            </dd>
+                            <dt id="comchoice.voting.Voting.loser"><code class="name flex">
 <span>def <span class="ident">loser</span></span>(<span>self, method='borda', n=1) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
-<dd>
-<div class="desc"><p>Returns the loser of an election based on a voting method.</p>
-<h2 id="parameters">Parameters</h2>
-<dl>
-<dt><strong><code>method</code></strong> :&ensp;<code>str</code>, default=<code>"borda"</code></dt>
-<dd>&nbsp;</dd>
-<dt><strong><code>n</code></strong> :&ensp;<code>int</code>, default=<code>1</code></dt>
-<dd>Number of losers.</dd>
-</dl>
-<h2 id="see-also">See Also</h2>
-<dl>
-<dt><code>winner</code></dt>
-<dd>some other related function</dd>
-</dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def loser(self, method=&#34;borda&#34;, n=1) -&gt; pd.DataFrame:
+                            <dd>
+                                <div class="desc">
+                                    <p>Returns the loser of an election based on a voting method.</p>
+                                    <h2 id="parameters">Parameters</h2>
+                                    <dl>
+                                        <dt><strong><code>method</code></strong> :&ensp;<code>str</code>,
+                                            default=<code>"borda"</code></dt>
+                                        <dd>&nbsp;</dd>
+                                        <dt><strong><code>n</code></strong> :&ensp;<code>int</code>,
+                                            default=<code>1</code></dt>
+                                        <dd>Number of losers.</dd>
+                                    </dl>
+                                    <h2 id="see-also">See Also</h2>
+                                    <dl>
+                                        <dt><code>winner</code></dt>
+                                        <dd>some other related function</dd>
+                                    </dl>
+                                </div>
+                                <details class="source">
+                                    <summary>
+                                        <span>Expand source code</span>
+                                    </summary>
+                                    <pre><code class="python">def loser(self, method=&#34;borda&#34;, n=1) -&gt; pd.DataFrame:
     &#34;&#34;&#34;Returns the loser of an election based on a voting method.
 
     Parameters
@@ -2221,27 +2775,29 @@ and pairwise comparison to identify the most popular candidates in an election. 
     winner: some other related function
     &#34;&#34;&#34;
     return self.__get_items(method=method, ascending=True, n=n)</code></pre>
-</details>
-</dd>
-<dt id="comchoice.voting.Voting.negative"><code class="name flex">
+                                </details>
+                            </dd>
+                            <dt id="comchoice.voting.Voting.negative"><code class="name flex">
 <span>def <span class="ident">negative</span></span>(<span>self) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
-<dd>
-<div class="desc"><p>Negative Voting.</p>
-<p>Calculates the score of each candidate using Negative Voting.</p>
-<h2 id="returns">Returns</h2>
-<dl>
-<dt><code>pandas.DataFrame:</code></dt>
-<dd>Election results using Negative Voting.</dd>
-</dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def negative(self) -&gt; pd.DataFrame:
+                            <dd>
+                                <div class="desc">
+                                    <p>Negative Voting.</p>
+                                    <p>Calculates the score of each alternative using Negative Voting.</p>
+                                    <h2 id="returns">Returns</h2>
+                                    <dl>
+                                        <dt><code>pandas.DataFrame:</code></dt>
+                                        <dd>Election results using Negative Voting.</dd>
+                                    </dl>
+                                </div>
+                                <details class="source">
+                                    <summary>
+                                        <span>Expand source code</span>
+                                    </summary>
+                                    <pre><code class="python">def negative(self) -&gt; pd.DataFrame:
     &#34;&#34;&#34;Negative Voting.
 
-    Calculates the score of each candidate using Negative Voting.
+    Calculates the score of each alternative using Negative Voting.
 
     Returns
     -------
@@ -2249,38 +2805,41 @@ and pairwise comparison to identify the most popular candidates in an election. 
         Election results using Negative Voting.
 
     &#34;&#34;&#34;
-    candidate = self.candidate
+    alternative = self.alternative
     rank = self.rank
     votes = self.votes
     df = self.df.copy()
 
-    tmp = df.groupby(candidate).agg({votes: &#34;sum&#34;}).reset_index().rename(
+    tmp = df.groupby(alternative).agg({votes: &#34;sum&#34;}).reset_index().rename(
         columns={votes: &#34;value&#34;}).sort_values(&#34;value&#34;, ascending=False)
     if self.show_rank:
         tmp[rank] = range(1, tmp.shape[0] + 1)
 
     return tmp</code></pre>
-</details>
-</dd>
-<dt id="comchoice.voting.Voting.plurality"><code class="name flex">
+                                </details>
+                            </dd>
+                            <dt id="comchoice.voting.Voting.plurality"><code class="name flex">
 <span>def <span class="ident">plurality</span></span>(<span>self)</span>
 </code></dt>
-<dd>
-<div class="desc"><p>Plurality Rule.</p>
-<p>Each voter selects one candidate (or none if voters can abstain), and the candidate(s) with the most votes win.</p>
-<h2 id="returns">Returns</h2>
-<dl>
-<dt><code>pandas.DataFrame:</code></dt>
-<dd>Election results using Plurality Rule.</dd>
-</dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def plurality(self):
+                            <dd>
+                                <div class="desc">
+                                    <p>Plurality Rule.</p>
+                                    <p>Each voter selects one alternative (or none if voters can abstain), and the
+                                        alternative(s) with the most votes win.</p>
+                                    <h2 id="returns">Returns</h2>
+                                    <dl>
+                                        <dt><code>pandas.DataFrame:</code></dt>
+                                        <dd>Election results using Plurality Rule.</dd>
+                                    </dl>
+                                </div>
+                                <details class="source">
+                                    <summary>
+                                        <span>Expand source code</span>
+                                    </summary>
+                                    <pre><code class="python">def plurality(self):
     &#34;&#34;&#34;Plurality Rule.
 
-    Each voter selects one candidate (or none if voters can abstain), and the candidate(s) with the most votes win.
+    Each voter selects one alternative (or none if voters can abstain), and the alternative(s) with the most votes win.
 
     Returns
     -------
@@ -2289,7 +2848,7 @@ and pairwise comparison to identify the most popular candidates in an election. 
     &#34;&#34;&#34;
     df = self.df.copy()
 
-    candidate = self.candidate
+    alternative = self.alternative
     rank = self.rank
     voters = self.voters
 
@@ -2300,39 +2859,45 @@ and pairwise comparison to identify the most popular candidates in an election. 
     if voters in list(df):
         df[&#34;value&#34;] *= df[voters]
 
-    tmp = df.groupby(candidate).agg(
+    tmp = df.groupby(alternative).agg(
         {&#34;value&#34;: &#34;sum&#34;}).reset_index().sort_values(&#34;value&#34;, ascending=False)
     if self.show_rank:
         tmp[rank] = range(1, tmp.shape[0] + 1)
 
     return tmp</code></pre>
-</details>
-</dd>
-<dt id="comchoice.voting.Voting.ranking"><code class="name flex">
+                                </details>
+                            </dd>
+                            <dt id="comchoice.voting.Voting.ranking"><code class="name flex">
 <span>def <span class="ident">ranking</span></span>(<span>self, method='plurality', **args) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
-<dd>
-<div class="desc"><p>Calculates the ranking of candidates usen a given voting method.</p>
-<h2 id="parameters">Parameters</h2>
-<dl>
-<dt><strong><code>method</code></strong> :&ensp;<code>{"borda", "copeland", "k-approval", "plurality"}</code>, default=<code>"plurality"</code></dt>
-<dd>Method to be used for calculating the ranking.</dd>
-<dt><strong><code>k</code></strong> :&ensp;<code>int</code>, default=<code>1</code></dt>
-<dd>Just valid for k-approval method.</dd>
-<dt><strong><code>bootstrap</code></strong> :&ensp;<code>bool</code> or <code>int</code>, default=<code>False</code></dt>
-<dd>Number of bootstraps to calculate confidence interval.</dd>
-</dl>
-<h2 id="returns">Returns</h2>
-<dl>
-<dt><code>pandas.DataFrame:</code></dt>
-<dd>Ranking of candidates calculated with the method defined.</dd>
-</dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def ranking(self, method=&#34;plurality&#34;, **args) -&gt; pd.DataFrame:
-    &#34;&#34;&#34;Calculates the ranking of candidates usen a given voting method.
+                            <dd>
+                                <div class="desc">
+                                    <p>Calculates the ranking of alternatives usen a given voting method.</p>
+                                    <h2 id="parameters">Parameters</h2>
+                                    <dl>
+                                        <dt><strong><code>method</code></strong>
+                                            :&ensp;<code>{"borda", "copeland", "k-approval", "plurality"}</code>,
+                                            default=<code>"plurality"</code></dt>
+                                        <dd>Method to be used for calculating the ranking.</dd>
+                                        <dt><strong><code>k</code></strong> :&ensp;<code>int</code>,
+                                            default=<code>1</code></dt>
+                                        <dd>Just valid for k-approval method.</dd>
+                                        <dt><strong><code>bootstrap</code></strong> :&ensp;<code>bool</code> or
+                                            <code>int</code>, default=<code>False</code></dt>
+                                        <dd>Number of bootstraps to calculate confidence interval.</dd>
+                                    </dl>
+                                    <h2 id="returns">Returns</h2>
+                                    <dl>
+                                        <dt><code>pandas.DataFrame:</code></dt>
+                                        <dd>Ranking of alternatives calculated with the method defined.</dd>
+                                    </dl>
+                                </div>
+                                <details class="source">
+                                    <summary>
+                                        <span>Expand source code</span>
+                                    </summary>
+                                    <pre><code class="python">def ranking(self, method=&#34;plurality&#34;, **args) -&gt; pd.DataFrame:
+    &#34;&#34;&#34;Calculates the ranking of alternatives usen a given voting method.
 
     Parameters
     ----------
@@ -2346,7 +2911,7 @@ and pairwise comparison to identify the most popular candidates in an election. 
     Returns
     -------
     pandas.DataFrame: 
-        Ranking of candidates calculated with the method defined.
+        Ranking of alternatives calculated with the method defined.
 
     &#34;&#34;&#34;
     methods = {
@@ -2361,29 +2926,31 @@ and pairwise comparison to identify the most popular candidates in an election. 
         return tmp
     except KeyError as err:
         raise Exception(f&#34;{method} is not a valid method.&#34;)</code></pre>
-</details>
-</dd>
-<dt id="comchoice.voting.Voting.score"><code class="name flex">
+                                </details>
+                            </dd>
+                            <dt id="comchoice.voting.Voting.score"><code class="name flex">
 <span>def <span class="ident">score</span></span>(<span>self) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
-<dd>
-<div class="desc"><p>Score Voting. (Also called as Range Voting, Utilitarian Voting).</p>
-<p>In this method, voters give a score to each candidate. We average the scores,
-and the winner is the candidate with the highest score.</p>
-<h2 id="returns">Returns</h2>
-<dl>
-<dt><code>pandas.DataFrame:</code></dt>
-<dd>Election results using Score Voting.</dd>
-</dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def score(self) -&gt; pd.DataFrame:
+                            <dd>
+                                <div class="desc">
+                                    <p>Score Voting. (Also called as Range Voting, Utilitarian Voting).</p>
+                                    <p>In this method, voters give a score to each alternative. We average the scores,
+                                        and the winner is the alternative with the highest score.</p>
+                                    <h2 id="returns">Returns</h2>
+                                    <dl>
+                                        <dt><code>pandas.DataFrame:</code></dt>
+                                        <dd>Election results using Score Voting.</dd>
+                                    </dl>
+                                </div>
+                                <details class="source">
+                                    <summary>
+                                        <span>Expand source code</span>
+                                    </summary>
+                                    <pre><code class="python">def score(self) -&gt; pd.DataFrame:
     &#34;&#34;&#34;Score Voting. (Also called as Range Voting, Utilitarian Voting).
 
-    In this method, voters give a score to each candidate. We average the scores, 
-    and the winner is the candidate with the highest score.
+    In this method, voters give a score to each alternative. We average the scores, 
+    and the winner is the alternative with the highest score.
 
     Returns
     -------
@@ -2391,46 +2958,49 @@ and the winner is the candidate with the highest score.</p>
         Election results using Score Voting.
 
     &#34;&#34;&#34;
-    candidate = self.candidate
+    alternative = self.alternative
     rank = self.rank
     votes = self.votes
     df = self.df.copy()
-    tmp = df.groupby(candidate).agg({votes: &#34;mean&#34;}).reset_index().rename(
+    tmp = df.groupby(alternative).agg({votes: &#34;mean&#34;}).reset_index().rename(
         columns={votes: &#34;value&#34;}).sort_values(&#34;value&#34;, ascending=False)
     if self.show_rank:
         tmp[rank] = range(1, tmp.shape[0] + 1)
 
     return tmp</code></pre>
-</details>
-</dd>
-<dt id="comchoice.voting.Voting.smith_set"><code class="name flex">
+                                </details>
+                            </dd>
+                            <dt id="comchoice.voting.Voting.smith_set"><code class="name flex">
 <span>def <span class="ident">smith_set</span></span>(<span>self)</span>
 </code></dt>
-<dd>
-<div class="desc"><p>Smith Set.</p>
-<p>The Smith Set, Generalized Top-Choice Assumption (GETCHA), or Top Cycle,
-is the smallest non-empty set of candidates in an election.
-Each member defeats every candidate outside the set in a pairwise election. </p>
-<h2 id="returns">Returns</h2>
-<dl>
-<dt><code>list:</code></dt>
-<dd>Candidates that are part of the Smith Set.</dd>
-</dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def smith_set(self):
+                            <dd>
+                                <div class="desc">
+                                    <p>Smith Set.</p>
+                                    <p>The Smith Set, Generalized Top-Choice Assumption (GETCHA), or Top Cycle,
+                                        is the smallest non-empty set of alternatives in an election.
+                                        Each member defeats every alternative outside the set in a pairwise election.
+                                    </p>
+                                    <h2 id="returns">Returns</h2>
+                                    <dl>
+                                        <dt><code>list:</code></dt>
+                                        <dd>alternatives that are part of the Smith Set.</dd>
+                                    </dl>
+                                </div>
+                                <details class="source">
+                                    <summary>
+                                        <span>Expand source code</span>
+                                    </summary>
+                                    <pre><code class="python">def smith_set(self):
     &#34;&#34;&#34;Smith Set.
 
     The Smith Set, Generalized Top-Choice Assumption (GETCHA), or Top Cycle, 
-    is the smallest non-empty set of candidates in an election. 
-    Each member defeats every candidate outside the set in a pairwise election. 
+    is the smallest non-empty set of alternatives in an election. 
+    Each member defeats every alternative outside the set in a pairwise election. 
 
     Returns
     -------
     list:
-        Candidates that are part of the Smith Set.
+        alternatives that are part of the Smith Set.
     &#34;&#34;&#34;
 
     df = self.df.copy()
@@ -2441,16 +3011,16 @@ Each member defeats every candidate outside the set in a pairwise election. </p>
     m = m.reindex(__index, axis=0)
     m = m.reindex(__index, axis=1)
 
-    _candidates = list(m)
+    _alternatives = list(m)
     m_values = m.values
 
-    _col = _candidates[0]
+    _col = _alternatives[0]
 
     while _col:
         _col_p = _col
-        for _row in _candidates:
-            i_row = _candidates.index(_row)
-            i_col = _candidates.index(_col)
+        for _row in _alternatives:
+            i_row = _alternatives.index(_row)
+            i_col = _alternatives.index(_col)
 
             if i_row &gt; i_col:
                 _value = m_values[i_row, i_col]
@@ -2461,24 +3031,26 @@ Each member defeats every candidate outside the set in a pairwise election. </p>
         if _col_p == _col:
             _col = False
 
-    return _candidates[:i_col + 1]</code></pre>
-</details>
-</dd>
-<dt id="comchoice.voting.Voting.winner"><code class="name flex">
+    return _alternatives[:i_col + 1]</code></pre>
+                                </details>
+                            </dd>
+                            <dt id="comchoice.voting.Voting.winner"><code class="name flex">
 <span>def <span class="ident">winner</span></span>(<span>self, method='borda', n=1) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
-<dd>
-<div class="desc"><p>Returns the winner of an election based on a voting method.</p>
-<h2 id="see-also">See Also</h2>
-<dl>
-<dt><code>loser</code></dt>
-<dd>some other related function</dd>
-</dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def winner(self, method=&#34;borda&#34;, n=1) -&gt; pd.DataFrame:
+                            <dd>
+                                <div class="desc">
+                                    <p>Returns the winner of an election based on a voting method.</p>
+                                    <h2 id="see-also">See Also</h2>
+                                    <dl>
+                                        <dt><code>loser</code></dt>
+                                        <dd>some other related function</dd>
+                                    </dl>
+                                </div>
+                                <details class="source">
+                                    <summary>
+                                        <span>Expand source code</span>
+                                    </summary>
+                                    <pre><code class="python">def winner(self, method=&#34;borda&#34;, n=1) -&gt; pd.DataFrame:
     &#34;&#34;&#34;Returns the winner of an election based on a voting method.
 
     See Also
@@ -2486,58 +3058,83 @@ Each member defeats every candidate outside the set in a pairwise election. </p>
     loser: some other related function
     &#34;&#34;&#34;
     return self.__get_items(method=method, ascending=False, n=n)</code></pre>
-</details>
-</dd>
-</dl>
-</dd>
-</dl>
-</section>
-</article>
-<nav id="sidebar">
-<h1>Index</h1>
-<div class="toc">
-<ul></ul>
-</div>
-<ul id="index">
-<li><h3>Super-module</h3>
-<ul>
-<li><code><a title="comchoice" href="index.html">comchoice</a></code></li>
-</ul>
-</li>
-<li><h3><a href="#header-classes">Classes</a></h3>
-<ul>
-<li>
-<h4><code><a title="comchoice.voting.Voting" href="#comchoice.voting.Voting">Voting</a></code></h4>
-<ul class="two-column">
-<li><code><a title="comchoice.voting.Voting.black" href="#comchoice.voting.Voting.black">black</a></code></li>
-<li><code><a title="comchoice.voting.Voting.borda" href="#comchoice.voting.Voting.borda">borda</a></code></li>
-<li><code><a title="comchoice.voting.Voting.compare_methods" href="#comchoice.voting.Voting.compare_methods">compare_methods</a></code></li>
-<li><code><a title="comchoice.voting.Voting.completeness" href="#comchoice.voting.Voting.completeness">completeness</a></code></li>
-<li><code><a title="comchoice.voting.Voting.condorcet" href="#comchoice.voting.Voting.condorcet">condorcet</a></code></li>
-<li><code><a title="comchoice.voting.Voting.copeland" href="#comchoice.voting.Voting.copeland">copeland</a></code></li>
-<li><code><a title="comchoice.voting.Voting.copeland_matrix" href="#comchoice.voting.Voting.copeland_matrix">copeland_matrix</a></code></li>
-<li><code><a title="comchoice.voting.Voting.cumulative" href="#comchoice.voting.Voting.cumulative">cumulative</a></code></li>
-<li><code><a title="comchoice.voting.Voting.dhondt" href="#comchoice.voting.Voting.dhondt">dhondt</a></code></li>
-<li><code><a title="comchoice.voting.Voting.dowdall" href="#comchoice.voting.Voting.dowdall">dowdall</a></code></li>
-<li><code><a title="comchoice.voting.Voting.hare" href="#comchoice.voting.Voting.hare">hare</a></code></li>
-<li><code><a title="comchoice.voting.Voting.k_approval" href="#comchoice.voting.Voting.k_approval">k_approval</a></code></li>
-<li><code><a title="comchoice.voting.Voting.kemeny_young" href="#comchoice.voting.Voting.kemeny_young">kemeny_young</a></code></li>
-<li><code><a title="comchoice.voting.Voting.loser" href="#comchoice.voting.Voting.loser">loser</a></code></li>
-<li><code><a title="comchoice.voting.Voting.negative" href="#comchoice.voting.Voting.negative">negative</a></code></li>
-<li><code><a title="comchoice.voting.Voting.plurality" href="#comchoice.voting.Voting.plurality">plurality</a></code></li>
-<li><code><a title="comchoice.voting.Voting.ranking" href="#comchoice.voting.Voting.ranking">ranking</a></code></li>
-<li><code><a title="comchoice.voting.Voting.score" href="#comchoice.voting.Voting.score">score</a></code></li>
-<li><code><a title="comchoice.voting.Voting.smith_set" href="#comchoice.voting.Voting.smith_set">smith_set</a></code></li>
-<li><code><a title="comchoice.voting.Voting.winner" href="#comchoice.voting.Voting.winner">winner</a></code></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</nav>
-</main>
-<footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
-</footer>
+                                </details>
+                            </dd>
+                        </dl>
+                    </dd>
+                </dl>
+            </section>
+        </article>
+        <nav id="sidebar">
+            <h1>Index</h1>
+            <div class="toc">
+                <ul></ul>
+            </div>
+            <ul id="index">
+                <li>
+                    <h3>Super-module</h3>
+                    <ul>
+                        <li><code><a title="comchoice" href="index.html">comchoice</a></code></li>
+                    </ul>
+                </li>
+                <li>
+                    <h3><a href="#header-classes">Classes</a></h3>
+                    <ul>
+                        <li>
+                            <h4><code><a title="comchoice.voting.Voting" href="#comchoice.voting.Voting">Voting</a></code>
+                            </h4>
+                            <ul class="two-column">
+                                <li><code><a title="comchoice.voting.Voting.black" href="#comchoice.voting.Voting.black">black</a></code>
+                                </li>
+                                <li><code><a title="comchoice.voting.Voting.borda" href="#comchoice.voting.Voting.borda">borda</a></code>
+                                </li>
+                                <li><code><a title="comchoice.voting.Voting.compare_methods" href="#comchoice.voting.Voting.compare_methods">compare_methods</a></code>
+                                </li>
+                                <li><code><a title="comchoice.voting.Voting.completeness" href="#comchoice.voting.Voting.completeness">completeness</a></code>
+                                </li>
+                                <li><code><a title="comchoice.voting.Voting.condorcet" href="#comchoice.voting.Voting.condorcet">condorcet</a></code>
+                                </li>
+                                <li><code><a title="comchoice.voting.Voting.copeland" href="#comchoice.voting.Voting.copeland">copeland</a></code>
+                                </li>
+                                <li><code><a title="comchoice.voting.Voting.copeland_matrix" href="#comchoice.voting.Voting.copeland_matrix">copeland_matrix</a></code>
+                                </li>
+                                <li><code><a title="comchoice.voting.Voting.cumulative" href="#comchoice.voting.Voting.cumulative">cumulative</a></code>
+                                </li>
+                                <li><code><a title="comchoice.voting.Voting.dhondt" href="#comchoice.voting.Voting.dhondt">dhondt</a></code>
+                                </li>
+                                <li><code><a title="comchoice.voting.Voting.dowdall" href="#comchoice.voting.Voting.dowdall">dowdall</a></code>
+                                </li>
+                                <li><code><a title="comchoice.voting.Voting.hare" href="#comchoice.voting.Voting.hare">hare</a></code>
+                                </li>
+                                <li><code><a title="comchoice.voting.Voting.k_approval" href="#comchoice.voting.Voting.k_approval">k_approval</a></code>
+                                </li>
+                                <li><code><a title="comchoice.voting.Voting.kemeny_young" href="#comchoice.voting.Voting.kemeny_young">kemeny_young</a></code>
+                                </li>
+                                <li><code><a title="comchoice.voting.Voting.loser" href="#comchoice.voting.Voting.loser">loser</a></code>
+                                </li>
+                                <li><code><a title="comchoice.voting.Voting.negative" href="#comchoice.voting.Voting.negative">negative</a></code>
+                                </li>
+                                <li><code><a title="comchoice.voting.Voting.plurality" href="#comchoice.voting.Voting.plurality">plurality</a></code>
+                                </li>
+                                <li><code><a title="comchoice.voting.Voting.ranking" href="#comchoice.voting.Voting.ranking">ranking</a></code>
+                                </li>
+                                <li><code><a title="comchoice.voting.Voting.score" href="#comchoice.voting.Voting.score">score</a></code>
+                                </li>
+                                <li><code><a title="comchoice.voting.Voting.smith_set" href="#comchoice.voting.Voting.smith_set">smith_set</a></code>
+                                </li>
+                                <li><code><a title="comchoice.voting.Voting.winner" href="#comchoice.voting.Voting.winner">winner</a></code>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </main>
+    <footer id="footer">
+        <p>Generated by <a href="https://pdoc3.github.io/pdoc"
+                title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+    </footer>
 </body>
+
 </html>

@@ -4,7 +4,7 @@ from comchoice.aggregate.nanson_baldwin import nanson_baldwin
 
 def baldwin(
     df,
-    candidate="candidate",
+    alternative="alternative",
     delimiter=">",
     rank="rank",
     borda_score="original",
@@ -15,7 +15,7 @@ def baldwin(
     return nanson_baldwin(
         df,
         method="baldwin",
-        candidate=candidate,
+        alternative=alternative,
         delimiter=delimiter,
         rank=rank,
         borda_score=borda_score,

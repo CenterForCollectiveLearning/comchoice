@@ -5,9 +5,9 @@ import pandas as pd
 
 def set_synthetic_election(
     aggregate=True,
-    candidates=None,
+    alternatives=None,
     full_rank=True,
-    n_candidates=3,
+    n_alternatives=3,
     n_voters=4,
     random_state=None,
     delimiter=">"
@@ -16,12 +16,12 @@ def set_synthetic_election(
 
     Parameters
     ----------
-    candidates: string list, default=alphabet
-        List of the names/candidates
+    alternatives: string list, default=alphabet
+        List of the names/alternatives
     full_rank : bool, default=True
-        If the value is `true`, every voter assigns a complete ranking of candidates.
-    n_candidates : int, default=3
-        Number of candidates. Must be a positive value.
+        If the value is `true`, every voter assigns a complete ranking of alternatives.
+    n_alternatives : int, default=3
+        Number of alternatives. Must be a positive value.
     n_voters : int, default=4
         Number of voters. Must be a positive value.
     random_state : int, None, default=None
@@ -38,15 +38,15 @@ def set_synthetic_election(
     load_synthetic_pairwise : Generates synthetic voting data.
     """
 
-    if candidates == None:
-        if n_candidates <= 26:
+    if alternatives == None:
+        if n_alternatives <= 26:
             alphabet_string = ascii_lowercase
-            candidates = list(alphabet_string[:n_candidates])
+            alternatives = list(alphabet_string[:n_alternatives])
         else:
-            candidates = list(range(1, n_candidates + 1))
-            candidates = [str(c) for c in candidates]
+            alternatives = list(range(1, n_alternatives + 1))
+            alternatives = [str(c) for c in alternatives]
     else:
-        n_candidates = len(candidates)
+        n_alternatives = len(alternatives)
 
     if random_state != None and (type(random_state) == int or float):
         seed(random_state)
@@ -55,7 +55,7 @@ def set_synthetic_election(
 
     for voter in range(1, n_voters + 1):
         voted = sample(
-            candidates, n_candidates) if full_rank else choice(candidates)
+            alternatives, n_alternatives) if full_rank else choice(alternatives)
         output.append({
             "voters": 1,
             "rank": delimiter.join(voted)

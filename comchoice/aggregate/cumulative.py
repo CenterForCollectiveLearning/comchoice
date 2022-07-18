@@ -5,13 +5,13 @@ from comchoice.aggregate.score import score
 
 def cumulative(
     df,
-    candidate="candidate",
+    alternative="alternative",
     score="score",
     show_rank=True
 ) -> pd.DataFrame:
     """Cumulative Voting.
 
-    Calculates the cumulative score of each candidate.
+    Calculates the cumulative score of each alternative.
 
     Returns
     -------
@@ -21,7 +21,7 @@ def cumulative(
     return score(
         df,
         aggregation="sum",
-        candidate=candidate,
+        alternative=alternative,
         score=score,
         show_rank=show_rank
     )

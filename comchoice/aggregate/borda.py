@@ -8,7 +8,7 @@ from comchoice.aggregate.__transform import __transform
 
 def borda(
     df,
-    candidate="candidate",
+    alternative="alternative",
     delimiter=">",
     rank="rank",
     rmv=[],
@@ -19,14 +19,14 @@ def borda(
 ) -> pd.DataFrame:
     """Borda Count (1784).
 
-    The Borda count is a voting method to rank candidates.
+    The Borda count is a voting method to rank alternatives.
     In an election, each voter gives a ranked-ordered list of their preferences.
-    Then, it assigns the lowest score to the lowest-ranked candidate, increasing
-    the score assigned until the candidate ranks first. The winner is the candidate with the most points.
+    Then, it assigns the lowest score to the lowest-ranked alternative, increasing
+    the score assigned until the alternative ranks first. The winner is the alternative with the most points.
 
-    The original version proposed by Borda for an election of `n` candidates, assigns `n - 1`
-    points to the candidate in the first place, `n - 2` to the candidate in the second place,
-    and so on, until assigning 0 to the lowest-ranked candidate.
+    The original version proposed by Borda for an election of `n` alternatives, assigns `n - 1`
+    points to the alternative in the first place, `n - 2` to the alternative in the second place,
+    and so on, until assigning 0 to the lowest-ranked alternative.
 
     Parameters
     ----------
@@ -46,7 +46,7 @@ def borda(
 
     # if plural_voters:
     df = __transform(df, delimiter=delimiter, rmv=rmv)
-    N = len(df[candidate].unique())
+    N = len(df[alternative].unique())
 
     if score == "dowdall":
         df["value"] = 1 / df[rank]
@@ -58,7 +58,7 @@ def borda(
         df["value"] = N - df[rank]
 
     df = __set_voters(df, voters=voters)
-    df = __aggregate(df, groupby=[candidate], aggregation="sum")
+    df = __aggregate(df, groupby=[alternative], aggregation="sum")
 
     if show_rank:
         df = __set_rank(df)

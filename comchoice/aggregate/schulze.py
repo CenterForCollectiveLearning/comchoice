@@ -7,7 +7,7 @@ from comchoice.aggregate.__set_rank import __set_rank
 
 def schulze(
     df,
-    candidate="candidate",
+    alternative="alternative",
     rank="rank",
     delimiter=">",
     show_rank=True,
@@ -17,37 +17,37 @@ def schulze(
 
     d = pairwise_matrix(
         df,
-        candidate=candidate,
+        alternative=alternative,
         rank=rank,
         delimiter=delimiter,
         voter=voter,
         voters=voters
     )
 
-    candidates = list(d)
-    n_candidates = len(candidates)
+    alternatives = list(d)
+    n_alternatives = len(alternatives)
 
     p = pd.DataFrame(
-        np.zeros((n_candidates, n_candidates)),
-        index=candidates,
-        columns=candidates
+        np.zeros((n_alternatives, n_alternatives)),
+        index=alternatives,
+        columns=alternatives
     )
 
-    for i in candidates:
-        for j in candidates:
+    for i in alternatives:
+        for j in alternatives:
             if i != j:
                 if d[i][j] > d[j][i]:
                     p[i][j] = d[i][j]
 
-    for i in candidates:
-        for j in candidates:
+    for i in alternatives:
+        for j in alternatives:
             if i != j:
-                for k in candidates:
+                for k in alternatives:
                     if i != k and j != k:
                         p[j][k] = max(p[j][k], min(p[j][i], p[i][k]))
 
     tmp = pd.DataFrame((p > p.T).astype(int).sum(axis=1)).reset_index()
-    tmp.columns = [candidate, "value"]
+    tmp.columns = [alternative, "value"]
 
     if show_rank:
         tmp = tmp.reset_index(drop=True)

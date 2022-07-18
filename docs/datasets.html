@@ -540,15 +540,15 @@ def load_lebanon() -&gt; pd.DataFrame:
     return pd.read_parquet(__path)
 
 
-def load_synthetic_election(full_rank = True, n_candidates = 3, n_voters = 4) -&gt; pd.DataFrame:
+def load_synthetic_election(full_rank = True, n_alternatives = 3, n_voters = 4) -&gt; pd.DataFrame:
     &#34;&#34;&#34;Generates synthetic voting data.
 
     Parameters
     ----------
     full_rank : bool, default=True
-        If the value is `true`, every voter assigns a complete ranking of candidates.
-    n_candidates : int, default=3
-        Number of candidates. Must be a positive value.
+        If the value is `true`, every voter assigns a complete ranking of alternatives.
+    n_alternatives : int, default=3
+        Number of alternatives. Must be a positive value.
     n_voters : int, default=4
         Number of voters. Must be a positive value.
         
@@ -562,12 +562,12 @@ def load_synthetic_election(full_rank = True, n_candidates = 3, n_voters = 4) -&
     load_synthetic_pairwise : Generates synthetic voting data.
     &#34;&#34;&#34;
     alphabet_string = ascii_lowercase
-    candidates = list(alphabet_string[:n_candidates])
+    alternatives = list(alphabet_string[:n_alternatives])
 
     output = []
 
     for voter in range(1, n_voters + 1):
-        voted = sample(candidates, n_candidates) if full_rank else choice(candidates)
+        voted = sample(alternatives, n_alternatives) if full_rank else choice(alternatives)
         output.append({
             &#34;voters&#34;: 1,
             &#34;rank&#34;: &#34;&#34;.join(voted)
@@ -580,7 +580,7 @@ def load_synthetic_election(full_rank = True, n_candidates = 3, n_voters = 4) -&
 
 
 def load_synthetic_pairwise(
-    n_candidates = 3, 
+    n_alternatives = 3, 
     n_voters = 10, 
     ties = False, 
     transitive = True, 
@@ -590,8 +590,8 @@ def load_synthetic_pairwise(
     
     Parameters
     ----------
-    n_candidates : int, default=3
-        Number of candidates. Must be a positive value.
+    n_alternatives : int, default=3
+        Number of alternatives. Must be a positive value.
     n_voters : int, default=10
         Number of voters. Must be a positive value.
     ties : bool, default=False
@@ -611,13 +611,13 @@ def load_synthetic_pairwise(
     load_synthetic_election : Generates synthetic voting data.
     &#34;&#34;&#34;
 
-    candidates = list(range(1, n_candidates + 1))
+    alternatives = list(range(1, n_alternatives + 1))
     voters = list(range(1, n_voters + 1))
 
     output = []
 
     for voter in voters:
-        rank_order = combinations(sample(candidates, n_candidates), 2)
+        rank_order = combinations(sample(alternatives, n_alternatives), 2)
         for alternative_a, alternative_b in rank_order:
 
             options = sample([alternative_a, alternative_b], 2)
@@ -718,7 +718,7 @@ def load_synthetic_pairwise(
                         </details>
                     </dd>
                     <dt id="comchoice.datasets.load_synthetic_election"><code class="name flex">
-<span>def <span class="ident">load_synthetic_election</span></span>(<span>full_rank=True, n_candidates=3, n_voters=4) ‑> pandas.core.frame.DataFrame</span>
+<span>def <span class="ident">load_synthetic_election</span></span>(<span>full_rank=True, n_alternatives=3, n_voters=4) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
                     <dd>
                         <div class="desc">
@@ -728,10 +728,10 @@ def load_synthetic_pairwise(
                                 <dt><strong><code>full_rank</code></strong> :&ensp;<code>bool</code>,
                                     default=<code>True</code></dt>
                                 <dd>If the value is <code>true</code>, every voter assigns a complete ranking of
-                                    candidates.</dd>
-                                <dt><strong><code>n_candidates</code></strong> :&ensp;<code>int</code>,
+                                    alternatives.</dd>
+                                <dt><strong><code>n_alternatives</code></strong> :&ensp;<code>int</code>,
                                     default=<code>3</code></dt>
-                                <dd>Number of candidates. Must be a positive value.</dd>
+                                <dd>Number of alternatives. Must be a positive value.</dd>
                                 <dt><strong><code>n_voters</code></strong> :&ensp;<code>int</code>,
                                     default=<code>4</code></dt>
                                 <dd>Number of voters. Must be a positive value.</dd>
@@ -752,15 +752,15 @@ def load_synthetic_pairwise(
                             <summary>
                                 <span>Expand source code</span>
                             </summary>
-                            <pre><code class="python">def load_synthetic_election(full_rank = True, n_candidates = 3, n_voters = 4) -&gt; pd.DataFrame:
+                            <pre><code class="python">def load_synthetic_election(full_rank = True, n_alternatives = 3, n_voters = 4) -&gt; pd.DataFrame:
     &#34;&#34;&#34;Generates synthetic voting data.
 
     Parameters
     ----------
     full_rank : bool, default=True
-        If the value is `true`, every voter assigns a complete ranking of candidates.
-    n_candidates : int, default=3
-        Number of candidates. Must be a positive value.
+        If the value is `true`, every voter assigns a complete ranking of alternatives.
+    n_alternatives : int, default=3
+        Number of alternatives. Must be a positive value.
     n_voters : int, default=4
         Number of voters. Must be a positive value.
         
@@ -774,12 +774,12 @@ def load_synthetic_pairwise(
     load_synthetic_pairwise : Generates synthetic voting data.
     &#34;&#34;&#34;
     alphabet_string = ascii_lowercase
-    candidates = list(alphabet_string[:n_candidates])
+    alternatives = list(alphabet_string[:n_alternatives])
 
     output = []
 
     for voter in range(1, n_voters + 1):
-        voted = sample(candidates, n_candidates) if full_rank else choice(candidates)
+        voted = sample(alternatives, n_alternatives) if full_rank else choice(alternatives)
         output.append({
             &#34;voters&#34;: 1,
             &#34;rank&#34;: &#34;&#34;.join(voted)
@@ -792,16 +792,16 @@ def load_synthetic_pairwise(
                         </details>
                     </dd>
                     <dt id="comchoice.datasets.load_synthetic_pairwise"><code class="name flex">
-<span>def <span class="ident">load_synthetic_pairwise</span></span>(<span>n_candidates=3, n_voters=10, ties=False, transitive=True, weight_tie=0.1) ‑> pandas.core.frame.DataFrame</span>
+<span>def <span class="ident">load_synthetic_pairwise</span></span>(<span>n_alternatives=3, n_voters=10, ties=False, transitive=True, weight_tie=0.1) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
                     <dd>
                         <div class="desc">
                             <p>Generates synthetic pairwise comparison data.</p>
                             <h2 id="parameters">Parameters</h2>
                             <dl>
-                                <dt><strong><code>n_candidates</code></strong> :&ensp;<code>int</code>,
+                                <dt><strong><code>n_alternatives</code></strong> :&ensp;<code>int</code>,
                                     default=<code>3</code></dt>
-                                <dd>Number of candidates. Must be a positive value.</dd>
+                                <dd>Number of alternatives. Must be a positive value.</dd>
                                 <dt><strong><code>n_voters</code></strong> :&ensp;<code>int</code>,
                                     default=<code>10</code></dt>
                                 <dd>Number of voters. Must be a positive value.</dd>
@@ -833,7 +833,7 @@ def load_synthetic_pairwise(
                                 <span>Expand source code</span>
                             </summary>
                             <pre><code class="python">def load_synthetic_pairwise(
-    n_candidates = 3, 
+    n_alternatives = 3, 
     n_voters = 10, 
     ties = False, 
     transitive = True, 
@@ -843,8 +843,8 @@ def load_synthetic_pairwise(
     
     Parameters
     ----------
-    n_candidates : int, default=3
-        Number of candidates. Must be a positive value.
+    n_alternatives : int, default=3
+        Number of alternatives. Must be a positive value.
     n_voters : int, default=10
         Number of voters. Must be a positive value.
     ties : bool, default=False
@@ -864,13 +864,13 @@ def load_synthetic_pairwise(
     load_synthetic_election : Generates synthetic voting data.
     &#34;&#34;&#34;
 
-    candidates = list(range(1, n_candidates + 1))
+    alternatives = list(range(1, n_alternatives + 1))
     voters = list(range(1, n_voters + 1))
 
     output = []
 
     for voter in voters:
-        rank_order = combinations(sample(candidates, n_candidates), 2)
+        rank_order = combinations(sample(alternatives, n_alternatives), 2)
         for alternative_a, alternative_b in rank_order:
 
             options = sample([alternative_a, alternative_b], 2)

@@ -5,7 +5,7 @@ from comchoice.aggregate.copeland import copeland
 
 def condorcet(
     df,
-    candidate="candidate",
+    alternative="alternative",
     rank="rank",
     delimiter=">",
     voter="voter",
@@ -14,8 +14,8 @@ def condorcet(
 ):
     """Condorcet winner (1785).
 
-    A Condorcet winner is the candidate who wins 100% of 1v1 elections regarding all
-    the other candidates running in the same election (under a plurality rule).
+    A Condorcet winner is the alternative who wins 100% of 1v1 elections regarding all
+    the other alternatives running in the same election (under a plurality rule).
 
     A weak Condorcet winner does not need to satisfy the rule of 100% of victories.
 
@@ -39,7 +39,7 @@ def condorcet(
 
     tmp = copeland(
         df,
-        candidate=candidate,
+        alternative=alternative,
         rank=rank,
         delimiter=delimiter,
         show_rank=True,

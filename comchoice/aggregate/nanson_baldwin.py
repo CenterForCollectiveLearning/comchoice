@@ -5,7 +5,7 @@ from comchoice.aggregate.borda import borda
 def nanson_baldwin(
     df,
     method="nanson",
-    candidate="candidate",
+    alternative="alternative",
     delimiter=">",
     rank="rank",
     rmv=[],
@@ -17,7 +17,7 @@ def nanson_baldwin(
     rmv = []
     tmp = borda(
         df,
-        candidate=candidate,
+        alternative=alternative,
         delimiter=delimiter,
         rank=rank,
         rmv=rmv,
@@ -29,13 +29,13 @@ def nanson_baldwin(
     while tmp.shape[0] > 1:
         mean = tmp["value"].mean()
         if method == "baldwin":
-            rmv += list(tmp.tail(1)[candidate].unique())
+            rmv += list(tmp.tail(1)[alternative].unique())
         elif method == "nanson":
-            rmv += list(tmp[tmp["value"] < mean][candidate].unique())
+            rmv += list(tmp[tmp["value"] < mean][alternative].unique())
 
         tmp = borda(
             df,
-            candidate=candidate,
+            alternative=alternative,
             delimiter=delimiter,
             rank=rank,
             rmv=rmv,

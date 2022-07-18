@@ -9,7 +9,7 @@ def __set_card_id(
     selected="selected",
     concat: str = "_"
 ) -> pd.DataFrame:
-    """Creates a unique identifier for candidates' pair (card_id).
+    """Creates a unique identifier for alternatives' pair (card_id).
 
     Parameters
     ----------

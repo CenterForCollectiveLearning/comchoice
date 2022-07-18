@@ -4,7 +4,7 @@ from comchoice.aggregate.borda import borda
 
 def dowdall(
     df,
-    candidate="candidate",
+    alternative="alternative",
     delimiter=">",
     rank="rank",
     rmv=[],
@@ -14,14 +14,14 @@ def dowdall(
     """Dowdall voting method (1971).
 
     Dowdall is an alternative to Borda count, devised by Nauru's Secretary
-    of Justice in 1971. As in Borda, each voter gives a ranking of candidates.
-    The first candidate gets 1 point, the 2nd candidate 1/2 points, and so on
-    until the candidate ranked in the n position receives 1/n points.
+    of Justice in 1971. As in Borda, each voter gives a ranking of alternatives.
+    The first alternative gets 1 point, the 2nd alternative 1/2 points, and so on
+    until the alternative ranked in the n position receives 1/n points.
 
     Returns
     -------
     pandas.DataFrame:
-        a ranking of candidates using Dowdall.
+        a ranking of alternatives using Dowdall.
 
     References
     ----------
@@ -29,7 +29,7 @@ def dowdall(
     """
     return borda(
         df,
-        candidate=candidate,
+        alternative=alternative,
         delimiter=delimiter,
         rank=rank,
         rmv=rmv,

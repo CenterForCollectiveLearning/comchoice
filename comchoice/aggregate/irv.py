@@ -7,7 +7,7 @@ from comchoice.aggregate.__aggregate import __aggregate
 
 def irv(
     df,
-    candidate="candidate",
+    alternative="alternative",
     delimiter=">",
     rank="rank",
     voters="voters"
@@ -15,7 +15,7 @@ def irv(
     """Hare Rule (also called as Instant Runoff IRV, Ranked-Choice Voting, and Alternative Vote)
 
     Calculates the winner of an election. In each iteration,
-    removes the candidate with the lowest score in a plurality rule,
+    removes the alternative with the lowest score in a plurality rule,
     until to have a majority winner.
 
     Returns
@@ -31,16 +31,16 @@ def irv(
         df["value"] = 1
         df = __set_voters(df, voters=voters)
 
-        return __aggregate(df, groupby=[candidate], aggregation="sum")
+        return __aggregate(df, groupby=[alternative], aggregation="sum")
 
     tmp = __plurality(df)
     tmp["value"] /= tmp["value"].sum()
     tmp = tmp.sort_values("value", ascending=False).reset_index(drop=True)
 
     while tmp.loc[0, "value"] <= 0.5:
-        rmv = tmp.loc[tmp.shape[0] - 1, candidate]
+        rmv = tmp.loc[tmp.shape[0] - 1, alternative]
 
-        df = df[df[candidate] != rmv].copy()
+        df = df[df[alternative] != rmv].copy()
         df = df.sort_values(["_id", rank], ascending=[True, True])
         df[rank] = df.groupby("_id").cumcount() + 1
 

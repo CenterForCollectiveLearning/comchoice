@@ -7,7 +7,7 @@ from comchoice.aggregate.condorcet import condorcet
 
 def black(
     df,
-    candidate="candidate",
+    alternative="alternative",
     rank="rank",
     delimiter=">",
     voter="voter",
@@ -16,7 +16,7 @@ def black(
     """Black procedure (1958).
 
     Calculates winner of an election using Black procedure. First, the method calculates if there is a
-    Condorcet winner. If there is a Condorcet winner, that candidate is the winner. Otherwise, the winner
+    Condorcet winner. If there is a Condorcet winner, that alternative is the winner. Otherwise, the winner
     using Borda count is the winner.
 
     Returns
@@ -30,7 +30,7 @@ def black(
     """
     r = condorcet(
         df,
-        candidate=candidate,
+        alternative=alternative,
         rank=rank,
         delimiter=delimiter,
         voter=voter,
@@ -39,7 +39,7 @@ def black(
     )
     return r if r.shape[0] > 0 else borda(
         df,
-        candidate=candidate,
+        alternative=alternative,
         rank=rank,
         delimiter=delimiter,
         score="original",

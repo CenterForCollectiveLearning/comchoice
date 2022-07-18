@@ -6,7 +6,7 @@ from comchoice.aggregate.minimax import minimax
 def simpson(
     df,
     method="winning_votes",
-    candidate="candidate",
+    alternative="alternative",
     rank="rank",
     delimiter=">",
     show_rank=True,
@@ -16,7 +16,7 @@ def simpson(
     return minimax(
         df,
         method=method,
-        candidate=candidate,
+        alternative=alternative,
         rank=rank,
         delimiter=delimiter,
         show_rank=show_rank,

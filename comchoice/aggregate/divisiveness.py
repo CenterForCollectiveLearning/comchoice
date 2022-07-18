@@ -10,7 +10,7 @@ from comchoice.preprocessing import to_pairwise
 
 def divisiveness(
     df,
-    candidate="candidate",
+    alternative="alternative",
     method=ahp,
     alternative_a="alternative_a",
     alternative_b="alternative_b",
@@ -26,7 +26,7 @@ def divisiveness(
     ----------
     df : _type_
         _description_
-    candidate : str, optional
+    alternative : str, optional
         _description_, by default "id"
     method : _type_, optional
         _description_, by default borda
@@ -99,22 +99,22 @@ def divisiveness(
     tmp_b = tmp[tmp["group"] == "B"]
 
     tmp_dv = pd.merge(tmp_a, tmp_b, on=[
-                      "card_id", candidate, f"{alternative_a}_sorted", f"{alternative_b}_sorted"])
+                      "card_id", alternative, f"{alternative_a}_sorted", f"{alternative_b}_sorted"])
 
-    tmp_dv = tmp_dv[[candidate, "card_id", "value_x",
+    tmp_dv = tmp_dv[[alternative, "card_id", "value_x",
                      "value_y", f"{selected}_x", f"{selected}_y"]]
     tmp_dv["value"] = tmp_dv["value_x"] - tmp_dv["value_y"]
     tmp_dv["value"] = tmp_dv["value"] ** 2
     tmp_dv["value"] = np.sqrt(tmp_dv["value"])
 
-    tmp_frag_a = tmp_dv[[candidate, f"{selected}_x", "value"]].rename(
+    tmp_frag_a = tmp_dv[[alternative, f"{selected}_x", "value"]].rename(
         columns={f"{selected}_x": "selected"})
-    tmp_frag_b = tmp_dv[[candidate, f"{selected}_y", "value"]].rename(
+    tmp_frag_b = tmp_dv[[alternative, f"{selected}_y", "value"]].rename(
         columns={f"{selected}_y": "selected"})
     tmp = pd.concat([tmp_frag_a, tmp_frag_b])
-    tmp = tmp[tmp[candidate]
+    tmp = tmp[tmp[alternative]
               == tmp["selected"]]
-    tmp = tmp.groupby(candidate).agg(
+    tmp = tmp.groupby(alternative).agg(
         {"value": "mean"}).reset_index()
 
     if show_rank:

@@ -3,11 +3,11 @@ from math import factorial
 
 
 def __combinations_for_completeness(
-    n_candidates=2,
+    n_alternatives=2,
     n_preferences=2
 ):
-    num = factorial(n_candidates)
-    den = factorial(n_preferences) * factorial(n_candidates - n_preferences)
+    num = factorial(n_alternatives)
+    den = factorial(n_preferences) * factorial(n_alternatives - n_preferences)
     return num / den
 
 
@@ -15,13 +15,13 @@ def completeness(
     df,
     alternative_a="alternative_a",
     alternative_b="alternative_b",
-    n_candidates=2,
+    n_alternatives=2,
     n_preferences=2,
     voter="voter"
 ) -> bool:
     """
-    Completeness: a data is complete if all candidates provided their
-    pairwise preferences between all the candidates.
+    Completeness: a data is complete if all alternatives provided their
+    pairwise preferences between all the alternatives.
 
     Returns
     -------
@@ -33,7 +33,7 @@ def completeness(
         .groupby(voter)[alternative_a].count().min()
 
     expected_num = __combinations_for_completeness(
-        n_candidates=n_candidates,
+        n_alternatives=n_alternatives,
         n_preferences=n_preferences
     )
 

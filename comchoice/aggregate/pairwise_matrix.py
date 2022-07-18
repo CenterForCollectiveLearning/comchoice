@@ -5,12 +5,12 @@ from itertools import combinations
 
 def pairwise_matrix(
     df,
-    candidate="candidate",
+    alternative="alternative",
     rank="rank",
-    delimiter="delimiter",
+    delimiter=">",
     voter="voter",
     voters="voters",
-    return_candidates=False
+    return_alternatives=False
 ):
     output = []
 
@@ -21,7 +21,7 @@ def pairwise_matrix(
         df["_id"] = range(df.shape[0])
         df[rank] = df[rank].str.split(delimiter)
         df = df.explode("rank")
-        df = df.rename(columns={"rank": "candidate"})
+        df = df.rename(columns={"rank": "alternative"})
         df[rank] = df.groupby("_id").cumcount() + 1
         if not unique_id:
             df = df.drop(columns=["_id"])
@@ -34,12 +34,12 @@ def pairwise_matrix(
     else:
         df[voters] = 1
 
-    unique_candidates = df[candidate].unique()
+    unique_alternatives = df[alternative].unique()
     for idx, df_tmp in df.groupby([voter, voters]):
         _voter, _voters = idx
 
         df_tmp = df_tmp.sort_values(rank)
-        items = df_tmp[candidate].values
+        items = df_tmp[alternative].values
 
         tmp = pd.DataFrame(list(combinations(items, 2)), columns=cols)
         tmp["value"] = _voters
@@ -48,11 +48,11 @@ def pairwise_matrix(
     m = pd.concat(output).groupby(cols).agg({"value": "sum"}).reset_index()
 
     m = m.pivot(index=cols[0], columns=cols[1], values="value")
-    m = m.reindex(unique_candidates, axis=0)
-    m = m.reindex(unique_candidates, axis=1)
+    m = m.reindex(unique_alternatives, axis=0)
+    m = m.reindex(unique_alternatives, axis=1)
     m = m.fillna(0)
 
-    if return_candidates:
-        return m, unique_candidates
+    if return_alternatives:
+        return m, unique_alternatives
 
     return m

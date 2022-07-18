@@ -7,7 +7,7 @@ from comchoice.aggregate.__set_rank import __set_rank
 
 def tideman(
     df,
-    candidate="candidate",
+    alternative="alternative",
     delimiter=">",
     rank="rank",
     show_rank=True,
@@ -16,7 +16,7 @@ def tideman(
 ):
     m = pairwise_matrix(
         df,
-        candidate=candidate,
+        alternative=alternative,
         rank=rank,
         delimiter=delimiter,
         voter=voter,
@@ -27,7 +27,7 @@ def tideman(
     m[m < 0] = 0
 
     tmp = m.sum(axis=0).to_frame(name="value")
-    tmp = tmp.reset_index().rename(columns={"_loser": candidate})
+    tmp = tmp.reset_index().rename(columns={"_loser": alternative})
     tmp = tmp.reset_index(drop=True)
 
     if show_rank:

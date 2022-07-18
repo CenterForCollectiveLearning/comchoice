@@ -6,7 +6,7 @@ from itertools import combinations
 
 def to_pairwise(
     df,
-    candidate="candidate",
+    alternative="alternative",
     delimiter=">",
     alternative_a="alternative_a",
     alternative_b="alternative_b",
@@ -24,8 +24,8 @@ def to_pairwise(
     ----------
     df : _type_
         _description_
-    candidate : str, optional
-        _description_, by default "candidate"
+    alternative : str, optional
+        _description_, by default "alternative"
     alternative_a : str, optional
         _description_, by default "alternative_a"
     alternative_b : str, optional
@@ -74,16 +74,16 @@ def to_pairwise(
     output = []
     for user_id, df_tmp in _iter:
         tmp = pd.merge(df_tmp, df_tmp, on=voter, how="outer")
-        tmp = tmp[tmp[f"{candidate}_x"] != tmp[f"{candidate}_y"]]
-        tmp = tmp[tmp[f"{candidate}_x"] > tmp[f"{candidate}_y"]]
+        tmp = tmp[tmp[f"{alternative}_x"] != tmp[f"{alternative}_y"]]
+        tmp = tmp[tmp[f"{alternative}_x"] > tmp[f"{alternative}_y"]]
         output.append(tmp)
         del tmp
 
     tmp = pd.concat(output)
     tmp = tmp.rename(
         columns={
-            f"{candidate}_x": alternative_a,
-            f"{candidate}_y": alternative_b
+            f"{alternative}_x": alternative_a,
+            f"{alternative}_y": alternative_b
         }
     )
 

@@ -6,7 +6,7 @@ from comchoice.aggregate.pairwise_matrix import pairwise_matrix
 
 def kemeny_young(
     df,
-    candidate="candidate",
+    alternative="alternative",
     rank="rank",
     delimiter=">",
     voter="voter",
@@ -16,7 +16,7 @@ def kemeny_young(
     """Kemeny-Young method.
 
     The Kemeny-Young method is a voting method that uses preferential ballots
-    and pairwise comparison to identify the most popular candidates in an election.
+    and pairwise comparison to identify the most popular alternatives in an election.
 
     Parameters
     ----------
@@ -38,7 +38,7 @@ def kemeny_young(
     """
     m = pairwise_matrix(
         df,
-        candidate=candidate,
+        alternative=alternative,
         rank=rank,
         delimiter=delimiter,
         voter=voter,
@@ -61,7 +61,7 @@ def kemeny_young(
         return tmp
 
     tmp_r = pd.DataFrame()
-    tmp_r[candidate] = tmp.loc[0, "rank"]
+    tmp_r[alternative] = tmp.loc[0, "rank"]
     tmp_r[rank] = range(1, tmp_r.shape[0] + 1)
 
     return tmp_r

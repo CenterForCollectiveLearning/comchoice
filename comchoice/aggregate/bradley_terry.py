@@ -8,7 +8,7 @@ from comchoice.aggregate.__set_rank import __set_rank
 def bradley_terry(
     df,
     delimiter=">",
-    candidate="candidate",
+    alternative="alternative",
     rank="rank",
     alternative_a="alternative_a",
     alternative_b="alternative_b",
@@ -38,7 +38,7 @@ def bradley_terry(
 
     m = pairwise_matrix(
         df,
-        candidate=candidate,
+        alternative=alternative,
         rank=rank,
         delimiter=delimiter,
         voter=voter,
@@ -65,7 +65,7 @@ def bradley_terry(
         p = pp
 
     tmp = pd.DataFrame(p / p.sum(), index=ids, columns=["value"]).reset_index()\
-        .rename(columns={"index": candidate}).sort_values("value", ascending=False)
+        .rename(columns={"index": alternative}).sort_values("value", ascending=False)
 
     if show_rank:
         tmp = __set_rank(tmp)

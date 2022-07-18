@@ -7,7 +7,7 @@ def sav(
     df,
     delimiter=",",
     n_seats=2,
-    candidates="candidates",
+    alternatives="alternatives",
     voters="voters"
 ) -> pd.DataFrame:
     return approval(
@@ -15,6 +15,6 @@ def sav(
         delimiter=delimiter,
         method="satisfaction",
         n_seats=n_seats,
-        candidates=candidates,
+        alternatives=alternatives,
         voters=voters
     )

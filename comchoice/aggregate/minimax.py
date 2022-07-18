@@ -7,7 +7,7 @@ from comchoice.aggregate.__set_rank import __set_rank
 def minimax(
     df,
     method="winning_votes",
-    candidate="candidate",
+    alternative="alternative",
     rank="rank",
     delimiter=">",
     show_rank=True,
@@ -16,7 +16,7 @@ def minimax(
 ):
     d = pairwise_matrix(
         df,
-        candidate=candidate,
+        alternative=alternative,
         rank=rank,
         delimiter=delimiter,
         voter=voter,
@@ -27,13 +27,13 @@ def minimax(
 
     if method in ["winning_votes", "pairwise_opposition"]:
         tmp = (1 - e).max(axis=1).to_frame(name="value")
-        tmp = tmp.reset_index().rename(columns={"_winner": candidate})
+        tmp = tmp.reset_index().rename(columns={"_winner": alternative})
         if method == "winning_votes":
             tmp.loc[tmp["value"] < 0.5, "value"] = 0
 
     elif method == "margins":
         tmp = (-1 * (e.T - e).min(axis=0)).to_frame(name="value")
-        tmp = tmp.reset_index().rename(columns={"_winner": candidate})
+        tmp = tmp.reset_index().rename(columns={"_winner": alternative})
 
     tmp = tmp.sort_values("value", ascending=True)
     tmp = tmp.reset_index(drop=True)

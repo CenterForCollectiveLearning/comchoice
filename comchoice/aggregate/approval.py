@@ -7,7 +7,7 @@ def approval(
     delimiter=",",
     method="proportional",
     n_seats=2,
-    candidates="candidates",
+    alternatives="alternatives",
     voters="voters"
 ):
     def harmonic(n):
@@ -15,12 +15,12 @@ def approval(
             return 0
         return 1 + sum([1 / i for i in range(2, n + 1)])
 
-    df[candidates] = df[candidates].str.split(delimiter)
+    df[alternatives] = df[alternatives].str.split(delimiter)
 
     output = []
-    for seats in combinations(df[candidates].explode().unique(), n_seats):
+    for seats in combinations(df[alternatives].explode().unique(), n_seats):
         for i, tmp in df.iterrows():
-            n_items = len(set(tmp[candidates]) & set(seats))
+            n_items = len(set(tmp[alternatives]) & set(seats))
 
             if method == "classic":
                 coef = 1  # TODO
@@ -30,13 +30,13 @@ def approval(
 
             elif method == "satisfaction":
                 coef = n_items / \
-                    len(set(tmp[candidates])) if n_items > 0 else 0
+                    len(set(tmp[alternatives])) if n_items > 0 else 0
                 if coef > 1:
                     coef = 1
 
             output.append({
-                candidates: seats,
+                alternatives: seats,
                 "value": coef * tmp[voters]
             })
 
-    return pd.DataFrame(output).groupby(candidates).agg({"value": "sum"}).reset_index()
+    return pd.DataFrame(output).groupby(alternatives).agg({"value": "sum"}).reset_index()

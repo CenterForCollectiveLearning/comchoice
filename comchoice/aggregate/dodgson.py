@@ -7,7 +7,7 @@ from comchoice.aggregate.tideman import tideman
 def dodgson(
     df,
     approximation="quick",
-    candidate="candidate",
+    alternative="alternative",
     delimiter=">",
     rank="rank",
     show_rank=True,
@@ -17,7 +17,7 @@ def dodgson(
     if approximation == "quick":
         return dodgson_quick(
             df,
-            candidate=candidate,
+            alternative=alternative,
             delimiter=delimiter,
             rank=rank,
             show_rank=show_rank,
@@ -27,7 +27,7 @@ def dodgson(
     elif approximation == "tideman":
         return tideman(
             df,
-            candidate=candidate,
+            alternative=alternative,
             delimiter=delimiter,
             rank=rank,
             show_rank=show_rank,

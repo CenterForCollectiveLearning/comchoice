@@ -9,7 +9,7 @@ def dhondt(
 ) -> pd.DataFrame:
     """D'Hondt (or Jefferson) method.
 
-    Calculates the number of elected candidates of each party using the D'Hondt (or Jefferson) method.
+    Calculates the number of elected alternatives of each party using the D'Hondt (or Jefferson) method.
 
     Parameters
     ----------

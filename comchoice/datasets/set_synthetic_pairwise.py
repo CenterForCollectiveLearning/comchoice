@@ -5,21 +5,21 @@ import pandas as pd
 
 
 def set_synthetic_pairwise(
-    n_candidates=3,
+    n_alternatives=3,
     n_voters=10,
     random_state=None,
     ties=False,
     weight_tie=0.1,
-    candidates=None
+    alternatives=None
 ) -> pd.DataFrame:
     """Generates synthetic pairwise comparison data.
 
     Parameters
     ----------
-    candidates: string list, default=numbers
-        List of the names/candidates
-    n_candidates : int, default=3
-        Number of candidates. Must be a positive value.
+    alternatives: string list, default=numbers
+        List of the names/alternatives
+    n_alternatives : int, default=3
+        Number of alternatives. Must be a positive value.
     n_voters : int, default=10
         Number of voters. Must be a positive value.
     random_state : int, None, default=None
@@ -40,10 +40,10 @@ def set_synthetic_pairwise(
     --------
     load_synthetic_election : Generates synthetic voting data.
     """
-    if candidates == None:
-        candidates = list(range(1, n_candidates + 1))
+    if alternatives == None:
+        alternatives = list(range(1, n_alternatives + 1))
     else:
-        n_candidates = len(candidates)
+        n_alternatives = len(alternatives)
 
     if random_state != None and (type(random_state) == int or float):
         seed(random_state)
@@ -53,7 +53,7 @@ def set_synthetic_pairwise(
     output = []
 
     for voter in voters:
-        rank_order = combinations(sample(candidates, n_candidates), 2)
+        rank_order = combinations(sample(alternatives, n_alternatives), 2)
         for alternative_a, alternative_b in rank_order:
 
             options = sample([alternative_a, alternative_b], 2)

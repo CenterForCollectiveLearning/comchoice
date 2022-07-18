@@ -5,7 +5,7 @@ from comchoice.aggregate.condorcet import condorcet
 
 def weak_condorcet(
     df,
-    candidate="candidate",
+    alternative="alternative",
     rank="rank",
     delimiter=">",
     voter="voter",
@@ -13,7 +13,7 @@ def weak_condorcet(
 ):
     return condorcet(
         df,
-        candidate=candidate,
+        alternative=alternative,
         rank=rank,
         delimiter=delimiter,
         voter=voter,

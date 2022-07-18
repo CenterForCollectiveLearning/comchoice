@@ -7,7 +7,7 @@ from comchoice.aggregate.__set_rank import __set_rank
 
 def copeland(
     df,
-    candidate="candidate",
+    alternative="alternative",
     rank="rank",
     delimiter=">",
     show_rank=True,
@@ -16,11 +16,11 @@ def copeland(
 ):
     """Copeland voting method (1951).
 
-    Each voter ranks candidates by preference. Next, we sort candidates by the
-    number of times they beat another candidate in a pairwise comparison.
+    Each voter ranks alternatives by preference. Next, we sort alternatives by the
+    number of times they beat another alternative in a pairwise comparison.
     The top-1 on Copeland's method is considered a weak Condorcet winner.
-    Likewise, if in an election of `n` candidates, a candidate beats `n - 1`
-    candidates in pairwise comparison scenarios, it is also considered a Condorcet winner.
+    Likewise, if in an election of `n` alternatives, a alternative beats `n - 1`
+    alternatives in pairwise comparison scenarios, it is also considered a Condorcet winner.
 
     Returns
     -------
@@ -32,28 +32,28 @@ def copeland(
     Copeland, A.H. (1951). A “reasonable” social welfare function, mimeographed. In: Seminar on applications of mathematics to the social sciences. Ann Arbor: Department of Mathematics, University of Michigan.
 
     """
-    m, unique_candidates = pairwise_matrix(
+    m, unique_alternatives = pairwise_matrix(
         df,
-        candidate=candidate,
+        alternative=alternative,
         rank=rank,
         delimiter=delimiter,
         voter=voter,
         voters=voters,
-        return_candidates=True
+        return_alternatives=True
     )
 
     r = m + m.T
     m = m / r
 
     m = np.where(m > 0.5, 1, np.where(m == 0.5, 0.5, 0))
-    m = pd.DataFrame(m, index=unique_candidates, columns=unique_candidates)
-    m = m.reindex(unique_candidates, axis=0)
-    m = m.reindex(unique_candidates, axis=1)
+    m = pd.DataFrame(m, index=unique_alternatives, columns=unique_alternatives)
+    m = m.reindex(unique_alternatives, axis=0)
+    m = m.reindex(unique_alternatives, axis=1)
     m = m.astype(float)
     np.fill_diagonal(m.values, np.nan)
 
     tmp = pd.DataFrame([(a, b) for a, b in list(zip(list(m), np.nanmean(m, axis=1)))],
-                       columns=[candidate, "value"])
+                       columns=[alternative, "value"])
     if show_rank:
         tmp = __set_rank(tmp)
 
