@@ -6,29 +6,38 @@ from comchoice.aggregate.__set_rank import __set_rank
 def fallback(
     df,
     alternatives="alternatives",
-    delimiter=",",
-    n_seats=1,
+    delimiter=">",
+    delimiter_ballot="|",
     voters="voters"
-):
+) -> str:
+    alternatives_tmp = f"{alternatives}_tmp"
 
+    df[[alternatives, f"{alternatives}_d"]] = df[alternatives].str.split(
+        delimiter_ballot, n=1, expand=True)
     df[alternatives] = df[alternatives].str.split(delimiter)
-    df["_top_ranked"] = df[alternatives].apply(lambda x: x[0])
 
-    tmp = df.groupby("_top_ranked").agg({voters: "sum"}) / df[voters].sum()
+    level = 1
+    W = None
 
-    # If there is a top-rated alternative over 50%, that alternative is elected as the winner
-    rate_top_ranked = tmp[voters] > 0.5
-    if any(rate_top_ranked) and n_seats == 1:
-        return tmp[rate_top_ranked].reset_index()
+    while not W:
+        if voters not in list(df):
+            df[voters] = 1
 
-    else:
-        tmp = df.copy()
-        tmp = tmp.explode(alternatives)
-        tmp = tmp.groupby(alternatives).agg({voters: "sum"})
+        n_voters = df[voters].sum()
+        df[alternatives_tmp] = df[alternatives].apply(
+            lambda x: x[:level]).to_list()
+
+        tmp = df.explode(alternatives_tmp).groupby(
+            alternatives_tmp).agg({voters: "sum"}) / n_voters
         tmp = tmp.reset_index()
+        tmp = tmp[tmp[voters] >= 0.5].sort_values(
+            voters, ascending=False).head(1)
 
-        tmp = __set_rank(tmp)
+        _W = tmp.shape[0]
 
-        tmp["elected"] = tmp["rank"] <= n_seats
+        if _W == 1:
+            W = tmp[alternatives_tmp].loc[0]
+        else:
+            level += 1
 
-        return tmp
+    return W
