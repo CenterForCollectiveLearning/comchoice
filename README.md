@@ -2,16 +2,15 @@
 
 ## What it is?
 
-Pairchoice is an open-source toolkit to analyze rating-based and pairwise comparison datasets for Python. Pairchoice is designed for users that need aggregating individual preferences.
+ComChoice is an open-source library to aggregate preferences in Python. This library tries to convert the state-of-the-art from Social Choice Theory, Decision-Making process and Pairwise Comparison Optimization into easy and intuitive methods to be used by programmers and researchers with basic knowledge of Python.
 
-We provided support to the most common aggregation methods used in **social choice theory**, **computational social choice**, and **operations research**.
+Moreover, ComChoice provides a module to run an API to aggregate preferences. This API can be used for digital democracy platforms.
 
 ## What we provide?
 
-- Rules to aggregate individual preferences (e.g., Borda count, Condorcet winner).
-- Methods to test some axiomatic properties in social choice theory.
-- A novel method to calculate disagreements in pairwise comparison data (Divisiveness).
-- Empiric and synthetic data of elections and pairwise comparison.
+- Coverage of state-of-the-art for voting rules for complete preferences, participatory budgeting.
+- Methods to test some axiomatic properties in Social Choice Theory.
+- A framework for digital democracy platforms, to provide an easy-to-use API.
 
 ## Getting Started
 
@@ -23,12 +22,12 @@ pip install comchoice
 
 ### From source code
 
-To install comchoice from source, you need to clone the repository of the project in your laptop.
+To install ComChoice from source, you need to clone the repository of the project in your laptop.
 
 ```
 git clone https://github.com/CenterForCollectiveLearning/comchoice.git
 cd comchoice
-python setup.py install
+python setup.py install --user
 
 ```
 
@@ -38,14 +37,15 @@ Before we start, you will frequently find the following concepts: alternative an
 
 ## Hands on Coding
 
-Pairchoice classes require a `pandas.DataFrame` or a `list` of `dict` to be initialized.
+ComChoice classes require a `pandas.DataFrame` or a `list` of `dict` to be initialized.
 
 ### Hello world: Election data
 
 For starting, let's use the data of an election of 22 voters and 4 alternatives. Each voter provided their ranking of alternatives.
 
 ```
-from comchoice.voting import Voting
+from comchoice.aggergate import borda, condorcet
+import pandas as pd
 
 data = [
     {"voters": 7, "rank": ["A", "B", "C", "D"]},
@@ -54,8 +54,8 @@ data = [
     {"voters": 4, "rank": ["C", "D", "A", "B"]}
 ]
 
-pch = Voting(data)
-df_borda = pch.borda()
+df = pd.DataFrame(data)
+df_borda = borda(df)
 
 df_borda.head()
 ```
@@ -69,12 +69,12 @@ Here, our goal is to calculate an aggregate ranking of alternatives. The result 
 | D         | 31    | 3    |
 | A         | 25    | 4    |
 
-As shown in the table above, `.borda()` method includes alternatives' Borda score and their aggregate position.
+As shown in the table above, `borda` method includes alternatives' Borda score and their aggregate position.
 
-Next, if you are interested in testing other rules using the same data, you just need to execute another method to the class already defined. For instance, `.condorcet()` method calculates the Condorcet winner of an election.
+Next, if you are interested in testing other rules using the same data, you just need to execute another method to the class already defined. For instance, `condorcet` method calculates the Condorcet winner of an election.
 
 ```
-pch.condorcet()
+condorcet(df, weak=True)
 ```
 
 | alternative | value    |
@@ -148,7 +148,7 @@ We invite you to create an issue in the project's GitHub repository (https://git
 
 ## About
 
-`Pairchoice` was developed by the research group in Digital Democracy of the [Center for Collective Learning](https://centerforcollectivelearning.org/).
+`ComChoice` was developed by the research group in Digital Democracy of the [Center for Collective Learning](https://centerforcollectivelearning.org/).
 
 ## MIT License
 
