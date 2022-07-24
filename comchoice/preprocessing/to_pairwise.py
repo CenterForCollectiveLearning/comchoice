@@ -54,13 +54,12 @@ def to_pairwise(
             df = pd.concat(output, ignore_index=True)
             df[voter] = range(df.shape[0])
 
-        df[rank] = df[rank].str.split(delimiter).apply(
+        df[rank] = df[rank].astype(str).str.split(delimiter).apply(
             lambda x: list(combinations(x, 2)))
         df = df.explode(rank)
 
-        df[alternative_a] = df[rank].map(lambda x: x[0])
-        df[alternative_b] = df[rank].map(lambda x: x[1])
-        df[selected] = df["alternative_a"]
+        df[alternative_a], df[alternative_b] = df[rank].str
+        df[selected] = df[alternative_a]
 
         return df[[voter, alternative_a, alternative_b, selected]]
 

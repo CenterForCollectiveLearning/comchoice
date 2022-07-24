@@ -8,8 +8,9 @@ from comchoice.aggregate.__set_rank import __set_rank
 def copeland(
     df,
     alternative="alternative",
-    rank="rank",
     delimiter=">",
+    pairwise_matrix=False,
+    rank="rank",
     show_rank=True,
     voter="voter",
     voters="voters"
@@ -32,15 +33,21 @@ def copeland(
     Copeland, A.H. (1951). A “reasonable” social welfare function, mimeographed. In: Seminar on applications of mathematics to the social sciences. Ann Arbor: Department of Mathematics, University of Michigan.
 
     """
-    m, unique_alternatives = pairwise_matrix(
-        df,
-        alternative=alternative,
-        rank=rank,
-        delimiter=delimiter,
-        voter=voter,
-        voters=voters,
-        return_alternatives=True
-    )
+
+    if pairwise_matrix:
+        m = df
+        unique_alternatives = list(df)
+
+    else:
+        m, unique_alternatives = pairwise_matrix(
+            df,
+            alternative=alternative,
+            rank=rank,
+            delimiter=delimiter,
+            voter=voter,
+            voters=voters,
+            return_alternatives=True
+        )
 
     r = m + m.T
     m = m / r

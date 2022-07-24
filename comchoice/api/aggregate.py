@@ -21,7 +21,15 @@ def read_root():
 
 @app.get("/api/aggregate/{method}")
 def aggregate_data(method: str, q: Union[str, None] = None):
+    valid_methods = ["borda", "condorcet", "copeland"]
+
+    if method in valid_methods:
+        return {
+            "data": getattr(agg, method)(fake_df).to_dict(orient="records"),
+            "q": q
+        }
+
     return {
-        "data": getattr(agg, method)(fake_df).to_dict(orient="records"),
-        "q": q
+        "data": [],
+        "message": "Aggregation method not valid. Pleasy try another option."
     }

@@ -20,9 +20,9 @@ def pairwise_matrix(
         df = data.copy()
         df["_id"] = range(df.shape[0])
         df[rank] = df[rank].str.split(delimiter)
-        df = df.explode("rank")
-        df = df.rename(columns={"rank": "alternative"})
-        df[rank] = df.groupby("_id").cumcount() + 1
+        df = df.explode(rank)
+        df = df.rename(columns={rank: "alternative"})
+        df["rank"] = df.groupby("_id").cumcount() + 1
         if not unique_id:
             df = df.drop(columns=["_id"])
 
@@ -38,7 +38,7 @@ def pairwise_matrix(
     for idx, df_tmp in df.groupby([voter, voters]):
         _voter, _voters = idx
 
-        df_tmp = df_tmp.sort_values(rank)
+        df_tmp = df_tmp.sort_values("rank")
         items = df_tmp[alternative].values
 
         tmp = pd.DataFrame(list(combinations(items, 2)), columns=cols)
