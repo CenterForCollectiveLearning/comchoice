@@ -12,6 +12,7 @@ def divisiveness(
     df,
     alternative="alternative",
     method=ahp,
+    method_kws=dict(),
     alternative_a="alternative_a",
     alternative_b="alternative_b",
     selected="selected",
@@ -52,7 +53,7 @@ def divisiveness(
         tmp = to_pairwise(tmp, origin="voting")
 
     tmp = __set_card_id(
-        tmp,
+        tmp.copy(),
         alternative_a=alternative_a,
         alternative_b=alternative_b,
         selected=selected,
@@ -69,7 +70,7 @@ def divisiveness(
 
         # data_temp = _data.loc[users].reset_index()
         data_temp = df_original[df_original[voter].isin(users)]
-        r_tmp = method(data_temp).dropna()
+        r_tmp = method(data_temp, **method_kws).dropna()
         r_tmp["card_id"] = card_id
         r_tmp[selected] = s
 

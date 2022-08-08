@@ -15,7 +15,8 @@ def borda(
     score="original",
     show_rank=True,
     voter="voter",
-    voters="voters"
+    voters="voters",
+    **kws
 ) -> pd.DataFrame:
     """Borda Count (1784).
 

@@ -2,15 +2,15 @@
 
 ## What it is?
 
-ComChoice is an open-source library to aggregate preferences in Python. This library tries to convert the state-of-the-art from Social Choice Theory, Decision-Making process and Pairwise Comparison Optimization into easy and intuitive methods to be used by programmers and researchers with basic knowledge of Python.
+ComChoice is an open-source library to aggregate preferences and manages voting data in Python. This library aims to convert the state-of-the-art in Social Choice Theory, Decision-Making Process and Pairwise Comparison Optimization into easy and intuitive functions to be used by programmers and researchers with basic programming knowledge.
 
-Moreover, ComChoice provides a module to run an API to aggregate preferences. This API can be used for digital democracy platforms.
+ComChoice provides a module to run an API to aggregate preferences. This API can be used for digital democracy platforms.
 
 ## What we provide?
 
-- Coverage of state-of-the-art for voting rules for complete preferences, participatory budgeting.
+- Following up of state-of-the-art in voting rules studied in Computational Social Choice (e.g., complete preferences, participatory budgeting)
 - Methods to test some axiomatic properties in Social Choice Theory.
-- A framework for digital democracy platforms, to provide an easy-to-use API.
+- A framework to run digital democracy platforms, by providing an easy-to-use API.
 
 ## Getting Started
 
@@ -22,7 +22,7 @@ pip install comchoice
 
 ### From source code
 
-To install ComChoice from source, you need to clone the repository of the project in your laptop.
+To install ComChoice from source, you need to clone the project repository in your laptop.
 
 ```
 git clone https://github.com/CenterForCollectiveLearning/comchoice.git
@@ -33,7 +33,7 @@ python setup.py install --user
 
 ## Basic background
 
-Before we start, you will frequently find the following concepts: alternative and voter. A alternative is the unit that we want to measure (its score), and the voter is the one who voted for the alternative. In general, the goal is to aggregate voters' individual preferences to elect a alternative. There are multiple voting methods (either absolute or relative judgments). For instance, we can consider reviewing a place in Google Maps as a voting mechanism because a user (voter) rates a place (alternative) on a scale of 1-5 stars (value).
+Before starting, you will frequently find the following concepts: alternative and voter. An *alternative* is the unit that we want to measure (its score), and the voter is the one who voted for alternatives. In general, the goal is to aggregate voters' individual preferences to elect a alternative. There are multiple voting methods (either absolute or relative judgments). For instance, we can consider reviewing a place in Google Maps as a voting mechanism because a user (voter) rates a place (alternative) on a scale of 1-5 stars (value).
 
 ## Hands on Coding
 
@@ -44,7 +44,7 @@ ComChoice classes require a `pandas.DataFrame` or a `list` of `dict` to be initi
 For starting, let's use the data of an election of 22 voters and 4 alternatives. Each voter provided their ranking of alternatives.
 
 ```
-from comchoice.aggergate import borda, condorcet
+from comchoice.aggregate import borda, condorcet
 import pandas as pd
 
 data = [

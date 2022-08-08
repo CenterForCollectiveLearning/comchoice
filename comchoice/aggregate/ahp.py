@@ -15,11 +15,12 @@ def ahp(
     alternative_a="alternative_a",
     alternative_b="alternative_b",
     selected="selected",
-    show_rank=True
+    show_rank=True,
+    **kws
 ) -> pd.DataFrame:
 
     df = __set_card_id(
-        df,
+        df.copy(),
         alternative_a=alternative_a,
         alternative_b=alternative_b,
         selected=selected,

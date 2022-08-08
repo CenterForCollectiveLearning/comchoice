@@ -7,6 +7,7 @@ from itertools import combinations
 def to_pairwise(
     df,
     alternative="alternative",
+    ascending=False,
     delimiter=">",
     alternative_a="alternative_a",
     alternative_b="alternative_b",
@@ -86,10 +87,17 @@ def to_pairwise(
         }
     )
 
-    tmp[selected] = np.where(
-        tmp[f"{value}_x"] == tmp[f"{value}_y"], 0,
-        np.where(tmp[f"{value}_x"] > tmp[f"{value}_y"],
-                 tmp[alternative_a], tmp[alternative_b])
-    )
+    if ascending:
+        tmp[selected] = np.where(
+            tmp[f"{value}_x"] == tmp[f"{value}_y"], 0,
+            np.where(tmp[f"{value}_x"] > tmp[f"{value}_y"],
+                     tmp[alternative_b], tmp[alternative_a])
+        )
+    else:
+        tmp[selected] = np.where(
+            tmp[f"{value}_x"] == tmp[f"{value}_y"], 0,
+            np.where(tmp[f"{value}_x"] > tmp[f"{value}_y"],
+                     tmp[alternative_a], tmp[alternative_b])
+        )
 
-    return tmp[[voter, alternative_a, alternative_b, selected]]
+    return tmp[[voter, alternative_a, alternative_b, selected]].reset_index(drop=True)

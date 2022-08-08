@@ -17,6 +17,7 @@ from .dowdall import dowdall
 from .elo import elo
 from .fallback import fallback
 from .irv import irv
+from .judgment import judgment
 from .k_approval import k_approval
 from .kemeny_young import kemeny_young
 from .minimax import minimax
@@ -34,3 +35,4 @@ from .score import score
 from .simpson import simpson
 from .smith_set import smith_set
 from .tideman import tideman
+from .win_rate import win_rate
