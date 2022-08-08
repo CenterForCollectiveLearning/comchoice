@@ -3,12 +3,14 @@ import re
 import urllib
 
 
-def from_preflib(path):
+def from_preflib(
+    path
+):
     """
     Converts Preflib Data
     """
     file = urllib.request.urlopen(path)
-    arr = file.read().decode('utf-8').split("\n")
+    arr = file.read().decode("utf-8").split("\n")
     _ = path.split(".")[-1]
 
     output = []

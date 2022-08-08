@@ -32,12 +32,12 @@ def borda(
     Parameters
     ----------
     score: {"original", "score_n", "dowdall"}, default="original"
-        Method to calculate Borda score.
+        Method to calculate Borda count.
 
     Returns
     -------
     pandas.DataFrame:
-        Election results using Borda Count.
+        Aggregation result using Borda count.
 
     References
     ----------

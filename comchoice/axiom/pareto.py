@@ -1,6 +1,10 @@
 import pandas as pd
 
-from comchoice.aggregage.condorcet import condorcet
+# from .comchoice.aggregage.condorcet import condorcet
+
+
+def condorcet():
+    return
 
 
 def pareto(

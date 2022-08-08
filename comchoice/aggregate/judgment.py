@@ -80,7 +80,7 @@ def judgment(
         jdgm["value"] = jdgm["alpha"] - jdgm["q"]
 
     elif method == "majority":
-        jdgm["mj"] = jdgm.apply(lambda x: x["p"] if (
+        jdgm["value"] = jdgm.apply(lambda x: x["p"] if (
             x["p"] > x["q"]) else -x["q"], axis=1)
 
     if show_rank:
