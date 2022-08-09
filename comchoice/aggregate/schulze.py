@@ -8,7 +8,7 @@ from comchoice.aggregate.__set_rank import __set_rank
 def schulze(
     df,
     alternative="alternative",
-    rank="rank",
+    ballot="ballot",
     delimiter=">",
     show_rank=True,
     voter="voter",
@@ -18,7 +18,7 @@ def schulze(
     d = pairwise_matrix(
         df,
         alternative=alternative,
-        rank=rank,
+        ballot=ballot,
         delimiter=delimiter,
         voter=voter,
         voters=voters

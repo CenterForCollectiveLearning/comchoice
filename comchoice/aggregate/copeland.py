@@ -10,7 +10,7 @@ def copeland(
     alternative="alternative",
     delimiter=">",
     pairwise_matrix=False,
-    rank="rank",
+    ballot="ballot",
     show_rank=True,
     voter="voter",
     voters="voters"
@@ -42,7 +42,7 @@ def copeland(
         m, unique_alternatives = pairwise_matrix(
             df,
             alternative=alternative,
-            rank=rank,
+            ballot=ballot,
             delimiter=delimiter,
             voter=voter,
             voters=voters,

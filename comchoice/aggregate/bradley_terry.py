@@ -9,7 +9,7 @@ def bradley_terry(
     df,
     delimiter=">",
     alternative="alternative",
-    rank="rank",
+    ballot="ballot",
     alternative_a="alternative_a",
     alternative_b="alternative_b",
     iterations: int = 1,
@@ -39,7 +39,7 @@ def bradley_terry(
     m = pairwise_matrix(
         df,
         alternative=alternative,
-        rank=rank,
+        ballot=ballot,
         delimiter=delimiter,
         voter=voter,
         voters=voters

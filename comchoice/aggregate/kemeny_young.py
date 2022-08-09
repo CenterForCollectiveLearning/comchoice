@@ -7,7 +7,7 @@ from comchoice.aggregate.pairwise_matrix import pairwise_matrix
 def kemeny_young(
     df,
     alternative="alternative",
-    rank="rank",
+    ballot="ballot",
     delimiter=">",
     voter="voter",
     voters="voters",
@@ -39,7 +39,7 @@ def kemeny_young(
     m = pairwise_matrix(
         df,
         alternative=alternative,
-        rank=rank,
+        ballot=ballot,
         delimiter=delimiter,
         voter=voter,
         voters=voters
@@ -62,6 +62,6 @@ def kemeny_young(
 
     tmp_r = pd.DataFrame()
     tmp_r[alternative] = tmp.loc[0, "rank"]
-    tmp_r[rank] = range(1, tmp_r.shape[0] + 1)
+    tmp_r[ballot] = range(1, tmp_r.shape[0] + 1)
 
     return tmp_r

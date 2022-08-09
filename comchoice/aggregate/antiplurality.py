@@ -6,7 +6,7 @@ def antiplurality(
     df,
     alternative="alternative",
     delimiter=">",
-    rank="rank",
+    ballot="ballot",
     show_rank=True,
     voters="voters"
 ) -> pd.DataFrame:
@@ -14,7 +14,7 @@ def antiplurality(
         df,
         alternative=alternative,
         delimiter=delimiter,
-        rank=rank,
+        ballot=ballot,
         show_rank=show_rank,
         voters=voters,
         ascending=True

@@ -10,7 +10,7 @@ def k_approval(
     df,
     k=1,
     alternative="alternative",
-    rank="rank",
+    ballot="ballot",
     show_rank=True,
     voters="voters"
 ) -> pd.DataFrame:
@@ -34,7 +34,7 @@ def k_approval(
     """
     # if plural_voters:
     df = __transform(df)
-    df["value"] = df[rank] <= k
+    df["value"] = df[ballot] <= k
 
     df = __set_voters(df, voters=voters)
     df = __aggregate(df, groupby=[alternative], aggregation="sum")

@@ -6,7 +6,7 @@ def baldwin(
     df,
     alternative="alternative",
     delimiter=">",
-    rank="rank",
+    ballot="ballot",
     borda_score="original",
     show_rank=True,
     voters="voters"
@@ -17,7 +17,7 @@ def baldwin(
         method="baldwin",
         alternative=alternative,
         delimiter=delimiter,
-        rank=rank,
+        ballot=ballot,
         borda_score=borda_score,
         show_rank=show_rank,
         voters=voters

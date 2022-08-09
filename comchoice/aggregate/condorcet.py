@@ -6,7 +6,7 @@ from comchoice.aggregate.copeland import copeland
 def condorcet(
     df,
     alternative="alternative",
-    rank="rank",
+    ballot="ballot",
     delimiter=">",
     voter="voter",
     voters="voters",
@@ -40,7 +40,7 @@ def condorcet(
     tmp = copeland(
         df,
         alternative=alternative,
-        rank=rank,
+        ballot=ballot,
         delimiter=delimiter,
         show_rank=True,
         voter=voter,

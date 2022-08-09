@@ -9,7 +9,7 @@ def tideman(
     df,
     alternative="alternative",
     delimiter=">",
-    rank="rank",
+    ballot="ballot",
     show_rank=True,
     voter="voter",
     voters="voters"
@@ -17,7 +17,7 @@ def tideman(
     m = pairwise_matrix(
         df,
         alternative=alternative,
-        rank=rank,
+        ballot=ballot,
         delimiter=delimiter,
         voter=voter,
         voters=voters

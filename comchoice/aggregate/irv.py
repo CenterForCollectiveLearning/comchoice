@@ -9,7 +9,7 @@ def irv(
     df,
     alternative="alternative",
     delimiter=">",
-    rank="rank",
+    ballot="ballot",
     voters="voters"
 ) -> pd.DataFrame:
     """Hare Rule (also called as Instant Runoff IRV, Ranked-Choice Voting, and Alternative Vote)
@@ -42,7 +42,7 @@ def irv(
 
         df = df[df[alternative] != rmv].copy()
         df = df.sort_values(["_id", rank], ascending=[True, True])
-        df[rank] = df.groupby("_id").cumcount() + 1
+        df[ballot] = df.groupby("_id").cumcount() + 1
 
         tmp = __plurality(df.copy())
         tmp["value"] /= tmp["value"].sum()

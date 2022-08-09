@@ -8,7 +8,7 @@ from comchoice.aggregate.condorcet import condorcet
 def black(
     df,
     alternative="alternative",
-    rank="rank",
+    ballot="ballot",
     delimiter=">",
     voter="voter",
     voters="voters"
@@ -31,7 +31,7 @@ def black(
     r = condorcet(
         df,
         alternative=alternative,
-        rank=rank,
+        ballot=ballot,
         delimiter=delimiter,
         voter=voter,
         voters=voters,
@@ -40,7 +40,7 @@ def black(
     return r if r.shape[0] > 0 else borda(
         df,
         alternative=alternative,
-        rank=rank,
+        ballot=ballot,
         delimiter=delimiter,
         score="original",
         show_rank=True,

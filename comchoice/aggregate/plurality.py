@@ -10,7 +10,7 @@ def plurality(
     df,
     alternative="alternative",
     delimiter=">",
-    rank="rank",
+    ballot="ballot",
     show_rank=True,
     voters="voters",
     ascending=False
@@ -27,7 +27,7 @@ def plurality(
 
     df = __transform(df, delimiter=delimiter)
 
-    df = df[df[rank] == 1].copy()
+    df = df[df[ballot] == 1].copy()
     df["value"] = 1
     df = __set_voters(df, voters=voters)
     alternatives = df[alternative].unique()

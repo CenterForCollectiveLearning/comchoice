@@ -7,7 +7,7 @@ from comchoice.aggregate.pairwise_matrix import pairwise_matrix
 def smith_set(
     df,
     alternative="alternative",
-    rank="rank",
+    ballot="ballot",
     delimiter=">",
     voter="voter",
     voters="voters"
@@ -27,7 +27,7 @@ def smith_set(
     m = pairwise_matrix(
         df,
         alternative=alternative,
-        rank=rank,
+        ballot=ballot,
         delimiter=delimiter,
         voter=voter,
         voters=voters

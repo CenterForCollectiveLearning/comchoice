@@ -9,7 +9,7 @@ def dodgson(
     approximation="quick",
     alternative="alternative",
     delimiter=">",
-    rank="rank",
+    ballot="ballot",
     show_rank=True,
     voter="voter",
     voters="voters"
@@ -19,7 +19,7 @@ def dodgson(
             df,
             alternative=alternative,
             delimiter=delimiter,
-            rank=rank,
+            ballot=ballot,
             show_rank=show_rank,
             voter=voter,
             voters=voters
@@ -29,7 +29,7 @@ def dodgson(
             df,
             alternative=alternative,
             delimiter=delimiter,
-            rank=rank,
+            ballot=ballot,
             show_rank=show_rank,
             voter=voter,
             voters=voters

@@ -673,7 +673,7 @@ class Pairwise:
         tmp = pd.DataFrame(p / p.sum(), index=ids, columns=[&#34;value&#34;]).reset_index()\
             .rename(columns={&#34;index&#34;: alternative}).sort_values(&#34;value&#34;, ascending=False)
         if self.show_rank:
-            tmp[rank] = range(1, tmp.shape[0] + 1)
+            tmp[ballot] = range(1, tmp.shape[0] + 1)
 
         return tmp
 
@@ -987,7 +987,8 @@ class Pairwise:
                                 <code><a title="comchoice.pairwise.Pairwise" href="#comchoice.pairwise.Pairwise">Pairwise</a></code>
                                 includes methods to manage pairwise comparison data.
                                 For instance, allows to rank alternatives, to convert rating-based data
-                                into pairwise comparison data, and calculates divisiveness.</p>
+                                into pairwise comparison data, and calculates divisiveness.
+                            </p>
                             <h2 id="attributes">Attributes</h2>
                             <dl>
                                 <dt><strong><code>alternative</code></strong> :&ensp;<code>str</code></dt>
@@ -1180,7 +1181,7 @@ class Pairwise:
         tmp = pd.DataFrame(p / p.sum(), index=ids, columns=[&#34;value&#34;]).reset_index()\
             .rename(columns={&#34;index&#34;: alternative}).sort_values(&#34;value&#34;, ascending=False)
         if self.show_rank:
-            tmp[rank] = range(1, tmp.shape[0] + 1)
+            tmp[ballot] = range(1, tmp.shape[0] + 1)
 
         return tmp
 
@@ -1603,7 +1604,7 @@ class Pairwise:
     tmp = pd.DataFrame(p / p.sum(), index=ids, columns=[&#34;value&#34;]).reset_index()\
         .rename(columns={&#34;index&#34;: alternative}).sort_values(&#34;value&#34;, ascending=False)
     if self.show_rank:
-        tmp[rank] = range(1, tmp.shape[0] + 1)
+        tmp[ballot] = range(1, tmp.shape[0] + 1)
 
     return tmp</code></pre>
                                 </details>

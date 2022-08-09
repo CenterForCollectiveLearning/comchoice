@@ -10,11 +10,10 @@ def borda(
     df,
     alternative="alternative",
     delimiter=">",
-    rank="rank",
+    ballot="ballot",
     rmv=[],
     score="original",
     show_rank=True,
-    voter="voter",
     voters="voters",
     **kws
 ) -> pd.DataFrame:
@@ -31,13 +30,27 @@ def borda(
 
     Parameters
     ----------
-    score: {"original", "score_n", "dowdall"}, default="original"
-        Method to calculate Borda count.
+    df : _type_
+        A data set to be aggregated.
+    alternative : str, optional
+        Column label to get alternatives, by default "alternative"
+    ballot : str, optional
+        Column label that includes a set of sorted alternatives for each voter or voters (when is defined in the data set), by default "ballot".
+    delimiter : str, optional
+        Delimiter used between alternatives in a `ballot`, by default ">"
+    rmv : list, optional
+        List of alternatives to remove before computing the score by the rule, by default []
+    score : {"original", "score_n", "dowdall"}
+        Specifies the minimax rule to be used to compute Borda, by default "original"
+    show_rank : bool, optional
+        Whether or not to include the ranking of alternatives, by default True
+    voters : str, optional
+        Whether the number of voters is defined in the data, it represents its column label, by default "voters"
 
     Returns
     -------
-    pandas.DataFrame:
-        Aggregation result using Borda count.
+    pd.DataFrame
+        Aggregation of preferences using Borda count.
 
     References
     ----------
@@ -50,13 +63,13 @@ def borda(
     N = len(df[alternative].unique())
 
     if score == "dowdall":
-        df["value"] = 1 / df[rank]
+        df["value"] = 1 / df[ballot]
 
     elif score == "score_n":
-        df["value"] = N - df[rank] - 1
+        df["value"] = N - df[ballot] - 1
 
     else:
-        df["value"] = N - df[rank]
+        df["value"] = N - df[ballot]
 
     df = __set_voters(df, voters=voters)
     df = __aggregate(df, groupby=[alternative], aggregation="sum")

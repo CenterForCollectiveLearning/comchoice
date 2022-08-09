@@ -8,16 +8,42 @@ def minimax(
     df,
     method="winning_votes",
     alternative="alternative",
-    rank="rank",
+    ballot="ballot",
     delimiter=">",
     show_rank=True,
     voter="voter",
     voters="voters"
-):
+) -> pd.DataFrame:
+    """_summary_
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        A data set to be aggregated.
+    method : {"winning_votes", "pairwise_opposition", "margins"}
+        Specifies the minimax rule to be used to compute the Minimax algorithm, by default "winning_votes".
+    alternative : str, optional
+        Column label to get alternatives, by default "alternative".
+    ballot : str, optional
+        Column label that includes a set of sorted alternatives for each voter or voters (when is defined in the data set), by default "ballot".
+    delimiter : str, optional
+        Delimiter used between alternatives in a `ballot`, by default ">".
+    show_rank : bool, optional
+        Whether or not to include the ranking of alternatives, by default True.
+    voter : str, optional
+        Column label of voter unique identifier, by default "voter".
+    voters : str, optional
+        Whether the number of voters is defined in the data, it represents its column label, by default "voters".
+
+    Returns
+    -------
+    pd.DataFrame
+        Aggregation of preferences using Minimax.
+    """
     d = pairwise_matrix(
         df,
         alternative=alternative,
-        rank=rank,
+        ballot=ballot,
         delimiter=delimiter,
         voter=voter,
         voters=voters

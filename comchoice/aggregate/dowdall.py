@@ -6,7 +6,7 @@ def dowdall(
     df,
     alternative="alternative",
     delimiter=">",
-    rank="rank",
+    ballot="ballot",
     rmv=[],
     show_rank=True,
     voters="voters"
@@ -31,7 +31,7 @@ def dowdall(
         df,
         alternative=alternative,
         delimiter=delimiter,
-        rank=rank,
+        ballot=ballot,
         rmv=rmv,
         score="dowdall",
         show_rank=show_rank,

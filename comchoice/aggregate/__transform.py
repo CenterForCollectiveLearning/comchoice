@@ -18,7 +18,7 @@ def __transform(
         A pandas DataFrame.
     delimiter : str, optional
         Whether alternatives are separated in the column, by default ">"
-    ballot : str, optional
+    ballot : {"rank", "score"}, optional
         DataFrame format. Values accepted are "rank" and "score", by default "rank"
     rmv : list, optional
         Remove alternatives from list, before calculating ranking, by default []
@@ -43,6 +43,7 @@ def __transform(
         if len(rmv) > 0:
             df = df[~df["alternative"].isin(rmv)].copy()
 
+        # TODO: Allow ties in ballots.
         df["rank"] = df.groupby("_id").cumcount() + 1
 
     elif ballot == "score":

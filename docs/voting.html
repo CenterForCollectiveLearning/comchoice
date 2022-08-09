@@ -601,13 +601,13 @@ class Voting:
         N = len(df[alternative].unique())
 
         if score == &#34;dowdall&#34;:
-            df[&#34;value&#34;] = 1 / df[rank]
+            df[&#34;value&#34;] = 1 / df[ballot]
 
         elif score == &#34;score_n&#34;:
-            df[&#34;value&#34;] = N - df[rank] - 1
+            df[&#34;value&#34;] = N - df[ballot] - 1
 
         else:
-            df[&#34;value&#34;] = N - df[rank]
+            df[&#34;value&#34;] = N - df[ballot]
 
         if plural_voters:
             df[&#34;value&#34;] *= df[voters]
@@ -825,7 +825,7 @@ class Voting:
         tmp = df.groupby(alternative).agg({votes: &#34;sum&#34;}).reset_index().rename(
             columns={votes: &#34;value&#34;}).sort_values(&#34;value&#34;, ascending=False)
         if self.show_rank:
-            tmp[rank] = range(1, tmp.shape[0] + 1)
+            tmp[ballot] = range(1, tmp.shape[0] + 1)
 
         return tmp
 
@@ -911,7 +911,7 @@ class Voting:
 
             df = df[df[alternative] != rmv].copy()
             df = df.sort_values([&#34;_id&#34;, rank], ascending=[True, True])
-            df[rank] = df.groupby(&#34;_id&#34;).cumcount() + 1
+            df[ballot] = df.groupby(&#34;_id&#34;).cumcount() + 1
 
             tmp = __plurality(df.copy())
             tmp[&#34;value&#34;] /= tmp[&#34;value&#34;].sum()
@@ -949,7 +949,7 @@ class Voting:
         if plural_voters:
             df = self.__transform(df)
 
-        df[&#34;value&#34;] = df[rank] &lt;= k
+        df[&#34;value&#34;] = df[ballot] &lt;= k
         if plural_voters:
             df[&#34;value&#34;] *= df[voters]
 
@@ -1005,7 +1005,7 @@ class Voting:
 
         tmp_r = pd.DataFrame()
         tmp_r[alternative] = tmp.loc[0, &#34;rank&#34;]
-        tmp_r[rank] = range(1, tmp_r.shape[0] + 1)
+        tmp_r[ballot] = range(1, tmp_r.shape[0] + 1)
 
         return tmp_r
 
@@ -1028,7 +1028,7 @@ class Voting:
         tmp = df.groupby(alternative).agg({votes: &#34;sum&#34;}).reset_index().rename(
             columns={votes: &#34;value&#34;}).sort_values(&#34;value&#34;, ascending=False)
         if self.show_rank:
-            tmp[rank] = range(1, tmp.shape[0] + 1)
+            tmp[ballot] = range(1, tmp.shape[0] + 1)
 
         return tmp
 
@@ -1050,7 +1050,7 @@ class Voting:
 
         if voters in list(df):
             df = self.__transform(df)
-        df = df[df[rank] == 1]
+        df = df[df[ballot] == 1]
         df[&#34;value&#34;] = 1
         if voters in list(df):
             df[&#34;value&#34;] *= df[voters]
@@ -1058,7 +1058,7 @@ class Voting:
         tmp = df.groupby(alternative).agg(
             {&#34;value&#34;: &#34;sum&#34;}).reset_index().sort_values(&#34;value&#34;, ascending=False)
         if self.show_rank:
-            tmp[rank] = range(1, tmp.shape[0] + 1)
+            tmp[ballot] = range(1, tmp.shape[0] + 1)
 
         return tmp
 
@@ -1081,7 +1081,7 @@ class Voting:
         tmp = df.groupby(alternative).agg({votes: &#34;mean&#34;}).reset_index().rename(
             columns={votes: &#34;value&#34;}).sort_values(&#34;value&#34;, ascending=False)
         if self.show_rank:
-            tmp[rank] = range(1, tmp.shape[0] + 1)
+            tmp[ballot] = range(1, tmp.shape[0] + 1)
 
         return tmp
 
@@ -1219,7 +1219,8 @@ class Voting:
                                 <code><a title="comchoice.voting.Voting" href="#comchoice.voting.Voting">Voting</a></code>
                                 defines rules to make collective decisions.
                                 It includes methods to calculate alternatives' ranking and some
-                                axiomatic properties in social choice theory.</p>
+                                axiomatic properties in social choice theory.
+                            </p>
                             <h2 id="attributes">Attributes</h2>
                             <dl>
                                 <dt><strong><code>alternative</code></strong> :&ensp;<code>str</code>,
@@ -1235,7 +1236,8 @@ class Voting:
                                     default=<code>True</code></dt>
                                 <dd>If the value is <code>true</code>, the ranking methods defined in
                                     <code><a title="comchoice.voting.Voting" href="#comchoice.voting.Voting">Voting</a></code>
-                                    will include a column with the ranking of each alternative.</dd>
+                                    will include a column with the ranking of each alternative.
+                                </dd>
                                 <dt><strong><code>voter</code></strong> :&ensp;<code>str</code>,
                                     default=<code>"voter"</code></dt>
                                 <dd>Voter's unique identifier.</dd>
@@ -1345,13 +1347,13 @@ class Voting:
         N = len(df[alternative].unique())
 
         if score == &#34;dowdall&#34;:
-            df[&#34;value&#34;] = 1 / df[rank]
+            df[&#34;value&#34;] = 1 / df[ballot]
 
         elif score == &#34;score_n&#34;:
-            df[&#34;value&#34;] = N - df[rank] - 1
+            df[&#34;value&#34;] = N - df[ballot] - 1
 
         else:
-            df[&#34;value&#34;] = N - df[rank]
+            df[&#34;value&#34;] = N - df[ballot]
 
         if plural_voters:
             df[&#34;value&#34;] *= df[voters]
@@ -1569,7 +1571,7 @@ class Voting:
         tmp = df.groupby(alternative).agg({votes: &#34;sum&#34;}).reset_index().rename(
             columns={votes: &#34;value&#34;}).sort_values(&#34;value&#34;, ascending=False)
         if self.show_rank:
-            tmp[rank] = range(1, tmp.shape[0] + 1)
+            tmp[ballot] = range(1, tmp.shape[0] + 1)
 
         return tmp
 
@@ -1655,7 +1657,7 @@ class Voting:
 
             df = df[df[alternative] != rmv].copy()
             df = df.sort_values([&#34;_id&#34;, rank], ascending=[True, True])
-            df[rank] = df.groupby(&#34;_id&#34;).cumcount() + 1
+            df[ballot] = df.groupby(&#34;_id&#34;).cumcount() + 1
 
             tmp = __plurality(df.copy())
             tmp[&#34;value&#34;] /= tmp[&#34;value&#34;].sum()
@@ -1693,7 +1695,7 @@ class Voting:
         if plural_voters:
             df = self.__transform(df)
 
-        df[&#34;value&#34;] = df[rank] &lt;= k
+        df[&#34;value&#34;] = df[ballot] &lt;= k
         if plural_voters:
             df[&#34;value&#34;] *= df[voters]
 
@@ -1749,7 +1751,7 @@ class Voting:
 
         tmp_r = pd.DataFrame()
         tmp_r[alternative] = tmp.loc[0, &#34;rank&#34;]
-        tmp_r[rank] = range(1, tmp_r.shape[0] + 1)
+        tmp_r[ballot] = range(1, tmp_r.shape[0] + 1)
 
         return tmp_r
 
@@ -1772,7 +1774,7 @@ class Voting:
         tmp = df.groupby(alternative).agg({votes: &#34;sum&#34;}).reset_index().rename(
             columns={votes: &#34;value&#34;}).sort_values(&#34;value&#34;, ascending=False)
         if self.show_rank:
-            tmp[rank] = range(1, tmp.shape[0] + 1)
+            tmp[ballot] = range(1, tmp.shape[0] + 1)
 
         return tmp
 
@@ -1794,7 +1796,7 @@ class Voting:
 
         if voters in list(df):
             df = self.__transform(df)
-        df = df[df[rank] == 1]
+        df = df[df[ballot] == 1]
         df[&#34;value&#34;] = 1
         if voters in list(df):
             df[&#34;value&#34;] *= df[voters]
@@ -1802,7 +1804,7 @@ class Voting:
         tmp = df.groupby(alternative).agg(
             {&#34;value&#34;: &#34;sum&#34;}).reset_index().sort_values(&#34;value&#34;, ascending=False)
         if self.show_rank:
-            tmp[rank] = range(1, tmp.shape[0] + 1)
+            tmp[ballot] = range(1, tmp.shape[0] + 1)
 
         return tmp
 
@@ -1825,7 +1827,7 @@ class Voting:
         tmp = df.groupby(alternative).agg({votes: &#34;mean&#34;}).reset_index().rename(
             columns={votes: &#34;value&#34;}).sort_values(&#34;value&#34;, ascending=False)
         if self.show_rank:
-            tmp[rank] = range(1, tmp.shape[0] + 1)
+            tmp[ballot] = range(1, tmp.shape[0] + 1)
 
         return tmp
 
@@ -2003,7 +2005,8 @@ class Voting:
                                         <code>n - 1</code>
                                         points to the alternative in the first place, <code>n - 2</code> to the
                                         alternative in the second place,
-                                        and so on, until assigning 0 to the lowest-ranked alternative.</p>
+                                        and so on, until assigning 0 to the lowest-ranked alternative.
+                                    </p>
                                     <h2 id="parameters">Parameters</h2>
                                     <dl>
                                         <dt><strong><code>score</code></strong>
@@ -2062,13 +2065,13 @@ class Voting:
     N = len(df[alternative].unique())
 
     if score == &#34;dowdall&#34;:
-        df[&#34;value&#34;] = 1 / df[rank]
+        df[&#34;value&#34;] = 1 / df[ballot]
 
     elif score == &#34;score_n&#34;:
-        df[&#34;value&#34;] = N - df[rank] - 1
+        df[&#34;value&#34;] = N - df[ballot] - 1
 
     else:
-        df[&#34;value&#34;] = N - df[rank]
+        df[&#34;value&#34;] = N - df[ballot]
 
     if plural_voters:
         df[&#34;value&#34;] *= df[voters]
@@ -2090,7 +2093,8 @@ class Voting:
                                     <dl>
                                         <dt><strong><code>methods</code></strong> :&ensp;<code>list</code> of
                                             <code>{"borda", "k-approval", "copeland", "plurality"}</code>,
-                                            optional<code>:</code></dt>
+                                            optional<code>:</code>
+                                        </dt>
                                         <dd>Methods to be compared. Values accepted are borda, k-approval, copeland, and
                                             plurality.</dd>
                                     </dl>
@@ -2270,7 +2274,8 @@ class Voting:
                                         Likewise, if in an election of <code>n</code> alternatives, a alternative beats
                                         <code>n - 1</code>
                                         alternatives in pairwise comparison scenarios, it is also considered a Condorcet
-                                        winner.</p>
+                                        winner.
+                                    </p>
                                     <h2 id="returns">Returns</h2>
                                     <dl>
                                         <dt><code>pandas.DataFrame:</code></dt>
@@ -2422,7 +2427,7 @@ class Voting:
     tmp = df.groupby(alternative).agg({votes: &#34;sum&#34;}).reset_index().rename(
         columns={votes: &#34;value&#34;}).sort_values(&#34;value&#34;, ascending=False)
     if self.show_rank:
-        tmp[rank] = range(1, tmp.shape[0] + 1)
+        tmp[ballot] = range(1, tmp.shape[0] + 1)
 
     return tmp</code></pre>
                                 </details>
@@ -2580,7 +2585,7 @@ class Voting:
 
         df = df[df[alternative] != rmv].copy()
         df = df.sort_values([&#34;_id&#34;, rank], ascending=[True, True])
-        df[rank] = df.groupby(&#34;_id&#34;).cumcount() + 1
+        df[ballot] = df.groupby(&#34;_id&#34;).cumcount() + 1
 
         tmp = __plurality(df.copy())
         tmp[&#34;value&#34;] /= tmp[&#34;value&#34;].sum()
@@ -2641,7 +2646,7 @@ class Voting:
     if plural_voters:
         df = self.__transform(df)
 
-    df[&#34;value&#34;] = df[rank] &lt;= k
+    df[&#34;value&#34;] = df[ballot] &lt;= k
     if plural_voters:
         df[&#34;value&#34;] *= df[voters]
 
@@ -2665,7 +2670,8 @@ class Voting:
                                     <h2 id="parameters">Parameters</h2>
                                     <dl>
                                         <dt><strong><code>score_matrix</code></strong> :&ensp;<code>bool</code>, default
-                                            <code>= False</code></dt>
+                                            <code>= False</code>
+                                        </dt>
                                         <dd>If the value is <code>true</code>, returns the score matrix.</dd>
                                     </dl>
                                     <h2 id="returns">Returns</h2>
@@ -2731,7 +2737,7 @@ class Voting:
 
     tmp_r = pd.DataFrame()
     tmp_r[alternative] = tmp.loc[0, &#34;rank&#34;]
-    tmp_r[rank] = range(1, tmp_r.shape[0] + 1)
+    tmp_r[ballot] = range(1, tmp_r.shape[0] + 1)
 
     return tmp_r</code></pre>
                                 </details>
@@ -2813,7 +2819,7 @@ class Voting:
     tmp = df.groupby(alternative).agg({votes: &#34;sum&#34;}).reset_index().rename(
         columns={votes: &#34;value&#34;}).sort_values(&#34;value&#34;, ascending=False)
     if self.show_rank:
-        tmp[rank] = range(1, tmp.shape[0] + 1)
+        tmp[ballot] = range(1, tmp.shape[0] + 1)
 
     return tmp</code></pre>
                                 </details>
@@ -2854,7 +2860,7 @@ class Voting:
 
     if voters in list(df):
         df = self.__transform(df)
-    df = df[df[rank] == 1]
+    df = df[df[ballot] == 1]
     df[&#34;value&#34;] = 1
     if voters in list(df):
         df[&#34;value&#34;] *= df[voters]
@@ -2862,7 +2868,7 @@ class Voting:
     tmp = df.groupby(alternative).agg(
         {&#34;value&#34;: &#34;sum&#34;}).reset_index().sort_values(&#34;value&#34;, ascending=False)
     if self.show_rank:
-        tmp[rank] = range(1, tmp.shape[0] + 1)
+        tmp[ballot] = range(1, tmp.shape[0] + 1)
 
     return tmp</code></pre>
                                 </details>
@@ -2883,7 +2889,8 @@ class Voting:
                                             default=<code>1</code></dt>
                                         <dd>Just valid for k-approval method.</dd>
                                         <dt><strong><code>bootstrap</code></strong> :&ensp;<code>bool</code> or
-                                            <code>int</code>, default=<code>False</code></dt>
+                                            <code>int</code>, default=<code>False</code>
+                                        </dt>
                                         <dd>Number of bootstraps to calculate confidence interval.</dd>
                                     </dl>
                                     <h2 id="returns">Returns</h2>
@@ -2965,7 +2972,7 @@ class Voting:
     tmp = df.groupby(alternative).agg({votes: &#34;mean&#34;}).reset_index().rename(
         columns={votes: &#34;value&#34;}).sort_values(&#34;value&#34;, ascending=False)
     if self.show_rank:
-        tmp[rank] = range(1, tmp.shape[0] + 1)
+        tmp[ballot] = range(1, tmp.shape[0] + 1)
 
     return tmp</code></pre>
                                 </details>
