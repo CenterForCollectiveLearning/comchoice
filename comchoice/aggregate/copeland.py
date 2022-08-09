@@ -23,15 +23,33 @@ def copeland(
     Likewise, if in an election of `n` alternatives, a alternative beats `n - 1`
     alternatives in pairwise comparison scenarios, it is also considered a Condorcet winner.
 
+    Parameters
+    ----------
+    df : pd.DataFrame
+        A data set to be aggregated.
+    alternative : str, optional
+        Column label to get alternatives, by default "alternative".
+    delimiter : str, optional
+        Delimiter used between alternatives in a `ballot`, by default ">".
+    pairwise_matrix : bool, optional
+        A Pairwise Matrix is set in df, by default False.
+    ballot : str, optional
+        Column label that includes a set of sorted alternatives for each voter or voters (when is defined in the data set), by default "ballot".
+    show_rank : bool, optional
+        Whether or not to include the ranking of alternatives, by default True.
+    voter : str, optional
+        Column label of voter unique identifier, by default "voter".
+    voters : str, optional
+        Whether the number of voters is defined in the data, it represents its column label, by default "voters".
+
     Returns
     -------
-    pandas.DataFrame:
-        Election results using Copeland method.
+    _type_
+        _description_
 
     References
     ----------
     Copeland, A.H. (1951). A “reasonable” social welfare function, mimeographed. In: Seminar on applications of mathematics to the social sciences. Ann Arbor: Department of Mathematics, University of Michigan.
-
     """
 
     if pairwise_matrix:

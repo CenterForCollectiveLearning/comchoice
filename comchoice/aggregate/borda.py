@@ -31,11 +31,11 @@ def borda(
     Parameters
     ----------
     df : _type_
-        A data set to be aggregated.
+        A data set to be aggregated
     alternative : str, optional
         Column label to get alternatives, by default "alternative"
     ballot : str, optional
-        Column label that includes a set of sorted alternatives for each voter or voters (when is defined in the data set), by default "ballot".
+        Column label that includes a set of sorted alternatives for each voter or voters (when is defined in the data set), by default "ballot"
     delimiter : str, optional
         Delimiter used between alternatives in a `ballot`, by default ">"
     rmv : list, optional
@@ -43,9 +43,9 @@ def borda(
     score : {"original", "score_n", "dowdall"}
         Specifies the minimax rule to be used to compute Borda, by default "original"
     show_rank : bool, optional
-        Whether or not to include the ranking of alternatives, by default True
+        Whether or not to include the ranking of alternatives, by default True.
     voters : str, optional
-        Whether the number of voters is defined in the data, it represents its column label, by default "voters"
+        Whether the number of voters is defined in the data, it represents its column label, by default "voters".
 
     Returns
     -------

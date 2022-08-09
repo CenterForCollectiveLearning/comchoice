@@ -21,8 +21,20 @@ def condorcet(
 
     Parameters
     ----------
-    weak: bool, default=True
-        If the value is `true`, returns a weak Condorcet winner.
+    df : pd.DataFrame
+        A data set to be aggregated.
+    alternative : str, optional
+        Column label to get alternatives, by default "alternative".
+    ballot : str, optional
+       Column label that includes a set of sorted alternatives for each voter or voters (when is defined in the data set), by default "ballot".
+    delimiter : str, optional
+       Delimiter used between alternatives in a `ballot`, by default ">".
+    voter : str, optional
+        Column label of voter unique identifier, by default "voter".
+    voters : str, optional
+        Whether the number of voters is defined in the data, it represents its column label, by default "voters".
+    weak : bool, optional
+        Whether or not returns a weak Condorcet winner, by default True.
 
     Returns
     -------
@@ -34,7 +46,6 @@ def condorcet(
     de Condorcet, M. (1785), Essai sur l'Application de l'Analyse à la Probabilité des Décisions Rendues à la Pluralité des Voix. Paris: L'Imprimerie Royale.
 
     Felsenthal, D.S., Tideman, N. Weak Condorcet winner(s) revisited. Public Choice 160, 313-326 (2014). https://doi.org/10.1007/s11127-014-0180-4
-
     """
 
     tmp = copeland(
