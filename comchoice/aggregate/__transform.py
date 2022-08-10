@@ -1,12 +1,16 @@
 import pandas as pd
 
 
+from comchoice.preprocessing.to_pairwise import to_pairwise as to_pw
+
+
 def __transform(
     data,
-    delimiter=">",
     ballot="rank",
+    delimiter=">",
     rmv=[],
     score_delimiter="=",
+    to_pairwise=False,
     unique_id=False,
     **kws
 ) -> pd.DataFrame:
@@ -53,6 +57,11 @@ def __transform(
             score_delimiter, n=1, expand=True)
         df["score"] = df["score"].astype(float)
         df = df.drop(columns=["ballot"])
+
+    if to_pairwise:
+        df = to_pw(
+            voter="_id"
+        )
 
     if not unique_id:
         df = df.drop(columns=["_id"])

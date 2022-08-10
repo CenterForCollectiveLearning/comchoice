@@ -6,6 +6,22 @@ def quota(
     n_votes=1,
     n_seats=1
 ) -> int:
+    """Computes Quota threshold.
+
+    Parameters
+    ----------
+    method : {"hare", "imperiali", "droop", "hagenbach-bischoff"}
+        Specifies the method to compute the quota, by default "hare".
+    n_votes : int
+        Number of votes, by default 1.
+    n_seats : int
+        Number of seats to elect, by default 1.
+
+    Returns
+    -------
+    int
+        Quota threshold
+    """
     if method == "hare":
         return floor(n_votes / n_seats)
     elif method == "imperiali":

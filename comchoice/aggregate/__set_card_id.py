@@ -25,18 +25,18 @@ def __set_card_id(
         A pairwise comparison DataFrame with card_id column.
     """
 
-    option_a_sorted = f"{alternative_a}_sorted"
-    option_b_sorted = f"{alternative_b}_sorted"
+    alternative_a_sorted = f"{alternative_a}_sorted"
+    alternative_b_sorted = f"{alternative_b}_sorted"
 
     cols = [alternative_a, alternative_b, selected]
     a = df[cols].values
 
     # Sorts options, always lower value on left column
-    df[option_a_sorted] = np.where(a[:, 0] < a[:, 1], a[:, 0], a[:, 1])
-    df[option_b_sorted] = np.where(a[:, 0] >= a[:, 1], a[:, 0], a[:, 1])
+    df[alternative_a_sorted] = np.where(a[:, 0] < a[:, 1], a[:, 0], a[:, 1])
+    df[alternative_b_sorted] = np.where(a[:, 0] >= a[:, 1], a[:, 0], a[:, 1])
 
-    _a = df[option_a_sorted]
-    _b = df[option_b_sorted]
+    _a = df[alternative_a_sorted]
+    _b = df[alternative_b_sorted]
 
     df["option_selected"] = np.where(
         _a[:] == a[:, 2], 1, np.where(_b[:] == a[:, 2], -1, 0))

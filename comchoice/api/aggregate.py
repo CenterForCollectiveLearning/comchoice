@@ -7,10 +7,10 @@ import comchoice.aggregate as agg
 app = FastAPI()
 
 fake_df = pd.DataFrame([
-    {"voters": 7, "rank": "A>B>C>D"},
-    {"voters": 5, "rank": "B>C>D>A"},
-    {"voters": 6, "rank": "D>B>C>A"},
-    {"voters": 4, "rank": "C>D>A>B"}
+    {"voters": 7, "ballot": "A>B>C>D"},
+    {"voters": 5, "ballot": "B>C>D>A"},
+    {"voters": 6, "ballot": "D>B>C>A"},
+    {"voters": 4, "ballot": "C>D>A>B"}
 ])
 
 
@@ -20,7 +20,24 @@ def read_root():
 
 
 @app.get("/api/aggregate/{method}")
-def aggregate_data(method: str, q: Union[str, None] = None):
+def aggregate_data(
+    method: str,
+    q: Union[str, None] = None
+) -> dict:
+    """API to aggregate preferences by using comchoice methods.
+
+    Parameters
+    ----------
+    method : str
+        Comchoice method.
+    q : Union[str, None], optional
+        Query, by default None
+
+    Returns
+    -------
+    _type_
+        _description_
+    """
     valid_methods = ["borda", "condorcet", "copeland"]
 
     if method in valid_methods:

@@ -10,6 +10,7 @@ def ahp(
     df,
     ppal_eigval="approximation",
     criteria="criteria",
+    delimiter=">",
     origin="pairwise",
     alternative="alternative",
     alternative_a="alternative_a",
@@ -18,35 +19,64 @@ def ahp(
     show_rank=True,
     **kws
 ) -> pd.DataFrame:
+    """Analytic Hierarchy Process (AHP)
 
-    df = __set_card_id(
-        df.copy(),
-        alternative_a=alternative_a,
-        alternative_b=alternative_b,
-        selected=selected,
-        concat="_"
-    )
+    Parameters
+    ----------
+    df : pd.DataFrame
+        A data set to be aggregated.
+    ppal_eigval : {"approximation", "eigval"}
+        Specifies the method to compute the eigenvector used in the algorithm, by default "approximation"
+    criteria : str, optional
+        Column label when data set includes more than one election criteria, by default "criteria"
+    origin : str, optional
+        _description_, by default "pairwise"
+    alternative : str, optional
+        Defines column label of the output data that includes the score of each alternative, by default "alternative"
+    alternative_a : str, optional
+        When `origin` is `pairwise`, column label for alternative displayed on the left of a pairwise comparison framework, by default "alternative_a"
+    alternative_b : str, optional
+        When `origin` is `pairwise`, column label for alternative displayed on the right of a pairwise comparison framework, by default "alternative_b"
+    selected : str, optional
+        When `origin` is `pairwise`, column label for alternative selected, by default "selected"
+    show_rank : bool, optional
+        Whether or not to include the ranking of alternatives, by default True.
 
-    option_a_sorted = f"{alternative_a}_sorted" if origin == "pairwise" else alternative_a
-    option_b_sorted = f"{alternative_b}_sorted" if origin == "pairwise" else alternative_b
+    Returns
+    -------
+    pd.DataFrame
+        Aggregation of preferences using AHP.
+    """
+
+    if "card_id" not in list(df):
+        df = __set_card_id(
+            df.copy(),
+            alternative_a=alternative_a,
+            alternative_b=alternative_b,
+            selected=selected,
+            concat="_"
+        )
+
+    alternative_a_sorted = f"{alternative_a}_sorted" if origin == "pairwise" else alternative_a
+    alternative_b_sorted = f"{alternative_b}_sorted" if origin == "pairwise" else alternative_b
 
     if selected in list(df):
         df["weight_a"] = np.where(
-            df[option_a_sorted] == df[selected], 1, 0)
+            df[alternative_a_sorted] == df[selected], 1, 0)
         df["weight_b"] = np.where(
-            df[option_b_sorted] == df[selected], 1, 0)
+            df[alternative_b_sorted] == df[selected], 1, 0)
 
-        df = df.groupby([option_a_sorted, option_b_sorted]).agg(
+        df = df.groupby([alternative_a_sorted, alternative_b_sorted]).agg(
             {"weight_a": "sum", "weight_b": "sum"}).reset_index()
 
     def __calc(df, ppal_eigval=ppal_eigval):
         df["value"] = df["weight_b"] / df["weight_a"]
 
-        items = set(df[option_a_sorted]) | set(df[option_b_sorted])
+        items = set(df[alternative_a_sorted]) | set(df[alternative_b_sorted])
         n = len(items)
 
-        tmp = df.pivot(index=option_b_sorted,
-                       columns=option_a_sorted, values="value")
+        tmp = df.pivot(index=alternative_b_sorted,
+                       columns=alternative_a_sorted, values="value")
         tmp = tmp.reindex(items, axis=0)
         tmp = tmp.reindex(items, axis=1)
 
@@ -65,7 +95,7 @@ def ahp(
             raise "Value provided to ppal_eigval parameter not valid. Values accepted are 'eigval', 'approximation'"
 
         priority = pd.DataFrame(priority).reset_index()
-        priority.columns = ["alternative", "value"]
+        priority.columns = [alternative, "value"]
 
         # Calculates Consistency Index
         ci = (_lambda - n) / (n - 1)

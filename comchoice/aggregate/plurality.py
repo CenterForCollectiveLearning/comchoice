@@ -19,10 +19,27 @@ def plurality(
 
     Each voter selects one alternative (or none if voters can abstain), and the alternative(s) with the most votes win.
 
+    Parameters
+    ----------
+    df : pd.DataFrame
+        A data set to be aggregated.
+    alternative : str, optional
+        _description_, by default "alternative"
+    delimiter : str, optional
+        _description_, by default ">"
+    ballot : str, optional
+        _description_, by default "ballot"
+    show_rank : bool, optional
+        _description_, by default True
+    voters : str, optional
+        _description_, by default "voters"
+    ascending : bool, optional
+        _description_, by default False
+
     Returns
     -------
-    pandas.DataFrame:
-        Election results using Plurality Rule.
+    pd.DataFrame
+        _description_
     """
 
     df = __transform(df, delimiter=delimiter)

@@ -26,14 +26,14 @@ class Axiom:
         return list(ranking.sort_values(by='index', ascending=True)[1].values), list(ranking.sort_values(by='index', ascending=True)[0].values)
 
     def sort_option_columns(data, columns=["option_a", "option_b", "selected"]):
-        data['option_a_sorted'] = data.apply(
+        data['alternative_a_sorted'] = data.apply(
             lambda x: x['option_a'] if x['option_a'] < x['option_b'] else x['option_b'], axis=1)
-        data['option_b_sorted'] = data.apply(
+        data['alternative_b_sorted'] = data.apply(
             lambda x: x['option_b'] if x['option_a'] < x['option_b'] else x['option_a'], axis=1)
-        data["card_id"] = data["option_a_sorted"].apply(
-            str) + "-" + data["option_b_sorted"].apply(str)
+        data["card_id"] = data["alternative_a_sorted"].apply(
+            str) + "-" + data["alternative_b_sorted"].apply(str)
         data['option_selected'] = data.apply(
-            lambda x: +1 if x['option_a_sorted'] == x['selected'] else -1, axis=1)
+            lambda x: +1 if x['alternative_a_sorted'] == x['selected'] else -1, axis=1)
         return data
 
     def standardize_data_columns(data, columns=["option_a", "option_b", "selected"]):
