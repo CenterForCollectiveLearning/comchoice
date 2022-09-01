@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 
+from comchoice.aggregate.__default_parameters import transform_kws
 from comchoice.preprocessing.transform import transform
 from itertools import combinations
 
@@ -13,19 +14,7 @@ def pairwise_matrix(
     voter="voter",
     voters="voters",
     return_alternatives=False,
-    transform_kws=dict(
-        dtype_from="ballot",
-        dtype_to="ballot_extended",
-        delimiter_ties="=",
-        delimiter_score="=",
-        alternative_a="alternative_a",
-        alternative_b="alternative_b",
-        selected="selected",
-        value="value",
-        voter="voter",
-        rmv=[],
-        ascending=False
-    )
+    transform_kws=transform_kws
 ):
     output = []
 
@@ -33,11 +22,15 @@ def pairwise_matrix(
 
     df = transform(
         df.copy(),
-        **transform_kws,
-        ballot=ballot,
-        delimiter=delimiter,
-        voters=voters,
-        unique_id=True
+        **{
+            **transform_kws,
+            **dict(
+                ballot=ballot,
+                delimiter=delimiter,
+                voters=voters,
+                unique_id=True
+            )
+        }
     )
     if voters in list(df):
         df = df.rename(columns={"_id": "voter"})

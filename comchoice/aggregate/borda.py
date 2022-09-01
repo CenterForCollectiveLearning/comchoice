@@ -1,6 +1,7 @@
 import pandas as pd
 
 from comchoice.aggregate.__aggregate import __aggregate
+from comchoice.aggregate.__default_parameters import transform_kws
 from comchoice.aggregate.__set_rank import __set_rank
 from comchoice.aggregate.__set_voters import __set_voters
 from comchoice.preprocessing.transform import transform
@@ -14,20 +15,7 @@ def borda(
     score="original",
     show_rank=True,
     voters="voters",
-    transform_kws=dict(
-        dtype_from="ballot",
-        dtype_to="ballot_extended",
-        delimiter_ties="=",
-        delimiter_score="=",
-        alternative_a="alternative_a",
-        alternative_b="alternative_b",
-        selected="selected",
-        value="value",
-        voter="voter",
-        rmv=[],
-        unique_id=False,
-        ascending=False
-    ),
+    transform_kws=transform_kws,
     **kws
 ) -> pd.DataFrame:
     """Borda Count (1784).
