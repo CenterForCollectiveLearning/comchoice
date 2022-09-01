@@ -35,10 +35,10 @@ import comchoice.aggregate as agg
 app = FastAPI()
 
 fake_df = pd.DataFrame([
-    {&#34;voters&#34;: 7, &#34;rank&#34;: &#34;A&gt;B&gt;C&gt;D&#34;},
-    {&#34;voters&#34;: 5, &#34;rank&#34;: &#34;B&gt;C&gt;D&gt;A&#34;},
-    {&#34;voters&#34;: 6, &#34;rank&#34;: &#34;D&gt;B&gt;C&gt;A&#34;},
-    {&#34;voters&#34;: 4, &#34;rank&#34;: &#34;C&gt;D&gt;A&gt;B&#34;}
+    {&#34;voters&#34;: 7, &#34;ballot&#34;: &#34;A&gt;B&gt;C&gt;D&#34;},
+    {&#34;voters&#34;: 5, &#34;ballot&#34;: &#34;B&gt;C&gt;D&gt;A&#34;},
+    {&#34;voters&#34;: 6, &#34;ballot&#34;: &#34;D&gt;B&gt;C&gt;A&#34;},
+    {&#34;voters&#34;: 4, &#34;ballot&#34;: &#34;C&gt;D&gt;A&gt;B&#34;}
 ])
 
 
@@ -48,7 +48,24 @@ def read_root():
 
 
 @app.get(&#34;/api/aggregate/{method}&#34;)
-def aggregate_data(method: str, q: Union[str, None] = None):
+def aggregate_data(
+    method: str,
+    q: Union[str, None] = None
+) -&gt; dict:
+    &#34;&#34;&#34;API to aggregate preferences by using comchoice methods.
+
+    Parameters
+    ----------
+    method : str
+        Comchoice method.
+    q : Union[str, None], optional
+        Query, by default None
+
+    Returns
+    -------
+    _type_
+        _description_
+    &#34;&#34;&#34;
     valid_methods = [&#34;borda&#34;, &#34;condorcet&#34;, &#34;copeland&#34;]
 
     if method in valid_methods:
@@ -71,16 +88,45 @@ def aggregate_data(method: str, q: Union[str, None] = None):
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="comchoice.api.aggregate.aggregate_data"><code class="name flex">
-<span>def <span class="ident">aggregate_data</span></span>(<span>method: str, q: Optional[str] = None)</span>
+<span>def <span class="ident">aggregate_data</span></span>(<span>method: str, q: Optional[str] = None) ‑> dict</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>API to aggregate preferences by using comchoice methods.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>method</code></strong> :&ensp;<code>str</code></dt>
+<dd>Comchoice method.</dd>
+<dt><strong><code>q</code></strong> :&ensp;<code>Union[str, None]</code>, optional</dt>
+<dd>Query, by default None</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>_type_</code></dt>
+<dd><em>description</em></dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@app.get(&#34;/api/aggregate/{method}&#34;)
-def aggregate_data(method: str, q: Union[str, None] = None):
+def aggregate_data(
+    method: str,
+    q: Union[str, None] = None
+) -&gt; dict:
+    &#34;&#34;&#34;API to aggregate preferences by using comchoice methods.
+
+    Parameters
+    ----------
+    method : str
+        Comchoice method.
+    q : Union[str, None], optional
+        Query, by default None
+
+    Returns
+    -------
+    _type_
+        _description_
+    &#34;&#34;&#34;
     valid_methods = [&#34;borda&#34;, &#34;condorcet&#34;, &#34;copeland&#34;]
 
     if method in valid_methods:

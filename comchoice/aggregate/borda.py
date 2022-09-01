@@ -3,7 +3,7 @@ import pandas as pd
 from comchoice.aggregate.__aggregate import __aggregate
 from comchoice.aggregate.__set_rank import __set_rank
 from comchoice.aggregate.__set_voters import __set_voters
-from comchoice.aggregate.__transform import __transform
+from comchoice.preprocessing.transform import transform
 
 
 def borda(
@@ -11,10 +11,23 @@ def borda(
     alternative="alternative",
     delimiter=">",
     ballot="ballot",
-    rmv=[],
     score="original",
     show_rank=True,
     voters="voters",
+    transform_kws=dict(
+        dtype_from="ballot",
+        dtype_to="ballot_extended",
+        delimiter_ties="=",
+        delimiter_score="=",
+        alternative_a="alternative_a",
+        alternative_b="alternative_b",
+        selected="selected",
+        value="value",
+        voter="voter",
+        rmv=[],
+        unique_id=False,
+        ascending=False
+    ),
     **kws
 ) -> pd.DataFrame:
     """Borda Count (1784).
@@ -31,19 +44,21 @@ def borda(
     Parameters
     ----------
     df : _type_
-        A data set to be aggregated
+        A data set to be aggregated.
     alternative : str, optional
-        Column label to get alternatives, by default "alternative"
+        Column label to get alternatives, by default "alternative".
     ballot : str, optional
-        Column label that includes a set of sorted alternatives for each voter or voters (when is defined in the data set), by default "ballot"
+        Column label that includes a set of sorted alternatives for each voter or voters (when is defined in the data set), by default "ballot".
     delimiter : str, optional
-        Delimiter used between alternatives in a `ballot`, by default ">"
+        Delimiter used between alternatives in a `ballot`, by default ">".
     rmv : list, optional
-        List of alternatives to remove before computing the score by the rule, by default []
+        List of alternatives to exclude before computing the score by the rule, by default [].
     score : {"original", "score_n", "dowdall"}
-        Specifies the minimax rule to be used to compute Borda, by default "original"
+        Specifies the minimax rule to be used to compute Borda, by default "original".
     show_rank : bool, optional
         Whether or not to include the ranking of alternatives, by default True.
+    transform_kws: dict, optional
+        Whether or not to process data.
     voters : str, optional
         Whether the number of voters is defined in the data, it represents its column label, by default "voters".
 
@@ -57,9 +72,13 @@ def borda(
     Borda, J. D. (1784). Mémoire sur les élections au scrutin. Histoire de l'Academie
     Royale des Sciences pour 1781 (Paris, 1784).
     """
-
-    # if plural_voters:
-    df = __transform(df, delimiter=delimiter, rmv=rmv)
+    df = transform(
+        df.copy(),
+        ballot=ballot,
+        delimiter=delimiter,
+        voters=voters,
+        **transform_kws
+    )
     N = len(df[alternative].unique())
 
     if score == "dowdall":

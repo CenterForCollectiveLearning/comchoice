@@ -34,6 +34,22 @@ def quota(
     n_votes=1,
     n_seats=1
 ) -&gt; int:
+    &#34;&#34;&#34;Computes Quota threshold.
+
+    Parameters
+    ----------
+    method : {&#34;hare&#34;, &#34;imperiali&#34;, &#34;droop&#34;, &#34;hagenbach-bischoff&#34;}
+        Specifies the method to compute the quota, by default &#34;hare&#34;.
+    n_votes : int
+        Number of votes, by default 1.
+    n_seats : int
+        Number of seats to elect, by default 1.
+
+    Returns
+    -------
+    int
+        Quota threshold
+    &#34;&#34;&#34;
     if method == &#34;hare&#34;:
         return floor(n_votes / n_seats)
     elif method == &#34;imperiali&#34;:
@@ -56,7 +72,21 @@ def quota(
 <span>def <span class="ident">quota</span></span>(<span>method='hare', n_votes=1, n_seats=1) ‑> int</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Computes Quota threshold.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>method</code></strong> :&ensp;<code>{"hare", "imperiali", "droop", "hagenbach-bischoff"}</code></dt>
+<dd>Specifies the method to compute the quota, by default "hare".</dd>
+<dt><strong><code>n_votes</code></strong> :&ensp;<code>int</code></dt>
+<dd>Number of votes, by default 1.</dd>
+<dt><strong><code>n_seats</code></strong> :&ensp;<code>int</code></dt>
+<dd>Number of seats to elect, by default 1.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>int</code></dt>
+<dd>Quota threshold</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -66,6 +96,22 @@ def quota(
     n_votes=1,
     n_seats=1
 ) -&gt; int:
+    &#34;&#34;&#34;Computes Quota threshold.
+
+    Parameters
+    ----------
+    method : {&#34;hare&#34;, &#34;imperiali&#34;, &#34;droop&#34;, &#34;hagenbach-bischoff&#34;}
+        Specifies the method to compute the quota, by default &#34;hare&#34;.
+    n_votes : int
+        Number of votes, by default 1.
+    n_seats : int
+        Number of seats to elect, by default 1.
+
+    Returns
+    -------
+    int
+        Quota threshold
+    &#34;&#34;&#34;
     if method == &#34;hare&#34;:
         return floor(n_votes / n_seats)
     elif method == &#34;imperiali&#34;:

@@ -44,7 +44,7 @@ def to_pairwise(
     value=&#34;value&#34;,
     voter=&#34;voter&#34;,
     voters=&#34;voters&#34;,
-    origin=&#34;star&#34;,
+    dtype=&#34;star&#34;,
     verbose=True
 ) -&gt; pd.DataFrame:
     &#34;&#34;&#34;Converts a star rating dataset to a pairwise comparison dataset.
@@ -74,7 +74,8 @@ def to_pairwise(
         _description_
     &#34;&#34;&#34;
 
-    if origin == &#34;voting&#34;:
+    # TODO: Allow ties
+    if dtype == &#34;ballot&#34;:
         if voters in list(df):
             output = []
             for i, row in df.iterrows():
@@ -85,7 +86,7 @@ def to_pairwise(
 
         df[ballot] = df[ballot].astype(str).str.split(delimiter).apply(
             lambda x: list(combinations(x, 2)))
-        df = df.explode(rank)
+        df = df.explode(ballot)
 
         df[alternative_a], df[alternative_b] = df[ballot].str
         df[selected] = df[alternative_a]
@@ -139,7 +140,7 @@ def to_pairwise(
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="comchoice.preprocessing.to_pairwise.to_pairwise"><code class="name flex">
-<span>def <span class="ident">to_pairwise</span></span>(<span>df, alternative='alternative', ascending=False, delimiter=&#x27;&gt;&#x27;, alternative_a='alternative_a', alternative_b='alternative_b', selected='selected', ballot='ballot', value='value', voter='voter', voters='voters', origin='star', verbose=True) ‑> pandas.core.frame.DataFrame</span>
+<span>def <span class="ident">to_pairwise</span></span>(<span>df, alternative='alternative', ascending=False, delimiter=&#x27;&gt;&#x27;, alternative_a='alternative_a', alternative_b='alternative_b', selected='selected', ballot='ballot', value='value', voter='voter', voters='voters', dtype='star', verbose=True) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Converts a star rating dataset to a pairwise comparison dataset.</p>
@@ -183,7 +184,7 @@ def to_pairwise(
     value=&#34;value&#34;,
     voter=&#34;voter&#34;,
     voters=&#34;voters&#34;,
-    origin=&#34;star&#34;,
+    dtype=&#34;star&#34;,
     verbose=True
 ) -&gt; pd.DataFrame:
     &#34;&#34;&#34;Converts a star rating dataset to a pairwise comparison dataset.
@@ -213,7 +214,8 @@ def to_pairwise(
         _description_
     &#34;&#34;&#34;
 
-    if origin == &#34;voting&#34;:
+    # TODO: Allow ties
+    if dtype == &#34;ballot&#34;:
         if voters in list(df):
             output = []
             for i, row in df.iterrows():
@@ -224,7 +226,7 @@ def to_pairwise(
 
         df[ballot] = df[ballot].astype(str).str.split(delimiter).apply(
             lambda x: list(combinations(x, 2)))
-        df = df.explode(rank)
+        df = df.explode(ballot)
 
         df[alternative_a], df[alternative_b] = df[ballot].str
         df[selected] = df[alternative_a]

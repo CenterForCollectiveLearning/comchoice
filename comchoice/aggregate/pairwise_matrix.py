@@ -1,5 +1,7 @@
 import numpy as np
 import pandas as pd
+
+from comchoice.preprocessing.transform import transform
 from itertools import combinations
 
 
@@ -10,25 +12,33 @@ def pairwise_matrix(
     delimiter=">",
     voter="voter",
     voters="voters",
-    return_alternatives=False
+    return_alternatives=False,
+    transform_kws=dict(
+        dtype_from="ballot",
+        dtype_to="ballot_extended",
+        delimiter_ties="=",
+        delimiter_score="=",
+        alternative_a="alternative_a",
+        alternative_b="alternative_b",
+        selected="selected",
+        value="value",
+        voter="voter",
+        rmv=[],
+        ascending=False
+    )
 ):
     output = []
 
     cols = ["_winner", "_loser"]
 
-    def __transform(data, unique_id=False) -> pd.DataFrame:
-        df = data.copy()
-        df["_id"] = range(df.shape[0])
-        df[ballot] = df[ballot].str.split(delimiter)
-        df = df.explode(rank)
-        df = df.rename(columns={rank: "alternative"})
-        df["rank"] = df.groupby("_id").cumcount() + 1
-        if not unique_id:
-            df = df.drop(columns=["_id"])
-
-        return df
-
-    df = __transform(df, unique_id=True)
+    df = transform(
+        df.copy(),
+        **transform_kws,
+        ballot=ballot,
+        delimiter=delimiter,
+        voters=voters,
+        unique_id=True
+    )
     if voters in list(df):
         df = df.rename(columns={"_id": "voter"})
     else:

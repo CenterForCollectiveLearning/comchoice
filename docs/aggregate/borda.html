@@ -31,7 +31,7 @@
 from comchoice.aggregate.__aggregate import __aggregate
 from comchoice.aggregate.__set_rank import __set_rank
 from comchoice.aggregate.__set_voters import __set_voters
-from comchoice.aggregate.__transform import __transform
+from comchoice.preprocessing.transform import transform
 
 
 def borda(
@@ -39,10 +39,23 @@ def borda(
     alternative=&#34;alternative&#34;,
     delimiter=&#34;&gt;&#34;,
     ballot=&#34;ballot&#34;,
-    rmv=[],
     score=&#34;original&#34;,
     show_rank=True,
     voters=&#34;voters&#34;,
+    transform_kws=dict(
+        dtype_from=&#34;ballot&#34;,
+        dtype_to=&#34;ballot_extended&#34;,
+        delimiter_ties=&#34;=&#34;,
+        delimiter_score=&#34;=&#34;,
+        alternative_a=&#34;alternative_a&#34;,
+        alternative_b=&#34;alternative_b&#34;,
+        selected=&#34;selected&#34;,
+        value=&#34;value&#34;,
+        voter=&#34;voter&#34;,
+        rmv=[],
+        unique_id=False,
+        ascending=False
+    ),
     **kws
 ) -&gt; pd.DataFrame:
     &#34;&#34;&#34;Borda Count (1784).
@@ -59,19 +72,21 @@ def borda(
     Parameters
     ----------
     df : _type_
-        A data set to be aggregated
+        A data set to be aggregated.
     alternative : str, optional
-        Column label to get alternatives, by default &#34;alternative&#34;
+        Column label to get alternatives, by default &#34;alternative&#34;.
     ballot : str, optional
-        Column label that includes a set of sorted alternatives for each voter or voters (when is defined in the data set), by default &#34;ballot&#34;
+        Column label that includes a set of sorted alternatives for each voter or voters (when is defined in the data set), by default &#34;ballot&#34;.
     delimiter : str, optional
-        Delimiter used between alternatives in a `ballot`, by default &#34;&gt;&#34;
+        Delimiter used between alternatives in a `ballot`, by default &#34;&gt;&#34;.
     rmv : list, optional
-        List of alternatives to remove before computing the score by the rule, by default []
+        List of alternatives to exclude before computing the score by the rule, by default [].
     score : {&#34;original&#34;, &#34;score_n&#34;, &#34;dowdall&#34;}
-        Specifies the minimax rule to be used to compute Borda, by default &#34;original&#34;
+        Specifies the minimax rule to be used to compute Borda, by default &#34;original&#34;.
     show_rank : bool, optional
         Whether or not to include the ranking of alternatives, by default True.
+    transform_kws: dict, optional
+        Whether or not to process data.
     voters : str, optional
         Whether the number of voters is defined in the data, it represents its column label, by default &#34;voters&#34;.
 
@@ -86,8 +101,13 @@ def borda(
     Royale des Sciences pour 1781 (Paris, 1784).
     &#34;&#34;&#34;
 
-    # if plural_voters:
-    df = __transform(df, delimiter=delimiter, rmv=rmv)
+    df = transform(
+        df,
+        ballot=ballot,
+        delimiter=delimiter,
+        voters=voters,
+        **transform_kws
+    )
     N = len(df[alternative].unique())
 
     if score == &#34;dowdall&#34;:
@@ -116,7 +136,7 @@ def borda(
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="comchoice.aggregate.borda.borda"><code class="name flex">
-<span>def <span class="ident">borda</span></span>(<span>df, alternative='alternative', delimiter=&#x27;&gt;&#x27;, ballot='ballot', rmv=[], score='original', show_rank=True, voters='voters', **kws) ‑> pandas.core.frame.DataFrame</span>
+<span>def <span class="ident">borda</span></span>(<span>df, alternative='alternative', delimiter=&#x27;&gt;&#x27;, ballot='ballot', score='original', show_rank=True, voters='voters', transform_kws={'dtype_from': 'ballot', 'dtype_to': 'ballot_extended', 'delimiter_ties': '=', 'delimiter_score': '=', 'alternative_a': 'alternative_a', 'alternative_b': 'alternative_b', 'selected': 'selected', 'value': 'value', 'voter': 'voter', 'rmv': [], 'unique_id': False, 'ascending': False}, **kws) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Borda Count (1784).</p>
@@ -130,19 +150,21 @@ and so on, until assigning 0 to the lowest-ranked alternative.</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
 <dt><strong><code>df</code></strong> :&ensp;<code>_type_</code></dt>
-<dd>A data set to be aggregated</dd>
+<dd>A data set to be aggregated.</dd>
 <dt><strong><code>alternative</code></strong> :&ensp;<code>str</code>, optional</dt>
-<dd>Column label to get alternatives, by default "alternative"</dd>
+<dd>Column label to get alternatives, by default "alternative".</dd>
 <dt><strong><code>ballot</code></strong> :&ensp;<code>str</code>, optional</dt>
-<dd>Column label that includes a set of sorted alternatives for each voter or voters (when is defined in the data set), by default "ballot"</dd>
+<dd>Column label that includes a set of sorted alternatives for each voter or voters (when is defined in the data set), by default "ballot".</dd>
 <dt><strong><code>delimiter</code></strong> :&ensp;<code>str</code>, optional</dt>
-<dd>Delimiter used between alternatives in a <code>ballot</code>, by default "&gt;"</dd>
+<dd>Delimiter used between alternatives in a <code>ballot</code>, by default "&gt;".</dd>
 <dt><strong><code>rmv</code></strong> :&ensp;<code>list</code>, optional</dt>
-<dd>List of alternatives to remove before computing the score by the rule, by default []</dd>
+<dd>List of alternatives to exclude before computing the score by the rule, by default [].</dd>
 <dt><strong><code>score</code></strong> :&ensp;<code>{"original", "score_n", "dowdall"}</code></dt>
-<dd>Specifies the minimax rule to be used to compute Borda, by default "original"</dd>
+<dd>Specifies the minimax rule to be used to compute Borda, by default "original".</dd>
 <dt><strong><code>show_rank</code></strong> :&ensp;<code>bool</code>, optional</dt>
 <dd>Whether or not to include the ranking of alternatives, by default True.</dd>
+<dt><strong><code>transform_kws</code></strong> :&ensp;<code>dict</code>, optional</dt>
+<dd>Whether or not to process data.</dd>
 <dt><strong><code>voters</code></strong> :&ensp;<code>str</code>, optional</dt>
 <dd>Whether the number of voters is defined in the data, it represents its column label, by default "voters".</dd>
 </dl>
@@ -163,10 +185,23 @@ Royale des Sciences pour 1781 (Paris, 1784).</p></div>
     alternative=&#34;alternative&#34;,
     delimiter=&#34;&gt;&#34;,
     ballot=&#34;ballot&#34;,
-    rmv=[],
     score=&#34;original&#34;,
     show_rank=True,
     voters=&#34;voters&#34;,
+    transform_kws=dict(
+        dtype_from=&#34;ballot&#34;,
+        dtype_to=&#34;ballot_extended&#34;,
+        delimiter_ties=&#34;=&#34;,
+        delimiter_score=&#34;=&#34;,
+        alternative_a=&#34;alternative_a&#34;,
+        alternative_b=&#34;alternative_b&#34;,
+        selected=&#34;selected&#34;,
+        value=&#34;value&#34;,
+        voter=&#34;voter&#34;,
+        rmv=[],
+        unique_id=False,
+        ascending=False
+    ),
     **kws
 ) -&gt; pd.DataFrame:
     &#34;&#34;&#34;Borda Count (1784).
@@ -183,19 +218,21 @@ Royale des Sciences pour 1781 (Paris, 1784).</p></div>
     Parameters
     ----------
     df : _type_
-        A data set to be aggregated
+        A data set to be aggregated.
     alternative : str, optional
-        Column label to get alternatives, by default &#34;alternative&#34;
+        Column label to get alternatives, by default &#34;alternative&#34;.
     ballot : str, optional
-        Column label that includes a set of sorted alternatives for each voter or voters (when is defined in the data set), by default &#34;ballot&#34;
+        Column label that includes a set of sorted alternatives for each voter or voters (when is defined in the data set), by default &#34;ballot&#34;.
     delimiter : str, optional
-        Delimiter used between alternatives in a `ballot`, by default &#34;&gt;&#34;
+        Delimiter used between alternatives in a `ballot`, by default &#34;&gt;&#34;.
     rmv : list, optional
-        List of alternatives to remove before computing the score by the rule, by default []
+        List of alternatives to exclude before computing the score by the rule, by default [].
     score : {&#34;original&#34;, &#34;score_n&#34;, &#34;dowdall&#34;}
-        Specifies the minimax rule to be used to compute Borda, by default &#34;original&#34;
+        Specifies the minimax rule to be used to compute Borda, by default &#34;original&#34;.
     show_rank : bool, optional
         Whether or not to include the ranking of alternatives, by default True.
+    transform_kws: dict, optional
+        Whether or not to process data.
     voters : str, optional
         Whether the number of voters is defined in the data, it represents its column label, by default &#34;voters&#34;.
 
@@ -210,8 +247,13 @@ Royale des Sciences pour 1781 (Paris, 1784).</p></div>
     Royale des Sciences pour 1781 (Paris, 1784).
     &#34;&#34;&#34;
 
-    # if plural_voters:
-    df = __transform(df, delimiter=delimiter, rmv=rmv)
+    df = transform(
+        df,
+        ballot=ballot,
+        delimiter=delimiter,
+        voters=voters,
+        **transform_kws
+    )
     N = len(df[alternative].unique())
 
     if score == &#34;dowdall&#34;:
