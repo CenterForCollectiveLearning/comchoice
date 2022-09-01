@@ -1,6 +1,7 @@
 import pandas as pd
 from itertools import combinations, permutations
 
+from comchoice.aggregate.__default_parameters import transform_kws
 from comchoice.aggregate.pairwise_matrix import pairwise_matrix
 
 
@@ -11,7 +12,8 @@ def kemeny_young(
     delimiter=">",
     voter="voter",
     voters="voters",
-    score_matrix=False
+    score_matrix=False,
+    transform_kws=transform_kws
 ) -> pd.DataFrame:
     """Kemeny-Young method.
 
@@ -42,7 +44,8 @@ def kemeny_young(
         ballot=ballot,
         delimiter=delimiter,
         voter=voter,
-        voters=voters
+        voters=voters,
+        transform_kws=transform_kws
     )
 
     output = []

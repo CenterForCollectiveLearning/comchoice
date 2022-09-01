@@ -1,8 +1,10 @@
 import pandas as pd
 
 
+from comchoice.aggregate.__default_parameters import transform_kws
 from comchoice.aggregate.borda import borda
 from comchoice.aggregate.condorcet import condorcet
+from comchoice.preprocessing.transform import transform
 
 
 def black(
@@ -11,7 +13,8 @@ def black(
     ballot="ballot",
     delimiter=">",
     voter="voter",
-    voters="voters"
+    voters="voters",
+    transform_kws=transform_kws
 ) -> pd.DataFrame:
     """Black procedure (1958).
 
@@ -35,7 +38,8 @@ def black(
         delimiter=delimiter,
         voter=voter,
         voters=voters,
-        weak=False
+        weak=False,
+        transform_kws=transform_kws
     )
     return r if r.shape[0] > 0 else borda(
         df,
@@ -45,5 +49,6 @@ def black(
         score="original",
         show_rank=True,
         voter=voter,
-        voters=voters
+        voters=voters,
+        transform_kws=transform_kws
     ).head(1)

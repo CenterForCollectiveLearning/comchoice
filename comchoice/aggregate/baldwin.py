@@ -1,5 +1,7 @@
 import pandas as pd
+
 from comchoice.aggregate.nanson_baldwin import nanson_baldwin
+from comchoice.aggregate.__default_parameters import transform_kws
 
 
 def baldwin(
@@ -9,7 +11,8 @@ def baldwin(
     ballot="ballot",
     borda_score="original",
     show_rank=True,
-    voters="voters"
+    voters="voters",
+    transform_kws=transform_kws
 ) -> pd.DataFrame:
 
     return nanson_baldwin(
@@ -20,5 +23,6 @@ def baldwin(
         ballot=ballot,
         borda_score=borda_score,
         show_rank=show_rank,
-        voters=voters
+        voters=voters,
+        transform_kws=transform_kws
     )

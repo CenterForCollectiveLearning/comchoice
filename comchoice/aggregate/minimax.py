@@ -1,7 +1,8 @@
 import pandas as pd
 
-from comchoice.aggregate.pairwise_matrix import pairwise_matrix
+from comchoice.aggregate.__default_parameters import transform_kws
 from comchoice.aggregate.__set_rank import __set_rank
+from comchoice.aggregate.pairwise_matrix import pairwise_matrix
 
 
 def minimax(
@@ -12,7 +13,8 @@ def minimax(
     delimiter=">",
     show_rank=True,
     voter="voter",
-    voters="voters"
+    voters="voters",
+    transform_kws=transform_kws
 ) -> pd.DataFrame:
     """_summary_
 
@@ -46,7 +48,8 @@ def minimax(
         ballot=ballot,
         delimiter=delimiter,
         voter=voter,
-        voters=voters
+        voters=voters,
+        transform_kws=transform_kws
     )
 
     e = d / (d + d.T)

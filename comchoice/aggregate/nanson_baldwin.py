@@ -1,5 +1,8 @@
 import pandas as pd
+
+
 from comchoice.aggregate.borda import borda
+from comchoice.aggregate.__default_parameters import transform_kws
 
 
 def nanson_baldwin(
@@ -11,7 +14,8 @@ def nanson_baldwin(
     rmv=[],
     borda_score="original",
     show_rank=True,
-    voters="voters"
+    voters="voters",
+    transform_kws=transform_kws
 ) -> pd.DataFrame:
 
     rmv = []
@@ -23,7 +27,8 @@ def nanson_baldwin(
         rmv=rmv,
         score=borda_score,
         show_rank=show_rank,
-        voters=voters
+        voters=voters,
+        transform_kws=transform_kws
     )
 
     while tmp.shape[0] > 1:
@@ -41,7 +46,8 @@ def nanson_baldwin(
             rmv=rmv,
             score=borda_score,
             show_rank=show_rank,
-            voters=voters
+            voters=voters,
+            transform_kws=transform_kws
         )
 
     return tmp

@@ -1,5 +1,6 @@
 import pandas as pd
 
+from comchoice.aggregate.__default_parameters import transform_kws
 from comchoice.aggregate.condorcet import condorcet
 
 
@@ -9,7 +10,8 @@ def weak_condorcet(
     ballot="ballot",
     delimiter=">",
     voter="voter",
-    voters="voters"
+    voters="voters",
+    transform_kws=transform_kws
 ):
     return condorcet(
         df,
@@ -18,5 +20,6 @@ def weak_condorcet(
         delimiter=delimiter,
         voter=voter,
         voters=voters,
-        weak=True
+        weak=True,
+        transform_kws=transform_kws
     )

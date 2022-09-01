@@ -1,5 +1,6 @@
 import pandas as pd
 
+from comchoice.aggregate.__default_parameters import transform_kws
 from comchoice.aggregate.dodgson_quick import dodgson_quick
 from comchoice.aggregate.tideman import tideman
 
@@ -12,7 +13,8 @@ def dodgson(
     ballot="ballot",
     show_rank=True,
     voter="voter",
-    voters="voters"
+    voters="voters",
+    transform_kws=transform_kws
 ):
     if approximation == "quick":
         return dodgson_quick(
@@ -22,7 +24,8 @@ def dodgson(
             ballot=ballot,
             show_rank=show_rank,
             voter=voter,
-            voters=voters
+            voters=voters,
+            transform_kws=transform_kws
         )
     elif approximation == "tideman":
         return tideman(
@@ -32,5 +35,6 @@ def dodgson(
             ballot=ballot,
             show_rank=show_rank,
             voter=voter,
-            voters=voters
+            voters=voters,
+            transform_kws=transform_kws
         )

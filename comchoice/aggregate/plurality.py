@@ -1,9 +1,11 @@
 import pandas as pd
 
 from comchoice.aggregate.__aggregate import __aggregate
+from comchoice.aggregate.__default_parameters import transform_kws
 from comchoice.aggregate.__set_rank import __set_rank
 from comchoice.aggregate.__set_voters import __set_voters
 from comchoice.aggregate.__transform import __transform
+from comchoice.preprocessing.transform import transform
 
 
 def plurality(
@@ -13,7 +15,8 @@ def plurality(
     ballot="ballot",
     show_rank=True,
     voters="voters",
-    ascending=False
+    ascending=False,
+    transform_kws=transform_kws
 ) -> pd.DataFrame:
     """Plurality Rule.
 
@@ -42,7 +45,13 @@ def plurality(
         _description_
     """
 
-    df = __transform(df, delimiter=delimiter)
+    df = transform(
+        df.copy(),
+        ballot=ballot,
+        delimiter=delimiter,
+        voters=voters,
+        **transform_kws
+    )
 
     df = df[df[ballot] == 1].copy()
     df["value"] = 1

@@ -1,5 +1,6 @@
 import pandas as pd
 
+from comchoice.aggregate.__default_parameters import transform_kws
 from comchoice.aggregate.minimax import minimax
 
 
@@ -11,7 +12,8 @@ def simpson(
     delimiter=">",
     show_rank=True,
     voter="voter",
-    voters="voters"
+    voters="voters",
+    transform_kws=transform_kws
 ):
     return minimax(
         df,
@@ -21,5 +23,6 @@ def simpson(
         delimiter=delimiter,
         show_rank=show_rank,
         voter=voter,
-        voters=voters
+        voters=voters,
+        transform_kws=transform_kws
     )

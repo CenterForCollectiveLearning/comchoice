@@ -1,8 +1,9 @@
 import numpy as np
 import pandas as pd
 
-from comchoice.aggregate.pairwise_matrix import pairwise_matrix
+from comchoice.aggregate.__default_parameters import transform_kws
 from comchoice.aggregate.__set_rank import __set_rank
+from comchoice.aggregate.pairwise_matrix import pairwise_matrix
 
 
 def dodgson_quick(
@@ -12,7 +13,8 @@ def dodgson_quick(
     ballot="ballot",
     show_rank=True,
     voter="voter",
-    voters="voters"
+    voters="voters",
+    transform_kws=transform_kws
 ) -> pd.DataFrame:
     m = pairwise_matrix(
         df,
@@ -20,7 +22,8 @@ def dodgson_quick(
         ballot=ballot,
         delimiter=delimiter,
         voter=voter,
-        voters=voters
+        voters=voters,
+        transform_kws=transform_kws
     )
 
     m = m - m.T

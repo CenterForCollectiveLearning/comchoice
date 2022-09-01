@@ -1,6 +1,7 @@
 import pandas as pd
 
 from comchoice.aggregate.copeland import copeland
+from comchoice.aggregate.__default_parameters import transform_kws
 
 
 def condorcet(
@@ -10,7 +11,8 @@ def condorcet(
     delimiter=">",
     voter="voter",
     voters="voters",
-    weak=True
+    weak=True,
+    transform_kws=transform_kws
 ):
     """Condorcet winner (1785).
 
@@ -55,7 +57,8 @@ def condorcet(
         delimiter=delimiter,
         show_rank=True,
         voter=voter,
-        voters=voters
+        voters=voters,
+        transform_kws=transform_kws
     )
 
     if weak:

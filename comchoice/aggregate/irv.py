@@ -1,8 +1,9 @@
 import pandas as pd
 
-from comchoice.aggregate.__transform import __transform
+from comchoice.aggregate.__default_parameters import transform_kws
 from comchoice.aggregate.__set_voters import __set_voters
 from comchoice.aggregate.__aggregate import __aggregate
+from comchoice.preprocessing.transform import transform
 
 
 def irv(
@@ -10,7 +11,8 @@ def irv(
     alternative="alternative",
     delimiter=">",
     ballot="ballot",
-    voters="voters"
+    voters="voters",
+    transform_kws=transform_kws
 ) -> pd.DataFrame:
     """Hare Rule (also called as Instant Runoff IRV, Ranked-Choice Voting, and Alternative Vote)
 
@@ -24,7 +26,18 @@ def irv(
         The election's winner using IRV.
     """
 
-    df = __transform(df, delimiter=delimiter, unique_id=True)
+    df = transform(
+        df.copy(),
+        ballot=ballot,
+        delimiter=delimiter,
+        voters=voters,
+        **{
+            **transform_kws,
+            **dict(
+                unique_id=True
+            )
+        }
+    )
 
     def __plurality(df):
         df = df[df["rank"] == 1].copy()
@@ -41,7 +54,7 @@ def irv(
         rmv = tmp.loc[tmp.shape[0] - 1, alternative]
 
         df = df[df[alternative] != rmv].copy()
-        df = df.sort_values(["_id", rank], ascending=[True, True])
+        df = df.sort_values(["_id", ballot], ascending=[True, True])
         df[ballot] = df.groupby("_id").cumcount() + 1
 
         tmp = __plurality(df.copy())
