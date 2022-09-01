@@ -9,7 +9,7 @@ def copeland(
     df,
     alternative="alternative",
     delimiter=">",
-    pairwise_matrix=False,
+    pw_matrix=False,
     ballot="ballot",
     show_rank=True,
     voter="voter",
@@ -31,7 +31,7 @@ def copeland(
         Column label to get alternatives, by default "alternative".
     delimiter : str, optional
         Delimiter used between alternatives in a `ballot`, by default ">".
-    pairwise_matrix : bool, optional
+    pw_matrix : bool, optional
         A Pairwise Matrix is set in df, by default False.
     ballot : str, optional
         Column label that includes a set of sorted alternatives for each voter or voters (when is defined in the data set), by default "ballot".
@@ -52,7 +52,7 @@ def copeland(
     Copeland, A.H. (1951). A “reasonable” social welfare function, mimeographed. In: Seminar on applications of mathematics to the social sciences. Ann Arbor: Department of Mathematics, University of Michigan.
     """
 
-    if pairwise_matrix:
+    if pw_matrix:
         m = df
         unique_alternatives = list(df)
 
