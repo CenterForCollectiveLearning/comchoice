@@ -1,8 +1,9 @@
-<img src="https://github.com/CenterForCollectiveLearning/comchoice/raw/master/logo.png" alt="" width="200"/>
+<img src="./logo.png" alt="Logo ComChoice" width="350"/>
+
 
 ## What it is?
 
-ComChoice is an open-source library to aggregate preferences and manages voting data in Python. This library aims to convert the state-of-the-art in Social Choice Theory, Decision-Making Process and Pairwise Comparison Optimization into easy and intuitive functions to be used by programmers and researchers with basic programming knowledge.
+ComChoice is an open-source library to aggregate individual and collective preferences in Python. This library aims to convert the state-of-the-art in Social Choice Theory, Decision-Making Process and Pairwise Comparison Optimization into easy and intuitive functions to be used by programmers and researchers with basic programming knowledge.
 
 ComChoice provides a module to run an API to aggregate preferences. This API can be used for digital democracy platforms.
 
@@ -27,7 +28,7 @@ To install ComChoice from source, you need to clone the project repository in yo
 ```
 git clone https://github.com/CenterForCollectiveLearning/comchoice.git
 cd comchoice
-python setup.py install --user
+python setup.py install
 
 ```
 
@@ -41,26 +42,25 @@ ComChoice classes require a `pandas.DataFrame` or a `list` of `dict` to be initi
 
 ### Hello world: Election data
 
-For starting, let's use the data of an election of 22 voters and 4 alternatives. Each voter provided their ranking of alternatives.
+For starting, let's use the data of an election of 22 voters and 4 alternatives. Then, voters provided their ranking of preferences.
 
 ```
-from comchoice.aggregate import borda, condorcet
 import pandas as pd
+from comchoice.aggregate import borda
 
 data = [
-    {"voters": 7, "rank": ["A", "B", "C", "D"]},
-    {"voters": 5, "rank": ["B", "C", "D", "A"]},
-    {"voters": 6, "rank": ["D", "B", "C", "A"]},
-    {"voters": 4, "rank": ["C", "D", "A", "B"]}
+    {"voters": 7, "ballot": "A>B>C>D"},
+    {"voters": 5, "ballot": "B>C>D>A"},
+    {"voters": 6, "ballot": "D>B>C>A"},
+    {"voters": 4, "ballot": "C>D>A>B"}
 ]
 
 df = pd.DataFrame(data)
-df_borda = borda(df)
 
-df_borda.head()
+borda(df)
 ```
 
-Here, our goal is to calculate an aggregate ranking of alternatives. The result using Borda count is:
+Here, our goal is to calculate a ranking of alternatives by using Borda count.
 
 | alternative | value | rank |
 | --------- | ----- | ---- |
@@ -71,9 +71,11 @@ Here, our goal is to calculate an aggregate ranking of alternatives. The result 
 
 As shown in the table above, `borda` method includes alternatives' Borda score and their aggregate position.
 
-Next, if you are interested in testing other rules using the same data, you just need to execute another method to the class already defined. For instance, `condorcet` method calculates the Condorcet winner of an election.
+Next, if you are interested in testing other rules using the same data, you just need to execute another function to the dataframe already defined. For instance, `condorcet` method calculates the Condorcet winner of an election.
 
 ```
+from comchoice.aggregate import condorcet
+
 condorcet(df, weak=True)
 ```
 
