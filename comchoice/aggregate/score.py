@@ -19,12 +19,25 @@ def score(
     In this method, voters give a score to each alternative. We average the scores,
     and the winner is the alternative with the highest score.
 
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        A data set to be aggregated.
+    aggregation : str, optional
+        Aggregation method, by default "mean".
+    alternative : str, optional
+        Column label that includes the alternatives, by default "alternative".
+    score : str, optional
+        Column label to be aggregated, by default "score".
+    show_rank : bool, optional
+        Whether or not to include the ranking of alternatives, by default True.
+
     Returns
     -------
-    pandas.DataFrame:
-        Election results using Score Voting.
-
+    pd.DataFrame
+        _description_
     """
+
     tmp = __aggregate(
         df,
         groupby=[alternative],

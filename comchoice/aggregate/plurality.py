@@ -4,7 +4,6 @@ from comchoice.aggregate.__aggregate import __aggregate
 from comchoice.aggregate.__default_parameters import transform_kws
 from comchoice.aggregate.__set_rank import __set_rank
 from comchoice.aggregate.__set_voters import __set_voters
-from comchoice.aggregate.__transform import __transform
 from comchoice.preprocessing.transform import transform
 
 

@@ -4,8 +4,8 @@ import pandas as pd
 
 def phragmen(
     df,
-    n_seats=1,
-    alternatives="alternatives",
+    n_seats=2,
+    ballot="ballot",
     delimiter=",",
     voters="voters"
 ) -> pd.DataFrame:
@@ -18,18 +18,18 @@ def phragmen(
     n_rows = df_tmp.shape[0]
     W = []
 
-    df_tmp[alternatives] = df_tmp[alternatives].str.split(delimiter)
+    df_tmp[ballot] = df_tmp[ballot].str.split(delimiter)
     df_tmp = df_tmp.copy()
-    df_tmp = df_tmp.explode(alternatives)
+    df_tmp = df_tmp.explode(ballot)
 
-    dd = 1 / df_tmp.groupby(alternatives).agg({voters: "sum"})
+    dd = 1 / df_tmp.groupby(ballot).agg({voters: "sum"})
     dd = dd.reset_index()
-    dd = dd.rename(columns={voters: "t*", alternatives: "alternative"})
+    dd = dd.rename(columns={voters: "t*", ballot: "alternative"})
 
     t_1 = dd.head(1).to_dict(orient="records")[0]
     W.append(t_1)
 
-    im = df_tmp.pivot(index="_id", columns=alternatives).fillna(0)
+    im = df_tmp.pivot(index="_id", columns=ballot).fillna(0)
     columns = [i[1] for i in im.columns]
     im.columns = columns
     im = im.reset_index(drop=True)
@@ -57,4 +57,4 @@ def phragmen(
         t_n = output.head(1).to_dict(orient="records")[0]
         W.append(t_n)
 
-    return W
+    return pd.DataFrame(W).rename(columns={"t*": "value"}).sort_values("value", ascending=False)

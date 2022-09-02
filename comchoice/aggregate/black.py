@@ -4,7 +4,6 @@ import pandas as pd
 from comchoice.aggregate.__default_parameters import transform_kws
 from comchoice.aggregate.borda import borda
 from comchoice.aggregate.condorcet import condorcet
-from comchoice.preprocessing.transform import transform
 
 
 def black(

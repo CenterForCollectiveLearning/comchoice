@@ -34,8 +34,6 @@ def bradley_terry(
     Bradley, Ralph Allan; Terry, Milton E. (1952). "Rank Analysis of Incomplete Block Designs: I. The Method of Paired Comparisons". Biometrika. 39 (3/4): 324–345. doi:10.2307/2334029. JSTOR 2334029.
     """
 
-    # self.fit()  # Creates custom columns into the dataset
-
     m = pairwise_matrix(
         df,
         alternative=alternative,

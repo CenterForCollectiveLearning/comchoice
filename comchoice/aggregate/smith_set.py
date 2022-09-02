@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 
+from comchoice.aggregate.__default_parameters import transform_kws
 from comchoice.aggregate.pairwise_matrix import pairwise_matrix
 
 
@@ -10,7 +11,8 @@ def smith_set(
     ballot="ballot",
     delimiter=">",
     voter="voter",
-    voters="voters"
+    voters="voters",
+    transform_kws=transform_kws
 ) -> list:
     """Smith Set.
 
@@ -30,7 +32,8 @@ def smith_set(
         ballot=ballot,
         delimiter=delimiter,
         voter=voter,
-        voters=voters
+        voters=voters,
+        transform_kws=transform_kws
     )
     __index = m.sum(axis="columns").sort_values(ascending=False).index
 
