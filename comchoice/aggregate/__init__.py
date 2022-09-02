@@ -5,6 +5,8 @@ from .baldwin import baldwin
 from .black import black
 from .borda import borda
 from .bradley_terry import bradley_terry
+from .bucklin_judgment import bucklin_judgment
+from .central_judgment import central_judgment
 from .condorcet import condorcet
 from .coombs import coombs
 from .copeland import copeland
@@ -20,6 +22,7 @@ from .irv import irv
 from .judgment import judgment
 from .k_approval import k_approval
 from .kemeny_young import kemeny_young
+from .majority_judgment import majority_judgment
 from .minimax import minimax
 from .nanson import nanson
 from .nanson_baldwin import nanson_baldwin
@@ -35,4 +38,6 @@ from .score import score
 from .simpson import simpson
 from .smith_set import smith_set
 from .tideman import tideman
+from .typical_judgment import typical_judgment
+from .usual_judgment import usual_judgment
 from .win_rate import win_rate

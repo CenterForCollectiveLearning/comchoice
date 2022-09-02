@@ -4,7 +4,7 @@ from comchoice.aggregate.__default_parameters import transform_kws
 from comchoice.aggregate.judgment import judgment
 
 
-def majority_judgment(
+def central_judgment(
     df,
     alternative="alternative",
     ballot="rank",
@@ -22,7 +22,7 @@ def majority_judgment(
         ballot=ballot,
         delimiter=delimiter,
         dtype=dtype,
-        method="majority",
+        method="central",
         ratings=ratings,
         show_rank=show_rank,
         transform_kws=transform_kws,
