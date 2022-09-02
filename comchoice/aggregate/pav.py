@@ -7,7 +7,7 @@ def pav(
     df,
     delimiter=",",
     n_seats=2,
-    alternatives="alternatives",
+    ballot="ballot",
     voters="voters"
 ) -> pd.DataFrame:
     return approval(
@@ -15,6 +15,6 @@ def pav(
         delimiter=delimiter,
         method="proportional",
         n_seats=n_seats,
-        alternatives=alternatives,
+        ballot=ballot,
         voters=voters
     )

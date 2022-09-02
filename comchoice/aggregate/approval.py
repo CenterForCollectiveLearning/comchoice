@@ -1,4 +1,5 @@
 import pandas as pd
+
 from itertools import combinations
 
 
@@ -7,20 +8,22 @@ def approval(
     delimiter=",",
     method="proportional",
     n_seats=2,
-    alternatives="alternatives",
+    ballot="ballot",
     voters="voters"
 ):
+    df = df.copy()
+
     def harmonic(n):
         if n == 0:
             return 0
         return 1 + sum([1 / i for i in range(2, n + 1)])
 
-    df[alternatives] = df[alternatives].str.split(delimiter)
+    df[ballot] = df[ballot].str.split(delimiter)
 
     output = []
-    for seats in combinations(df[alternatives].explode().unique(), n_seats):
+    for seats in combinations(df[ballot].explode().unique(), n_seats):
         for i, tmp in df.iterrows():
-            n_items = len(set(tmp[alternatives]) & set(seats))
+            n_items = len(set(tmp[ballot]) & set(seats))
 
             if method == "classic":
                 coef = 1  # TODO
@@ -30,13 +33,17 @@ def approval(
 
             elif method == "satisfaction":
                 coef = n_items / \
-                    len(set(tmp[alternatives])) if n_items > 0 else 0
+                    len(set(tmp[ballot])) if n_items > 0 else 0
                 if coef > 1:
                     coef = 1
 
             output.append({
-                alternatives: seats,
+                ballot: seats,
                 "value": coef * tmp[voters]
             })
 
-    return pd.DataFrame(output).groupby(alternatives).agg({"value": "sum"}).reset_index()
+    tmp = pd.DataFrame(output).groupby(
+        ballot).agg({"value": "sum"}).reset_index()
+    tmp = tmp.sort_values("value", ascending=False)
+
+    return tmp
