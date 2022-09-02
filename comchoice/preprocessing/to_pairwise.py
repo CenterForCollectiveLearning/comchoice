@@ -60,7 +60,9 @@ def to_pairwise(
             lambda x: list(combinations(x, 2)))
         df = df.explode(ballot)
 
-        df[alternative_a], df[alternative_b] = df[ballot].str
+        df[alternative_a] = df[ballot].apply(lambda x: x[0])
+        df[alternative_b] = df[ballot].apply(lambda x: x[1])
+
         df[selected] = df[alternative_a]
 
         return df[[voter, alternative_a, alternative_b, selected]]

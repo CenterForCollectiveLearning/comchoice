@@ -1,8 +1,10 @@
 import numpy as np
 import pandas as pd
 
-from comchoice.aggregate.pairwise_matrix import pairwise_matrix
+from comchoice.aggregate.__default_parameters import transform_kws
 from comchoice.aggregate.__set_rank import __set_rank
+from comchoice.aggregate.pairwise_matrix import pairwise_matrix
+from comchoice.preprocessing.transform import transform
 
 
 def bradley_terry(
@@ -14,6 +16,7 @@ def bradley_terry(
     alternative_b="alternative_b",
     iterations: int = 1,
     show_rank=True,
+    transform_kws=transform_kws,
     voter="voter",
     voters="voters"
 ) -> pd.DataFrame:
@@ -33,6 +36,17 @@ def bradley_terry(
     ----------
     Bradley, Ralph Allan; Terry, Milton E. (1952). "Rank Analysis of Incomplete Block Designs: I. The Method of Paired Comparisons". Biometrika. 39 (3/4): 324–345. doi:10.2307/2334029. JSTOR 2334029.
     """
+    df = df.copy()
+    df = transform(
+        df,
+        **{
+            **transform_kws,
+            **dict(
+                dtype_to="ballot_extended",
+                unique_id=True
+            )
+        }
+    )
 
     m = pairwise_matrix(
         df,
@@ -40,12 +54,13 @@ def bradley_terry(
         ballot=ballot,
         delimiter=delimiter,
         voter=voter,
-        voters=voters
+        voters=voters,
+        set_transform=False
     )
 
     m = m.values
 
-    ids = set(df[alternative_a]) | set(df[alternative_b])
+    ids = set(df[alternative])
     N = len(ids)
 
     p = np.ones(N)

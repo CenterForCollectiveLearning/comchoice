@@ -14,24 +14,26 @@ def pairwise_matrix(
     voter="voter",
     voters="voters",
     return_alternatives=False,
+    set_transform=True,
     transform_kws=transform_kws
 ):
     output = []
 
     cols = ["_winner", "_loser"]
 
-    df = transform(
-        df.copy(),
-        **{
-            **transform_kws,
-            **dict(
-                ballot=ballot,
-                delimiter=delimiter,
-                voters=voters,
-                unique_id=True
-            )
-        }
-    )
+    if set_transform:
+        df = transform(
+            df.copy(),
+            **{
+                **transform_kws,
+                **dict(
+                    ballot=ballot,
+                    delimiter=delimiter,
+                    voters=voters,
+                    unique_id=True
+                )
+            }
+        )
     if voters in list(df):
         df = df.rename(columns={"_id": "voter"})
     else:

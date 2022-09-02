@@ -68,7 +68,7 @@ def transform(
         return df
 
     elif dtype_from in ["ballot", "score"] and dtype_to == "pairwise":
-        dtype_a, dtype_b = dtype_from.split("_")
+        # dtype_a, dtype_b = dtype_from.split("_")
         return to_pairwise(
             df,
             alternative=alternative,
@@ -81,6 +81,6 @@ def transform(
             value=value,
             voter=voter,
             voters=voters,
-            dtype=dtype_a,
+            dtype=dtype_from,
             verbose=True
         )

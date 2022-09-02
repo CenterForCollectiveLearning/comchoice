@@ -2,8 +2,11 @@ import numpy as np
 import pandas as pd
 from scipy import linalg
 
-from comchoice.aggregate.__set_rank import __set_rank
+from comchoice.aggregate.__default_parameters import transform_kws
 from comchoice.aggregate.__set_card_id import __set_card_id
+from comchoice.aggregate.__set_rank import __set_rank
+from comchoice.aggregate.pairwise_matrix import pairwise_matrix
+from comchoice.preprocessing.transform import transform
 
 
 def ahp(
@@ -11,11 +14,12 @@ def ahp(
     ppal_eigval="approximation",
     criteria="criteria",
     delimiter=">",
-    origin="pairwise",
+    origin="ballot",
     alternative="alternative",
     alternative_a="alternative_a",
     alternative_b="alternative_b",
     selected="selected",
+    transform_kws=transform_kws,
     show_rank=True,
     **kws
 ) -> pd.DataFrame:
@@ -48,17 +52,31 @@ def ahp(
         Aggregation of preferences using AHP.
     """
 
-    if "card_id" not in list(df):
-        df = __set_card_id(
+    df = df.copy()
+
+    if origin != "pairwise":
+
+        df = transform(
             df.copy(),
-            alternative_a=alternative_a,
-            alternative_b=alternative_b,
-            selected=selected,
-            concat="_"
+            **{
+                **transform_kws,
+                **dict(
+                    dtype_to="pairwise"
+                )
+            }
         )
 
-    alternative_a_sorted = f"{alternative_a}_sorted" if origin == "pairwise" else alternative_a
-    alternative_b_sorted = f"{alternative_b}_sorted" if origin == "pairwise" else alternative_b
+        if "card_id" not in list(df):
+            df = __set_card_id(
+                df.copy(),
+                alternative_a=alternative_a,
+                alternative_b=alternative_b,
+                selected=selected,
+                concat="_"
+            )
+
+    alternative_a_sorted = f"{alternative_a}_sorted"
+    alternative_b_sorted = f"{alternative_b}_sorted"
 
     if selected in list(df):
         df["weight_a"] = np.where(

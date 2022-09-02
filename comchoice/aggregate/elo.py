@@ -1,5 +1,9 @@
 import pandas as pd
 
+from comchoice.aggregate.__default_parameters import transform_kws
+from comchoice.aggregate.__set_rank import __set_rank
+from comchoice.preprocessing.transform import transform
+
 
 def elo(
     df,
@@ -8,7 +12,10 @@ def elo(
     alternative="alternative",
     selected="selected",
     rating: int = 400,
-    K: int = 10
+    K: int = 10,
+    transform_kws=transform_kws,
+    random_state=None,
+    show_rank=True
 ):
     """Elo score.
 
@@ -22,6 +29,20 @@ def elo(
         The K-factor estimates the score that a player can win in a game.
 
     """
+
+    df = df.copy()
+    if random_state:
+        df = df.sample(frac=1, random_state=random_state)
+
+    df = transform(
+        df.copy(),
+        **{
+            **transform_kws,
+            **dict(
+                dtype_to="pairwise"
+            )
+        }
+    )
 
     alternatives = set(df[alternative_a]) | set(df[alternative_b])
 
@@ -49,7 +70,12 @@ def elo(
         ELO_RATING[item_a] = r_a + K * (s_a - e_a)
         ELO_RATING[item_b] = r_b + K * (s_b - e_b)
 
-    return pd.DataFrame(
+    tmp = pd.DataFrame(
         ELO_RATING.items(),
         columns=[alternative, "value"]
     )
+
+    if show_rank:
+        tmp = __set_rank(tmp)
+
+    return tmp
