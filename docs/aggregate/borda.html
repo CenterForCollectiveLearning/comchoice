@@ -29,6 +29,7 @@
 <pre><code class="python">import pandas as pd
 
 from comchoice.aggregate.__aggregate import __aggregate
+from comchoice.aggregate.__default_parameters import transform_kws
 from comchoice.aggregate.__set_rank import __set_rank
 from comchoice.aggregate.__set_voters import __set_voters
 from comchoice.preprocessing.transform import transform
@@ -42,20 +43,7 @@ def borda(
     score=&#34;original&#34;,
     show_rank=True,
     voters=&#34;voters&#34;,
-    transform_kws=dict(
-        dtype_from=&#34;ballot&#34;,
-        dtype_to=&#34;ballot_extended&#34;,
-        delimiter_ties=&#34;=&#34;,
-        delimiter_score=&#34;=&#34;,
-        alternative_a=&#34;alternative_a&#34;,
-        alternative_b=&#34;alternative_b&#34;,
-        selected=&#34;selected&#34;,
-        value=&#34;value&#34;,
-        voter=&#34;voter&#34;,
-        rmv=[],
-        unique_id=False,
-        ascending=False
-    ),
+    transform_kws=transform_kws,
     **kws
 ) -&gt; pd.DataFrame:
     &#34;&#34;&#34;Borda Count (1784).
@@ -100,9 +88,8 @@ def borda(
     Borda, J. D. (1784). Mémoire sur les élections au scrutin. Histoire de l&#39;Academie
     Royale des Sciences pour 1781 (Paris, 1784).
     &#34;&#34;&#34;
-
     df = transform(
-        df,
+        df.copy(),
         ballot=ballot,
         delimiter=delimiter,
         voters=voters,
@@ -136,7 +123,7 @@ def borda(
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="comchoice.aggregate.borda.borda"><code class="name flex">
-<span>def <span class="ident">borda</span></span>(<span>df, alternative='alternative', delimiter=&#x27;&gt;&#x27;, ballot='ballot', score='original', show_rank=True, voters='voters', transform_kws={'dtype_from': 'ballot', 'dtype_to': 'ballot_extended', 'delimiter_ties': '=', 'delimiter_score': '=', 'alternative_a': 'alternative_a', 'alternative_b': 'alternative_b', 'selected': 'selected', 'value': 'value', 'voter': 'voter', 'rmv': [], 'unique_id': False, 'ascending': False}, **kws) ‑> pandas.core.frame.DataFrame</span>
+<span>def <span class="ident">borda</span></span>(<span>df, alternative='alternative', delimiter=&#x27;&gt;&#x27;, ballot='ballot', score='original', show_rank=True, voters='voters', transform_kws={&#x27;dtype_from&#x27;: &#x27;ballot&#x27;, &#x27;dtype_to&#x27;: &#x27;ballot_extended&#x27;, &#x27;delimiter&#x27;: &#x27;&gt;&#x27;, &#x27;delimiter_ties&#x27;: &#x27;=&#x27;, &#x27;delimiter_score&#x27;: &#x27;=&#x27;, &#x27;alternative_a&#x27;: &#x27;alternative_a&#x27;, &#x27;alternative_b&#x27;: &#x27;alternative_b&#x27;, &#x27;selected&#x27;: &#x27;selected&#x27;, &#x27;value&#x27;: &#x27;value&#x27;, &#x27;voter&#x27;: &#x27;voter&#x27;, &#x27;rmv&#x27;: [], &#x27;unique_id&#x27;: False, &#x27;ascending&#x27;: False}, **kws) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Borda Count (1784).</p>
@@ -188,20 +175,7 @@ Royale des Sciences pour 1781 (Paris, 1784).</p></div>
     score=&#34;original&#34;,
     show_rank=True,
     voters=&#34;voters&#34;,
-    transform_kws=dict(
-        dtype_from=&#34;ballot&#34;,
-        dtype_to=&#34;ballot_extended&#34;,
-        delimiter_ties=&#34;=&#34;,
-        delimiter_score=&#34;=&#34;,
-        alternative_a=&#34;alternative_a&#34;,
-        alternative_b=&#34;alternative_b&#34;,
-        selected=&#34;selected&#34;,
-        value=&#34;value&#34;,
-        voter=&#34;voter&#34;,
-        rmv=[],
-        unique_id=False,
-        ascending=False
-    ),
+    transform_kws=transform_kws,
     **kws
 ) -&gt; pd.DataFrame:
     &#34;&#34;&#34;Borda Count (1784).
@@ -246,9 +220,8 @@ Royale des Sciences pour 1781 (Paris, 1784).</p></div>
     Borda, J. D. (1784). Mémoire sur les élections au scrutin. Histoire de l&#39;Academie
     Royale des Sciences pour 1781 (Paris, 1784).
     &#34;&#34;&#34;
-
     df = transform(
-        df,
+        df.copy(),
         ballot=ballot,
         delimiter=delimiter,
         voters=voters,

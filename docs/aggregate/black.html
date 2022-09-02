@@ -29,6 +29,7 @@
 <pre><code class="python">import pandas as pd
 
 
+from comchoice.aggregate.__default_parameters import transform_kws
 from comchoice.aggregate.borda import borda
 from comchoice.aggregate.condorcet import condorcet
 
@@ -39,7 +40,8 @@ def black(
     ballot=&#34;ballot&#34;,
     delimiter=&#34;&gt;&#34;,
     voter=&#34;voter&#34;,
-    voters=&#34;voters&#34;
+    voters=&#34;voters&#34;,
+    transform_kws=transform_kws
 ) -&gt; pd.DataFrame:
     &#34;&#34;&#34;Black procedure (1958).
 
@@ -63,7 +65,8 @@ def black(
         delimiter=delimiter,
         voter=voter,
         voters=voters,
-        weak=False
+        weak=False,
+        transform_kws=transform_kws
     )
     return r if r.shape[0] &gt; 0 else borda(
         df,
@@ -73,7 +76,8 @@ def black(
         score=&#34;original&#34;,
         show_rank=True,
         voter=voter,
-        voters=voters
+        voters=voters,
+        transform_kws=transform_kws
     ).head(1)</code></pre>
 </details>
 </section>
@@ -85,7 +89,7 @@ def black(
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="comchoice.aggregate.black.black"><code class="name flex">
-<span>def <span class="ident">black</span></span>(<span>df, alternative='alternative', ballot='ballot', delimiter=&#x27;&gt;&#x27;, voter='voter', voters='voters') ‑> pandas.core.frame.DataFrame</span>
+<span>def <span class="ident">black</span></span>(<span>df, alternative='alternative', ballot='ballot', delimiter=&#x27;&gt;&#x27;, voter='voter', voters='voters', transform_kws={&#x27;dtype_from&#x27;: &#x27;ballot&#x27;, &#x27;dtype_to&#x27;: &#x27;ballot_extended&#x27;, &#x27;delimiter&#x27;: &#x27;&gt;&#x27;, &#x27;delimiter_ties&#x27;: &#x27;=&#x27;, &#x27;delimiter_score&#x27;: &#x27;=&#x27;, &#x27;alternative_a&#x27;: &#x27;alternative_a&#x27;, &#x27;alternative_b&#x27;: &#x27;alternative_b&#x27;, &#x27;selected&#x27;: &#x27;selected&#x27;, &#x27;value&#x27;: &#x27;value&#x27;, &#x27;voter&#x27;: &#x27;voter&#x27;, &#x27;rmv&#x27;: [], &#x27;unique_id&#x27;: False, &#x27;ascending&#x27;: False}) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Black procedure (1958).</p>
@@ -109,7 +113,8 @@ using Borda count is the winner.</p>
     ballot=&#34;ballot&#34;,
     delimiter=&#34;&gt;&#34;,
     voter=&#34;voter&#34;,
-    voters=&#34;voters&#34;
+    voters=&#34;voters&#34;,
+    transform_kws=transform_kws
 ) -&gt; pd.DataFrame:
     &#34;&#34;&#34;Black procedure (1958).
 
@@ -133,7 +138,8 @@ using Borda count is the winner.</p>
         delimiter=delimiter,
         voter=voter,
         voters=voters,
-        weak=False
+        weak=False,
+        transform_kws=transform_kws
     )
     return r if r.shape[0] &gt; 0 else borda(
         df,
@@ -143,7 +149,8 @@ using Borda count is the winner.</p>
         score=&#34;original&#34;,
         show_rank=True,
         voter=voter,
-        voters=voters
+        voters=voters,
+        transform_kws=transform_kws
     ).head(1)</code></pre>
 </details>
 </dd>

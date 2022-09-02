@@ -27,6 +27,7 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">import pandas as pd
+
 from itertools import combinations
 
 
@@ -35,20 +36,22 @@ def approval(
     delimiter=&#34;,&#34;,
     method=&#34;proportional&#34;,
     n_seats=2,
-    alternatives=&#34;alternatives&#34;,
+    ballot=&#34;ballot&#34;,
     voters=&#34;voters&#34;
 ):
+    df = df.copy()
+
     def harmonic(n):
         if n == 0:
             return 0
         return 1 + sum([1 / i for i in range(2, n + 1)])
 
-    df[alternatives] = df[alternatives].str.split(delimiter)
+    df[ballot] = df[ballot].str.split(delimiter)
 
     output = []
-    for seats in combinations(df[alternatives].explode().unique(), n_seats):
+    for seats in combinations(df[ballot].explode().unique(), n_seats):
         for i, tmp in df.iterrows():
-            n_items = len(set(tmp[alternatives]) &amp; set(seats))
+            n_items = len(set(tmp[ballot]) &amp; set(seats))
 
             if method == &#34;classic&#34;:
                 coef = 1  # TODO
@@ -58,16 +61,20 @@ def approval(
 
             elif method == &#34;satisfaction&#34;:
                 coef = n_items / \
-                    len(set(tmp[alternatives])) if n_items &gt; 0 else 0
+                    len(set(tmp[ballot])) if n_items &gt; 0 else 0
                 if coef &gt; 1:
                     coef = 1
 
             output.append({
-                alternatives: seats,
+                ballot: seats,
                 &#34;value&#34;: coef * tmp[voters]
             })
 
-    return pd.DataFrame(output).groupby(alternatives).agg({&#34;value&#34;: &#34;sum&#34;}).reset_index()</code></pre>
+    tmp = pd.DataFrame(output).groupby(
+        ballot).agg({&#34;value&#34;: &#34;sum&#34;}).reset_index()
+    tmp = tmp.sort_values(&#34;value&#34;, ascending=False)
+
+    return tmp</code></pre>
 </details>
 </section>
 <section>
@@ -78,7 +85,7 @@ def approval(
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="comchoice.aggregate.approval.approval"><code class="name flex">
-<span>def <span class="ident">approval</span></span>(<span>df, delimiter=',', method='proportional', n_seats=2, alternatives='alternatives', voters='voters')</span>
+<span>def <span class="ident">approval</span></span>(<span>df, delimiter=',', method='proportional', n_seats=2, ballot='ballot', voters='voters')</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -91,20 +98,22 @@ def approval(
     delimiter=&#34;,&#34;,
     method=&#34;proportional&#34;,
     n_seats=2,
-    alternatives=&#34;alternatives&#34;,
+    ballot=&#34;ballot&#34;,
     voters=&#34;voters&#34;
 ):
+    df = df.copy()
+
     def harmonic(n):
         if n == 0:
             return 0
         return 1 + sum([1 / i for i in range(2, n + 1)])
 
-    df[alternatives] = df[alternatives].str.split(delimiter)
+    df[ballot] = df[ballot].str.split(delimiter)
 
     output = []
-    for seats in combinations(df[alternatives].explode().unique(), n_seats):
+    for seats in combinations(df[ballot].explode().unique(), n_seats):
         for i, tmp in df.iterrows():
-            n_items = len(set(tmp[alternatives]) &amp; set(seats))
+            n_items = len(set(tmp[ballot]) &amp; set(seats))
 
             if method == &#34;classic&#34;:
                 coef = 1  # TODO
@@ -114,16 +123,20 @@ def approval(
 
             elif method == &#34;satisfaction&#34;:
                 coef = n_items / \
-                    len(set(tmp[alternatives])) if n_items &gt; 0 else 0
+                    len(set(tmp[ballot])) if n_items &gt; 0 else 0
                 if coef &gt; 1:
                     coef = 1
 
             output.append({
-                alternatives: seats,
+                ballot: seats,
                 &#34;value&#34;: coef * tmp[voters]
             })
 
-    return pd.DataFrame(output).groupby(alternatives).agg({&#34;value&#34;: &#34;sum&#34;}).reset_index()</code></pre>
+    tmp = pd.DataFrame(output).groupby(
+        ballot).agg({&#34;value&#34;: &#34;sum&#34;}).reset_index()
+    tmp = tmp.sort_values(&#34;value&#34;, ascending=False)
+
+    return tmp</code></pre>
 </details>
 </dd>
 </dl>

@@ -29,6 +29,7 @@
 <pre><code class="python">import numpy as np
 import pandas as pd
 
+from comchoice.aggregate.__default_parameters import transform_kws
 from comchoice.aggregate.pairwise_matrix import pairwise_matrix
 
 
@@ -38,7 +39,8 @@ def smith_set(
     ballot=&#34;ballot&#34;,
     delimiter=&#34;&gt;&#34;,
     voter=&#34;voter&#34;,
-    voters=&#34;voters&#34;
+    voters=&#34;voters&#34;,
+    transform_kws=transform_kws
 ) -&gt; list:
     &#34;&#34;&#34;Smith Set.
 
@@ -58,7 +60,8 @@ def smith_set(
         ballot=ballot,
         delimiter=delimiter,
         voter=voter,
-        voters=voters
+        voters=voters,
+        transform_kws=transform_kws
     )
     __index = m.sum(axis=&#34;columns&#34;).sort_values(ascending=False).index
 
@@ -96,7 +99,7 @@ def smith_set(
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="comchoice.aggregate.smith_set.smith_set"><code class="name flex">
-<span>def <span class="ident">smith_set</span></span>(<span>df, alternative='alternative', ballot='ballot', delimiter=&#x27;&gt;&#x27;, voter='voter', voters='voters') ‑> list</span>
+<span>def <span class="ident">smith_set</span></span>(<span>df, alternative='alternative', ballot='ballot', delimiter=&#x27;&gt;&#x27;, voter='voter', voters='voters', transform_kws={&#x27;dtype_from&#x27;: &#x27;ballot&#x27;, &#x27;dtype_to&#x27;: &#x27;ballot_extended&#x27;, &#x27;delimiter&#x27;: &#x27;&gt;&#x27;, &#x27;delimiter_ties&#x27;: &#x27;=&#x27;, &#x27;delimiter_score&#x27;: &#x27;=&#x27;, &#x27;alternative_a&#x27;: &#x27;alternative_a&#x27;, &#x27;alternative_b&#x27;: &#x27;alternative_b&#x27;, &#x27;selected&#x27;: &#x27;selected&#x27;, &#x27;value&#x27;: &#x27;value&#x27;, &#x27;voter&#x27;: &#x27;voter&#x27;, &#x27;rmv&#x27;: [], &#x27;unique_id&#x27;: False, &#x27;ascending&#x27;: False}) ‑> list</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Smith Set.</p>
@@ -118,7 +121,8 @@ Each member defeats every alternative outside the set in a pairwise election.</p
     ballot=&#34;ballot&#34;,
     delimiter=&#34;&gt;&#34;,
     voter=&#34;voter&#34;,
-    voters=&#34;voters&#34;
+    voters=&#34;voters&#34;,
+    transform_kws=transform_kws
 ) -&gt; list:
     &#34;&#34;&#34;Smith Set.
 
@@ -138,7 +142,8 @@ Each member defeats every alternative outside the set in a pairwise election.</p
         ballot=ballot,
         delimiter=delimiter,
         voter=voter,
-        voters=voters
+        voters=voters,
+        transform_kws=transform_kws
     )
     __index = m.sum(axis=&#34;columns&#34;).sort_values(ascending=False).index
 

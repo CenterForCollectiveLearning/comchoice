@@ -30,61 +30,68 @@
 import pandas as pd
 
 from comchoice.aggregate.__aggregate import __aggregate
+from comchoice.aggregate.__default_parameters import transform_kws
 from comchoice.aggregate.__set_rank import __set_rank
-from comchoice.aggregate.__set_voters import __set_voters
-from comchoice.aggregate.__transform import __transform
+from comchoice.preprocessing.transform import transform
 
 
 def judgment(
     df,
     alternative=&#34;alternative&#34;,
-    column=&#34;rank&#34;,
+    ballot=&#34;ballot&#34;,
     delimiter=&#34;&gt;&#34;,
+    dtype=&#34;ballot&#34;,
     method=&#34;typical&#34;,
     ratings=None,
     show_rank=True,
-    source=&#34;rank&#34;,
-    transform_kws=dict(ballot=&#34;rank&#34;),
-    voter=&#34;voter&#34;,
+    transform_kws=transform_kws,
     voters=&#34;voters&#34;,
     e=0
 ):
+    df = df.copy()
+
     if voters in list(df):
-        df = __transform(
-            df,
-            delimiter=delimiter,
-            unique_id=True,
-            **transform_kws
+        df = transform(
+            df.copy(),
+            **{
+                **transform_kws,
+                **dict(
+                    ballot=ballot,
+                    delimiter=delimiter,
+                    voters=voters,
+                    unique_id=True
+                )
+            }
         )
     else:
         df[voters] = 1
 
     ascending = True
-    if source == &#34;rank&#34;:
+    if dtype == &#34;ballot&#34;:
         jdgm = []
         for _alternative, tmp in df.groupby(&#34;_id&#34;):
             output = []
             for i, items in tmp.iterrows():
-                output += [items[column]] * items[voters]
+                output += [items[ballot]] * items[voters]
 
             jdgm.append([_alternative, np.median(output)])
 
         jdgm = pd.DataFrame(jdgm, columns=[&#34;_id&#34;, &#34;alpha&#34;])
         jdgm = pd.merge(df, jdgm, on=&#34;_id&#34;)
 
-    elif source == &#34;score&#34;:
-        jdgm = __aggregate(df, groupby=[alternative], aggregation=&#34;median&#34;, column=column)\
-            .rename(columns={column: &#34;alpha&#34;})
+    elif dtype == &#34;score&#34;:
+        jdgm = __aggregate(df, groupby=[alternative], aggregation=&#34;median&#34;, column=ballot)\
+            .rename(columns={ballot: &#34;alpha&#34;})
         jdgm = pd.merge(df, jdgm, on=alternative)
 
         ascending = False
 
-    if column == &#34;score&#34; and ratings:
-        jdgm[column] = jdgm[column].replace(ratings)
+    if dtype == &#34;score&#34; and ratings:
+        jdgm[ballot] = jdgm[ballot].replace(ratings)
 
-    jdgm[&#34;p&#34; if ascending else &#34;q&#34;] = jdgm[column] &lt; np.floor(
+    jdgm[&#34;p&#34; if ascending else &#34;q&#34;] = jdgm[ballot] &lt; np.floor(
         jdgm[&#34;alpha&#34;])  # Rate higher than median
-    jdgm[&#34;q&#34; if ascending else &#34;p&#34;] = jdgm[column] &gt; np.floor(
+    jdgm[&#34;q&#34; if ascending else &#34;p&#34;] = jdgm[ballot] &gt; np.floor(
         jdgm[&#34;alpha&#34;])  # Rate lower than median
 
     for col in [&#34;p&#34;, &#34;q&#34;]:
@@ -125,7 +132,7 @@ def judgment(
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="comchoice.aggregate.judgment.judgment"><code class="name flex">
-<span>def <span class="ident">judgment</span></span>(<span>df, alternative='alternative', column='rank', delimiter=&#x27;&gt;&#x27;, method='typical', ratings=None, show_rank=True, source='rank', transform_kws={'ballot': 'rank'}, voter='voter', voters='voters', e=0)</span>
+<span>def <span class="ident">judgment</span></span>(<span>df, alternative='alternative', ballot='ballot', delimiter=&#x27;&gt;&#x27;, dtype='ballot', method='typical', ratings=None, show_rank=True, transform_kws={&#x27;dtype_from&#x27;: &#x27;ballot&#x27;, &#x27;dtype_to&#x27;: &#x27;ballot_extended&#x27;, &#x27;delimiter&#x27;: &#x27;&gt;&#x27;, &#x27;delimiter_ties&#x27;: &#x27;=&#x27;, &#x27;delimiter_score&#x27;: &#x27;=&#x27;, &#x27;alternative_a&#x27;: &#x27;alternative_a&#x27;, &#x27;alternative_b&#x27;: &#x27;alternative_b&#x27;, &#x27;selected&#x27;: &#x27;selected&#x27;, &#x27;value&#x27;: &#x27;value&#x27;, &#x27;voter&#x27;: &#x27;voter&#x27;, &#x27;rmv&#x27;: [], &#x27;unique_id&#x27;: False, &#x27;ascending&#x27;: False}, voters='voters', e=0)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -136,53 +143,60 @@ def judgment(
 <pre><code class="python">def judgment(
     df,
     alternative=&#34;alternative&#34;,
-    column=&#34;rank&#34;,
+    ballot=&#34;ballot&#34;,
     delimiter=&#34;&gt;&#34;,
+    dtype=&#34;ballot&#34;,
     method=&#34;typical&#34;,
     ratings=None,
     show_rank=True,
-    source=&#34;rank&#34;,
-    transform_kws=dict(ballot=&#34;rank&#34;),
-    voter=&#34;voter&#34;,
+    transform_kws=transform_kws,
     voters=&#34;voters&#34;,
     e=0
 ):
+    df = df.copy()
+
     if voters in list(df):
-        df = __transform(
-            df,
-            delimiter=delimiter,
-            unique_id=True,
-            **transform_kws
+        df = transform(
+            df.copy(),
+            **{
+                **transform_kws,
+                **dict(
+                    ballot=ballot,
+                    delimiter=delimiter,
+                    voters=voters,
+                    unique_id=True
+                )
+            }
         )
     else:
         df[voters] = 1
 
     ascending = True
-    if source == &#34;rank&#34;:
+    if dtype == &#34;ballot&#34;:
         jdgm = []
         for _alternative, tmp in df.groupby(&#34;_id&#34;):
             output = []
             for i, items in tmp.iterrows():
-                output += [items[column]] * items[voters]
+                output += [items[ballot]] * items[voters]
 
             jdgm.append([_alternative, np.median(output)])
 
         jdgm = pd.DataFrame(jdgm, columns=[&#34;_id&#34;, &#34;alpha&#34;])
         jdgm = pd.merge(df, jdgm, on=&#34;_id&#34;)
 
-    elif source == &#34;score&#34;:
-        jdgm = __aggregate(df, groupby=[alternative], aggregation=&#34;median&#34;, column=column)\
-            .rename(columns={column: &#34;alpha&#34;})
+    elif dtype == &#34;score&#34;:
+        jdgm = __aggregate(df, groupby=[alternative], aggregation=&#34;median&#34;, column=ballot)\
+            .rename(columns={ballot: &#34;alpha&#34;})
         jdgm = pd.merge(df, jdgm, on=alternative)
 
         ascending = False
 
-    if column == &#34;score&#34; and ratings:
-        jdgm[column] = jdgm[column].replace(ratings)
+    if dtype == &#34;score&#34; and ratings:
+        jdgm[ballot] = jdgm[ballot].replace(ratings)
 
-    jdgm[&#34;p&#34; if ascending else &#34;q&#34;] = jdgm[column] &lt; np.floor(
+    jdgm[&#34;p&#34; if ascending else &#34;q&#34;] = jdgm[ballot] &lt; np.floor(
         jdgm[&#34;alpha&#34;])  # Rate higher than median
-    jdgm[&#34;q&#34; if ascending else &#34;p&#34;] = jdgm[column] &gt; np.floor(
+    jdgm[&#34;q&#34; if ascending else &#34;p&#34;] = jdgm[ballot] &gt; np.floor(
         jdgm[&#34;alpha&#34;])  # Rate lower than median
 
     for col in [&#34;p&#34;, &#34;q&#34;]:

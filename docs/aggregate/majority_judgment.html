@@ -28,9 +28,35 @@
 </summary>
 <pre><code class="python">import pandas as pd
 
+from comchoice.aggregate.__default_parameters import transform_kws
+from comchoice.aggregate.judgment import judgment
 
-def majority_judgment():
-    return</code></pre>
+
+def majority_judgment(
+    df,
+    alternative=&#34;alternative&#34;,
+    ballot=&#34;rank&#34;,
+    delimiter=&#34;&gt;&#34;,
+    dtype=&#34;ballot&#34;,
+    ratings=None,
+    show_rank=True,
+    transform_kws=transform_kws,
+    voters=&#34;voters&#34;,
+    e=0
+):
+    return judgment(
+        df,
+        alternative=alternative,
+        ballot=ballot,
+        delimiter=delimiter,
+        dtype=dtype,
+        method=&#34;majority&#34;,
+        ratings=ratings,
+        show_rank=show_rank,
+        transform_kws=transform_kws,
+        voters=voters,
+        e=e
+    )</code></pre>
 </details>
 </section>
 <section>
@@ -41,7 +67,7 @@ def majority_judgment():
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="comchoice.aggregate.majority_judgment.majority_judgment"><code class="name flex">
-<span>def <span class="ident">majority_judgment</span></span>(<span>)</span>
+<span>def <span class="ident">majority_judgment</span></span>(<span>df, alternative='alternative', ballot='rank', delimiter=&#x27;&gt;&#x27;, dtype='ballot', ratings=None, show_rank=True, transform_kws={&#x27;dtype_from&#x27;: &#x27;ballot&#x27;, &#x27;dtype_to&#x27;: &#x27;ballot_extended&#x27;, &#x27;delimiter&#x27;: &#x27;&gt;&#x27;, &#x27;delimiter_ties&#x27;: &#x27;=&#x27;, &#x27;delimiter_score&#x27;: &#x27;=&#x27;, &#x27;alternative_a&#x27;: &#x27;alternative_a&#x27;, &#x27;alternative_b&#x27;: &#x27;alternative_b&#x27;, &#x27;selected&#x27;: &#x27;selected&#x27;, &#x27;value&#x27;: &#x27;value&#x27;, &#x27;voter&#x27;: &#x27;voter&#x27;, &#x27;rmv&#x27;: [], &#x27;unique_id&#x27;: False, &#x27;ascending&#x27;: False}, voters='voters', e=0)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -49,8 +75,31 @@ def majority_judgment():
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def majority_judgment():
-    return</code></pre>
+<pre><code class="python">def majority_judgment(
+    df,
+    alternative=&#34;alternative&#34;,
+    ballot=&#34;rank&#34;,
+    delimiter=&#34;&gt;&#34;,
+    dtype=&#34;ballot&#34;,
+    ratings=None,
+    show_rank=True,
+    transform_kws=transform_kws,
+    voters=&#34;voters&#34;,
+    e=0
+):
+    return judgment(
+        df,
+        alternative=alternative,
+        ballot=ballot,
+        delimiter=delimiter,
+        dtype=dtype,
+        method=&#34;majority&#34;,
+        ratings=ratings,
+        show_rank=show_rank,
+        transform_kws=transform_kws,
+        voters=voters,
+        e=e
+    )</code></pre>
 </details>
 </dd>
 </dl>

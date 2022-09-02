@@ -28,9 +28,10 @@
 </summary>
 <pre><code class="python">import pandas as pd
 
-from comchoice.aggregate.__transform import __transform
+from comchoice.aggregate.__default_parameters import transform_kws
 from comchoice.aggregate.__set_voters import __set_voters
 from comchoice.aggregate.__aggregate import __aggregate
+from comchoice.preprocessing.transform import transform
 
 
 def irv(
@@ -38,7 +39,8 @@ def irv(
     alternative=&#34;alternative&#34;,
     delimiter=&#34;&gt;&#34;,
     ballot=&#34;ballot&#34;,
-    voters=&#34;voters&#34;
+    voters=&#34;voters&#34;,
+    transform_kws=transform_kws
 ) -&gt; pd.DataFrame:
     &#34;&#34;&#34;Hare Rule (also called as Instant Runoff IRV, Ranked-Choice Voting, and Alternative Vote)
 
@@ -52,7 +54,18 @@ def irv(
         The election&#39;s winner using IRV.
     &#34;&#34;&#34;
 
-    df = __transform(df, delimiter=delimiter, unique_id=True)
+    df = transform(
+        df.copy(),
+        ballot=ballot,
+        delimiter=delimiter,
+        voters=voters,
+        **{
+            **transform_kws,
+            **dict(
+                unique_id=True
+            )
+        }
+    )
 
     def __plurality(df):
         df = df[df[&#34;rank&#34;] == 1].copy()
@@ -69,7 +82,7 @@ def irv(
         rmv = tmp.loc[tmp.shape[0] - 1, alternative]
 
         df = df[df[alternative] != rmv].copy()
-        df = df.sort_values([&#34;_id&#34;, rank], ascending=[True, True])
+        df = df.sort_values([&#34;_id&#34;, ballot], ascending=[True, True])
         df[ballot] = df.groupby(&#34;_id&#34;).cumcount() + 1
 
         tmp = __plurality(df.copy())
@@ -88,7 +101,7 @@ def irv(
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="comchoice.aggregate.irv.irv"><code class="name flex">
-<span>def <span class="ident">irv</span></span>(<span>df, alternative='alternative', delimiter=&#x27;&gt;&#x27;, ballot='ballot', voters='voters') ‑> pandas.core.frame.DataFrame</span>
+<span>def <span class="ident">irv</span></span>(<span>df, alternative='alternative', delimiter=&#x27;&gt;&#x27;, ballot='ballot', voters='voters', transform_kws={&#x27;dtype_from&#x27;: &#x27;ballot&#x27;, &#x27;dtype_to&#x27;: &#x27;ballot_extended&#x27;, &#x27;delimiter&#x27;: &#x27;&gt;&#x27;, &#x27;delimiter_ties&#x27;: &#x27;=&#x27;, &#x27;delimiter_score&#x27;: &#x27;=&#x27;, &#x27;alternative_a&#x27;: &#x27;alternative_a&#x27;, &#x27;alternative_b&#x27;: &#x27;alternative_b&#x27;, &#x27;selected&#x27;: &#x27;selected&#x27;, &#x27;value&#x27;: &#x27;value&#x27;, &#x27;voter&#x27;: &#x27;voter&#x27;, &#x27;rmv&#x27;: [], &#x27;unique_id&#x27;: False, &#x27;ascending&#x27;: False}) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Hare Rule (also called as Instant Runoff IRV, Ranked-Choice Voting, and Alternative Vote)</p>
@@ -109,7 +122,8 @@ until to have a majority winner.</p>
     alternative=&#34;alternative&#34;,
     delimiter=&#34;&gt;&#34;,
     ballot=&#34;ballot&#34;,
-    voters=&#34;voters&#34;
+    voters=&#34;voters&#34;,
+    transform_kws=transform_kws
 ) -&gt; pd.DataFrame:
     &#34;&#34;&#34;Hare Rule (also called as Instant Runoff IRV, Ranked-Choice Voting, and Alternative Vote)
 
@@ -123,7 +137,18 @@ until to have a majority winner.</p>
         The election&#39;s winner using IRV.
     &#34;&#34;&#34;
 
-    df = __transform(df, delimiter=delimiter, unique_id=True)
+    df = transform(
+        df.copy(),
+        ballot=ballot,
+        delimiter=delimiter,
+        voters=voters,
+        **{
+            **transform_kws,
+            **dict(
+                unique_id=True
+            )
+        }
+    )
 
     def __plurality(df):
         df = df[df[&#34;rank&#34;] == 1].copy()
@@ -140,7 +165,7 @@ until to have a majority winner.</p>
         rmv = tmp.loc[tmp.shape[0] - 1, alternative]
 
         df = df[df[alternative] != rmv].copy()
-        df = df.sort_values([&#34;_id&#34;, rank], ascending=[True, True])
+        df = df.sort_values([&#34;_id&#34;, ballot], ascending=[True, True])
         df[ballot] = df.groupby(&#34;_id&#34;).cumcount() + 1
 
         tmp = __plurality(df.copy())

@@ -28,20 +28,22 @@
 </summary>
 <pre><code class="python">import numpy as np
 import pandas as pd
-from comchoice.aggregate.pairwise_matrix import pairwise_matrix
 
+from comchoice.aggregate.__default_parameters import transform_kws
 from comchoice.aggregate.__set_rank import __set_rank
+from comchoice.aggregate.pairwise_matrix import pairwise_matrix
 
 
 def copeland(
     df,
     alternative=&#34;alternative&#34;,
     delimiter=&#34;&gt;&#34;,
-    pairwise_matrix=False,
+    pw_matrix=False,
     ballot=&#34;ballot&#34;,
     show_rank=True,
     voter=&#34;voter&#34;,
-    voters=&#34;voters&#34;
+    voters=&#34;voters&#34;,
+    transform_kws=transform_kws
 ):
     &#34;&#34;&#34;Copeland voting method (1951).
 
@@ -59,7 +61,7 @@ def copeland(
         Column label to get alternatives, by default &#34;alternative&#34;.
     delimiter : str, optional
         Delimiter used between alternatives in a `ballot`, by default &#34;&gt;&#34;.
-    pairwise_matrix : bool, optional
+    pw_matrix : bool, optional
         A Pairwise Matrix is set in df, by default False.
     ballot : str, optional
         Column label that includes a set of sorted alternatives for each voter or voters (when is defined in the data set), by default &#34;ballot&#34;.
@@ -80,7 +82,7 @@ def copeland(
     Copeland, A.H. (1951). A “reasonable” social welfare function, mimeographed. In: Seminar on applications of mathematics to the social sciences. Ann Arbor: Department of Mathematics, University of Michigan.
     &#34;&#34;&#34;
 
-    if pairwise_matrix:
+    if pw_matrix:
         m = df
         unique_alternatives = list(df)
 
@@ -92,7 +94,8 @@ def copeland(
             delimiter=delimiter,
             voter=voter,
             voters=voters,
-            return_alternatives=True
+            return_alternatives=True,
+            transform_kws=transform_kws
         )
 
     r = m + m.T
@@ -121,7 +124,7 @@ def copeland(
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="comchoice.aggregate.copeland.copeland"><code class="name flex">
-<span>def <span class="ident">copeland</span></span>(<span>df, alternative='alternative', delimiter=&#x27;&gt;&#x27;, pairwise_matrix=False, ballot='ballot', show_rank=True, voter='voter', voters='voters')</span>
+<span>def <span class="ident">copeland</span></span>(<span>df, alternative='alternative', delimiter=&#x27;&gt;&#x27;, pw_matrix=False, ballot='ballot', show_rank=True, voter='voter', voters='voters', transform_kws={&#x27;dtype_from&#x27;: &#x27;ballot&#x27;, &#x27;dtype_to&#x27;: &#x27;ballot_extended&#x27;, &#x27;delimiter&#x27;: &#x27;&gt;&#x27;, &#x27;delimiter_ties&#x27;: &#x27;=&#x27;, &#x27;delimiter_score&#x27;: &#x27;=&#x27;, &#x27;alternative_a&#x27;: &#x27;alternative_a&#x27;, &#x27;alternative_b&#x27;: &#x27;alternative_b&#x27;, &#x27;selected&#x27;: &#x27;selected&#x27;, &#x27;value&#x27;: &#x27;value&#x27;, &#x27;voter&#x27;: &#x27;voter&#x27;, &#x27;rmv&#x27;: [], &#x27;unique_id&#x27;: False, &#x27;ascending&#x27;: False})</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Copeland voting method (1951).</p>
@@ -138,7 +141,7 @@ alternatives in pairwise comparison scenarios, it is also considered a Condorcet
 <dd>Column label to get alternatives, by default "alternative".</dd>
 <dt><strong><code>delimiter</code></strong> :&ensp;<code>str</code>, optional</dt>
 <dd>Delimiter used between alternatives in a <code>ballot</code>, by default "&gt;".</dd>
-<dt><strong><code>pairwise_matrix</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dt><strong><code>pw_matrix</code></strong> :&ensp;<code>bool</code>, optional</dt>
 <dd>A Pairwise Matrix is set in df, by default False.</dd>
 <dt><strong><code>ballot</code></strong> :&ensp;<code>str</code>, optional</dt>
 <dd>Column label that includes a set of sorted alternatives for each voter or voters (when is defined in the data set), by default "ballot".</dd>
@@ -164,11 +167,12 @@ alternatives in pairwise comparison scenarios, it is also considered a Condorcet
     df,
     alternative=&#34;alternative&#34;,
     delimiter=&#34;&gt;&#34;,
-    pairwise_matrix=False,
+    pw_matrix=False,
     ballot=&#34;ballot&#34;,
     show_rank=True,
     voter=&#34;voter&#34;,
-    voters=&#34;voters&#34;
+    voters=&#34;voters&#34;,
+    transform_kws=transform_kws
 ):
     &#34;&#34;&#34;Copeland voting method (1951).
 
@@ -186,7 +190,7 @@ alternatives in pairwise comparison scenarios, it is also considered a Condorcet
         Column label to get alternatives, by default &#34;alternative&#34;.
     delimiter : str, optional
         Delimiter used between alternatives in a `ballot`, by default &#34;&gt;&#34;.
-    pairwise_matrix : bool, optional
+    pw_matrix : bool, optional
         A Pairwise Matrix is set in df, by default False.
     ballot : str, optional
         Column label that includes a set of sorted alternatives for each voter or voters (when is defined in the data set), by default &#34;ballot&#34;.
@@ -207,7 +211,7 @@ alternatives in pairwise comparison scenarios, it is also considered a Condorcet
     Copeland, A.H. (1951). A “reasonable” social welfare function, mimeographed. In: Seminar on applications of mathematics to the social sciences. Ann Arbor: Department of Mathematics, University of Michigan.
     &#34;&#34;&#34;
 
-    if pairwise_matrix:
+    if pw_matrix:
         m = df
         unique_alternatives = list(df)
 
@@ -219,7 +223,8 @@ alternatives in pairwise comparison scenarios, it is also considered a Condorcet
             delimiter=delimiter,
             voter=voter,
             voters=voters,
-            return_alternatives=True
+            return_alternatives=True,
+            transform_kws=transform_kws
         )
 
     r = m + m.T

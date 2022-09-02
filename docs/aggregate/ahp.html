@@ -30,8 +30,11 @@
 import pandas as pd
 from scipy import linalg
 
-from comchoice.aggregate.__set_rank import __set_rank
+from comchoice.aggregate.__default_parameters import transform_kws
 from comchoice.aggregate.__set_card_id import __set_card_id
+from comchoice.aggregate.__set_rank import __set_rank
+from comchoice.aggregate.pairwise_matrix import pairwise_matrix
+from comchoice.preprocessing.transform import transform
 
 
 def ahp(
@@ -39,11 +42,12 @@ def ahp(
     ppal_eigval=&#34;approximation&#34;,
     criteria=&#34;criteria&#34;,
     delimiter=&#34;&gt;&#34;,
-    origin=&#34;pairwise&#34;,
+    origin=&#34;ballot&#34;,
     alternative=&#34;alternative&#34;,
     alternative_a=&#34;alternative_a&#34;,
     alternative_b=&#34;alternative_b&#34;,
     selected=&#34;selected&#34;,
+    transform_kws=transform_kws,
     show_rank=True,
     **kws
 ) -&gt; pd.DataFrame:
@@ -76,17 +80,31 @@ def ahp(
         Aggregation of preferences using AHP.
     &#34;&#34;&#34;
 
-    if &#34;card_id&#34; not in list(df):
-        df = __set_card_id(
+    df = df.copy()
+
+    if origin != &#34;pairwise&#34;:
+
+        df = transform(
             df.copy(),
-            alternative_a=alternative_a,
-            alternative_b=alternative_b,
-            selected=selected,
-            concat=&#34;_&#34;
+            **{
+                **transform_kws,
+                **dict(
+                    dtype_to=&#34;pairwise&#34;
+                )
+            }
         )
 
-    alternative_a_sorted = f&#34;{alternative_a}_sorted&#34; if origin == &#34;pairwise&#34; else alternative_a
-    alternative_b_sorted = f&#34;{alternative_b}_sorted&#34; if origin == &#34;pairwise&#34; else alternative_b
+        if &#34;card_id&#34; not in list(df):
+            df = __set_card_id(
+                df.copy(),
+                alternative_a=alternative_a,
+                alternative_b=alternative_b,
+                selected=selected,
+                concat=&#34;_&#34;
+            )
+
+    alternative_a_sorted = f&#34;{alternative_a}_sorted&#34;
+    alternative_b_sorted = f&#34;{alternative_b}_sorted&#34;
 
     if selected in list(df):
         df[&#34;weight_a&#34;] = np.where(
@@ -165,7 +183,7 @@ def ahp(
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="comchoice.aggregate.ahp.ahp"><code class="name flex">
-<span>def <span class="ident">ahp</span></span>(<span>df, ppal_eigval='approximation', criteria='criteria', delimiter=&#x27;&gt;&#x27;, origin='pairwise', alternative='alternative', alternative_a='alternative_a', alternative_b='alternative_b', selected='selected', show_rank=True, **kws) ‑> pandas.core.frame.DataFrame</span>
+<span>def <span class="ident">ahp</span></span>(<span>df, ppal_eigval='approximation', criteria='criteria', delimiter=&#x27;&gt;&#x27;, origin='ballot', alternative='alternative', alternative_a='alternative_a', alternative_b='alternative_b', selected='selected', transform_kws={&#x27;dtype_from&#x27;: &#x27;ballot&#x27;, &#x27;dtype_to&#x27;: &#x27;ballot_extended&#x27;, &#x27;delimiter&#x27;: &#x27;&gt;&#x27;, &#x27;delimiter_ties&#x27;: &#x27;=&#x27;, &#x27;delimiter_score&#x27;: &#x27;=&#x27;, &#x27;alternative_a&#x27;: &#x27;alternative_a&#x27;, &#x27;alternative_b&#x27;: &#x27;alternative_b&#x27;, &#x27;selected&#x27;: &#x27;selected&#x27;, &#x27;value&#x27;: &#x27;value&#x27;, &#x27;voter&#x27;: &#x27;voter&#x27;, &#x27;rmv&#x27;: [], &#x27;unique_id&#x27;: False, &#x27;ascending&#x27;: False}, show_rank=True, **kws) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Analytic Hierarchy Process (AHP)</p>
@@ -204,11 +222,12 @@ def ahp(
     ppal_eigval=&#34;approximation&#34;,
     criteria=&#34;criteria&#34;,
     delimiter=&#34;&gt;&#34;,
-    origin=&#34;pairwise&#34;,
+    origin=&#34;ballot&#34;,
     alternative=&#34;alternative&#34;,
     alternative_a=&#34;alternative_a&#34;,
     alternative_b=&#34;alternative_b&#34;,
     selected=&#34;selected&#34;,
+    transform_kws=transform_kws,
     show_rank=True,
     **kws
 ) -&gt; pd.DataFrame:
@@ -241,17 +260,31 @@ def ahp(
         Aggregation of preferences using AHP.
     &#34;&#34;&#34;
 
-    if &#34;card_id&#34; not in list(df):
-        df = __set_card_id(
+    df = df.copy()
+
+    if origin != &#34;pairwise&#34;:
+
+        df = transform(
             df.copy(),
-            alternative_a=alternative_a,
-            alternative_b=alternative_b,
-            selected=selected,
-            concat=&#34;_&#34;
+            **{
+                **transform_kws,
+                **dict(
+                    dtype_to=&#34;pairwise&#34;
+                )
+            }
         )
 
-    alternative_a_sorted = f&#34;{alternative_a}_sorted&#34; if origin == &#34;pairwise&#34; else alternative_a
-    alternative_b_sorted = f&#34;{alternative_b}_sorted&#34; if origin == &#34;pairwise&#34; else alternative_b
+        if &#34;card_id&#34; not in list(df):
+            df = __set_card_id(
+                df.copy(),
+                alternative_a=alternative_a,
+                alternative_b=alternative_b,
+                selected=selected,
+                concat=&#34;_&#34;
+            )
+
+    alternative_a_sorted = f&#34;{alternative_a}_sorted&#34;
+    alternative_b_sorted = f&#34;{alternative_b}_sorted&#34;
 
     if selected in list(df):
         df[&#34;weight_a&#34;] = np.where(

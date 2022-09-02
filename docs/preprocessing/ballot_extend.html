@@ -38,15 +38,15 @@ def ballot_extend(
     unique_id=False
 ):
     df[&#34;_id&#34;] = range(df.shape[0])
-
     df[ballot] = df[ballot].str.split(delimiter)
     df = df.explode(ballot)
-    df = df.rename(columns={ballot: &#34;alternative&#34;})
 
+    df = df.rename(columns={ballot: &#34;alternative&#34;})
     if len(rmv) &gt; 0:
         df = df[~df[&#34;alternative&#34;].isin(rmv)].copy()
 
     df[&#34;rank_a&#34;] = df.groupby(&#34;_id&#34;).cumcount() + 1
+
     df[&#34;alternative&#34;] = df[&#34;alternative&#34;].str.split(delimiter_ties)
     df[&#34;rank_b&#34;] = df[&#34;alternative&#34;].map(len)
     df[&#34;rank_b&#34;] = df.groupby(&#34;_id&#34;)[&#34;rank_b&#34;].cumsum()
@@ -88,15 +88,15 @@ def ballot_extend(
     unique_id=False
 ):
     df[&#34;_id&#34;] = range(df.shape[0])
-
     df[ballot] = df[ballot].str.split(delimiter)
     df = df.explode(ballot)
-    df = df.rename(columns={ballot: &#34;alternative&#34;})
 
+    df = df.rename(columns={ballot: &#34;alternative&#34;})
     if len(rmv) &gt; 0:
         df = df[~df[&#34;alternative&#34;].isin(rmv)].copy()
 
     df[&#34;rank_a&#34;] = df.groupby(&#34;_id&#34;).cumcount() + 1
+
     df[&#34;alternative&#34;] = df[&#34;alternative&#34;].str.split(delimiter_ties)
     df[&#34;rank_b&#34;] = df[&#34;alternative&#34;].map(len)
     df[&#34;rank_b&#34;] = df.groupby(&#34;_id&#34;)[&#34;rank_b&#34;].cumsum()

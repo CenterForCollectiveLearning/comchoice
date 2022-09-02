@@ -29,9 +29,10 @@
 <pre><code class="python">import pandas as pd
 
 from comchoice.aggregate.__aggregate import __aggregate
+from comchoice.aggregate.__default_parameters import transform_kws
 from comchoice.aggregate.__set_rank import __set_rank
 from comchoice.aggregate.__set_voters import __set_voters
-from comchoice.aggregate.__transform import __transform
+from comchoice.preprocessing.transform import transform
 
 
 def k_approval(
@@ -39,8 +40,10 @@ def k_approval(
     k=1,
     alternative=&#34;alternative&#34;,
     ballot=&#34;ballot&#34;,
+    delimiter=&#34;&gt;&#34;,
     show_rank=True,
-    voters=&#34;voters&#34;
+    voters=&#34;voters&#34;,
+    transform_kws=transform_kws,
 ) -&gt; pd.DataFrame:
     &#34;&#34;&#34;k-Approval voting method.
 
@@ -60,8 +63,13 @@ def k_approval(
     ----------
 
     &#34;&#34;&#34;
-    # if plural_voters:
-    df = __transform(df)
+    df = transform(
+        df.copy(),
+        ballot=ballot,
+        delimiter=delimiter,
+        voters=voters,
+        **transform_kws
+    )
     df[&#34;value&#34;] = df[ballot] &lt;= k
 
     df = __set_voters(df, voters=voters)
@@ -81,7 +89,7 @@ def k_approval(
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="comchoice.aggregate.k_approval.k_approval"><code class="name flex">
-<span>def <span class="ident">k_approval</span></span>(<span>df, k=1, alternative='alternative', ballot='ballot', show_rank=True, voters='voters') ‑> pandas.core.frame.DataFrame</span>
+<span>def <span class="ident">k_approval</span></span>(<span>df, k=1, alternative='alternative', ballot='ballot', delimiter=&#x27;&gt;&#x27;, show_rank=True, voters='voters', transform_kws={&#x27;dtype_from&#x27;: &#x27;ballot&#x27;, &#x27;dtype_to&#x27;: &#x27;ballot_extended&#x27;, &#x27;delimiter&#x27;: &#x27;&gt;&#x27;, &#x27;delimiter_ties&#x27;: &#x27;=&#x27;, &#x27;delimiter_score&#x27;: &#x27;=&#x27;, &#x27;alternative_a&#x27;: &#x27;alternative_a&#x27;, &#x27;alternative_b&#x27;: &#x27;alternative_b&#x27;, &#x27;selected&#x27;: &#x27;selected&#x27;, &#x27;value&#x27;: &#x27;value&#x27;, &#x27;voter&#x27;: &#x27;voter&#x27;, &#x27;rmv&#x27;: [], &#x27;unique_id&#x27;: False, &#x27;ascending&#x27;: False}) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
 <dd>
 <div class="desc"><p>k-Approval voting method.</p>
@@ -104,8 +112,10 @@ Threshold to score alternatives with a value of 1.</p>
     k=1,
     alternative=&#34;alternative&#34;,
     ballot=&#34;ballot&#34;,
+    delimiter=&#34;&gt;&#34;,
     show_rank=True,
-    voters=&#34;voters&#34;
+    voters=&#34;voters&#34;,
+    transform_kws=transform_kws,
 ) -&gt; pd.DataFrame:
     &#34;&#34;&#34;k-Approval voting method.
 
@@ -125,8 +135,13 @@ Threshold to score alternatives with a value of 1.</p>
     ----------
 
     &#34;&#34;&#34;
-    # if plural_voters:
-    df = __transform(df)
+    df = transform(
+        df.copy(),
+        ballot=ballot,
+        delimiter=delimiter,
+        voters=voters,
+        **transform_kws
+    )
     df[&#34;value&#34;] = df[ballot] &lt;= k
 
     df = __set_voters(df, voters=voters)

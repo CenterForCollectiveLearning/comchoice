@@ -29,9 +29,10 @@
 <pre><code class="python">import pandas as pd
 
 from comchoice.aggregate.__aggregate import __aggregate
+from comchoice.aggregate.__default_parameters import transform_kws
 from comchoice.aggregate.__set_rank import __set_rank
 from comchoice.aggregate.__set_voters import __set_voters
-from comchoice.aggregate.__transform import __transform
+from comchoice.preprocessing.transform import transform
 
 
 def plurality(
@@ -41,7 +42,8 @@ def plurality(
     ballot=&#34;ballot&#34;,
     show_rank=True,
     voters=&#34;voters&#34;,
-    ascending=False
+    ascending=False,
+    transform_kws=transform_kws
 ) -&gt; pd.DataFrame:
     &#34;&#34;&#34;Plurality Rule.
 
@@ -70,7 +72,13 @@ def plurality(
         _description_
     &#34;&#34;&#34;
 
-    df = __transform(df, delimiter=delimiter)
+    df = transform(
+        df.copy(),
+        ballot=ballot,
+        delimiter=delimiter,
+        voters=voters,
+        **transform_kws
+    )
 
     df = df[df[ballot] == 1].copy()
     df[&#34;value&#34;] = 1
@@ -94,7 +102,7 @@ def plurality(
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="comchoice.aggregate.plurality.plurality"><code class="name flex">
-<span>def <span class="ident">plurality</span></span>(<span>df, alternative='alternative', delimiter=&#x27;&gt;&#x27;, ballot='ballot', show_rank=True, voters='voters', ascending=False) ‑> pandas.core.frame.DataFrame</span>
+<span>def <span class="ident">plurality</span></span>(<span>df, alternative='alternative', delimiter=&#x27;&gt;&#x27;, ballot='ballot', show_rank=True, voters='voters', ascending=False, transform_kws={&#x27;dtype_from&#x27;: &#x27;ballot&#x27;, &#x27;dtype_to&#x27;: &#x27;ballot_extended&#x27;, &#x27;delimiter&#x27;: &#x27;&gt;&#x27;, &#x27;delimiter_ties&#x27;: &#x27;=&#x27;, &#x27;delimiter_score&#x27;: &#x27;=&#x27;, &#x27;alternative_a&#x27;: &#x27;alternative_a&#x27;, &#x27;alternative_b&#x27;: &#x27;alternative_b&#x27;, &#x27;selected&#x27;: &#x27;selected&#x27;, &#x27;value&#x27;: &#x27;value&#x27;, &#x27;voter&#x27;: &#x27;voter&#x27;, &#x27;rmv&#x27;: [], &#x27;unique_id&#x27;: False, &#x27;ascending&#x27;: False}) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Plurality Rule.</p>
@@ -132,7 +140,8 @@ def plurality(
     ballot=&#34;ballot&#34;,
     show_rank=True,
     voters=&#34;voters&#34;,
-    ascending=False
+    ascending=False,
+    transform_kws=transform_kws
 ) -&gt; pd.DataFrame:
     &#34;&#34;&#34;Plurality Rule.
 
@@ -161,7 +170,13 @@ def plurality(
         _description_
     &#34;&#34;&#34;
 
-    df = __transform(df, delimiter=delimiter)
+    df = transform(
+        df.copy(),
+        ballot=ballot,
+        delimiter=delimiter,
+        voters=voters,
+        **transform_kws
+    )
 
     df = df[df[ballot] == 1].copy()
     df[&#34;value&#34;] = 1

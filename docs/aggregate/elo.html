@@ -28,6 +28,10 @@
 </summary>
 <pre><code class="python">import pandas as pd
 
+from comchoice.aggregate.__default_parameters import transform_kws
+from comchoice.aggregate.__set_rank import __set_rank
+from comchoice.preprocessing.transform import transform
+
 
 def elo(
     df,
@@ -36,7 +40,10 @@ def elo(
     alternative=&#34;alternative&#34;,
     selected=&#34;selected&#34;,
     rating: int = 400,
-    K: int = 10
+    K: int = 10,
+    transform_kws=transform_kws,
+    random_state=None,
+    show_rank=True
 ):
     &#34;&#34;&#34;Elo score.
 
@@ -50,6 +57,20 @@ def elo(
         The K-factor estimates the score that a player can win in a game.
 
     &#34;&#34;&#34;
+
+    df = df.copy()
+    if random_state:
+        df = df.sample(frac=1, random_state=random_state)
+
+    df = transform(
+        df.copy(),
+        **{
+            **transform_kws,
+            **dict(
+                dtype_to=&#34;pairwise&#34;
+            )
+        }
+    )
 
     alternatives = set(df[alternative_a]) | set(df[alternative_b])
 
@@ -77,10 +98,15 @@ def elo(
         ELO_RATING[item_a] = r_a + K * (s_a - e_a)
         ELO_RATING[item_b] = r_b + K * (s_b - e_b)
 
-    return pd.DataFrame(
+    tmp = pd.DataFrame(
         ELO_RATING.items(),
         columns=[alternative, &#34;value&#34;]
-    )</code></pre>
+    )
+
+    if show_rank:
+        tmp = __set_rank(tmp)
+
+    return tmp</code></pre>
 </details>
 </section>
 <section>
@@ -91,7 +117,7 @@ def elo(
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="comchoice.aggregate.elo.elo"><code class="name flex">
-<span>def <span class="ident">elo</span></span>(<span>df, alternative_a='alternative_a', alternative_b='alternative_b', alternative='alternative', selected='selected', rating: int = 400, K: int = 10)</span>
+<span>def <span class="ident">elo</span></span>(<span>df, alternative_a='alternative_a', alternative_b='alternative_b', alternative='alternative', selected='selected', rating: int = 400, K: int = 10, transform_kws={&#x27;dtype_from&#x27;: &#x27;ballot&#x27;, &#x27;dtype_to&#x27;: &#x27;ballot_extended&#x27;, &#x27;delimiter&#x27;: &#x27;&gt;&#x27;, &#x27;delimiter_ties&#x27;: &#x27;=&#x27;, &#x27;delimiter_score&#x27;: &#x27;=&#x27;, &#x27;alternative_a&#x27;: &#x27;alternative_a&#x27;, &#x27;alternative_b&#x27;: &#x27;alternative_b&#x27;, &#x27;selected&#x27;: &#x27;selected&#x27;, &#x27;value&#x27;: &#x27;value&#x27;, &#x27;voter&#x27;: &#x27;voter&#x27;, &#x27;rmv&#x27;: [], &#x27;unique_id&#x27;: False, &#x27;ascending&#x27;: False}, random_state=None, show_rank=True)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Elo score.</p>
@@ -114,7 +140,10 @@ def elo(
     alternative=&#34;alternative&#34;,
     selected=&#34;selected&#34;,
     rating: int = 400,
-    K: int = 10
+    K: int = 10,
+    transform_kws=transform_kws,
+    random_state=None,
+    show_rank=True
 ):
     &#34;&#34;&#34;Elo score.
 
@@ -128,6 +157,20 @@ def elo(
         The K-factor estimates the score that a player can win in a game.
 
     &#34;&#34;&#34;
+
+    df = df.copy()
+    if random_state:
+        df = df.sample(frac=1, random_state=random_state)
+
+    df = transform(
+        df.copy(),
+        **{
+            **transform_kws,
+            **dict(
+                dtype_to=&#34;pairwise&#34;
+            )
+        }
+    )
 
     alternatives = set(df[alternative_a]) | set(df[alternative_b])
 
@@ -155,10 +198,15 @@ def elo(
         ELO_RATING[item_a] = r_a + K * (s_a - e_a)
         ELO_RATING[item_b] = r_b + K * (s_b - e_b)
 
-    return pd.DataFrame(
+    tmp = pd.DataFrame(
         ELO_RATING.items(),
         columns=[alternative, &#34;value&#34;]
-    )</code></pre>
+    )
+
+    if show_rank:
+        tmp = __set_rank(tmp)
+
+    return tmp</code></pre>
 </details>
 </dd>
 </dl>

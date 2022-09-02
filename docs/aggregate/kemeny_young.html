@@ -29,6 +29,7 @@
 <pre><code class="python">import pandas as pd
 from itertools import combinations, permutations
 
+from comchoice.aggregate.__default_parameters import transform_kws
 from comchoice.aggregate.pairwise_matrix import pairwise_matrix
 
 
@@ -39,7 +40,8 @@ def kemeny_young(
     delimiter=&#34;&gt;&#34;,
     voter=&#34;voter&#34;,
     voters=&#34;voters&#34;,
-    score_matrix=False
+    score_matrix=False,
+    transform_kws=transform_kws
 ) -&gt; pd.DataFrame:
     &#34;&#34;&#34;Kemeny-Young method.
 
@@ -70,7 +72,8 @@ def kemeny_young(
         ballot=ballot,
         delimiter=delimiter,
         voter=voter,
-        voters=voters
+        voters=voters,
+        transform_kws=transform_kws
     )
 
     output = []
@@ -103,7 +106,7 @@ def kemeny_young(
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="comchoice.aggregate.kemeny_young.kemeny_young"><code class="name flex">
-<span>def <span class="ident">kemeny_young</span></span>(<span>df, alternative='alternative', ballot='ballot', delimiter=&#x27;&gt;&#x27;, voter='voter', voters='voters', score_matrix=False) ‑> pandas.core.frame.DataFrame</span>
+<span>def <span class="ident">kemeny_young</span></span>(<span>df, alternative='alternative', ballot='ballot', delimiter=&#x27;&gt;&#x27;, voter='voter', voters='voters', score_matrix=False, transform_kws={&#x27;dtype_from&#x27;: &#x27;ballot&#x27;, &#x27;dtype_to&#x27;: &#x27;ballot_extended&#x27;, &#x27;delimiter&#x27;: &#x27;&gt;&#x27;, &#x27;delimiter_ties&#x27;: &#x27;=&#x27;, &#x27;delimiter_score&#x27;: &#x27;=&#x27;, &#x27;alternative_a&#x27;: &#x27;alternative_a&#x27;, &#x27;alternative_b&#x27;: &#x27;alternative_b&#x27;, &#x27;selected&#x27;: &#x27;selected&#x27;, &#x27;value&#x27;: &#x27;value&#x27;, &#x27;voter&#x27;: &#x27;voter&#x27;, &#x27;rmv&#x27;: [], &#x27;unique_id&#x27;: False, &#x27;ascending&#x27;: False}) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Kemeny-Young method.</p>
@@ -134,7 +137,8 @@ and pairwise comparison to identify the most popular alternatives in an election
     delimiter=&#34;&gt;&#34;,
     voter=&#34;voter&#34;,
     voters=&#34;voters&#34;,
-    score_matrix=False
+    score_matrix=False,
+    transform_kws=transform_kws
 ) -&gt; pd.DataFrame:
     &#34;&#34;&#34;Kemeny-Young method.
 
@@ -165,7 +169,8 @@ and pairwise comparison to identify the most popular alternatives in an election
         ballot=ballot,
         delimiter=delimiter,
         voter=voter,
-        voters=voters
+        voters=voters,
+        transform_kws=transform_kws
     )
 
     output = []

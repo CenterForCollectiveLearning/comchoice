@@ -27,7 +27,9 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">import pandas as pd
+
 from comchoice.aggregate.nanson_baldwin import nanson_baldwin
+from comchoice.aggregate.__default_parameters import transform_kws
 
 
 def nanson(
@@ -37,7 +39,8 @@ def nanson(
     ballot=&#34;ballot&#34;,
     borda_score=&#34;original&#34;,
     show_rank=True,
-    voters=&#34;voters&#34;
+    voters=&#34;voters&#34;,
+    transform_kws=transform_kws
 ) -&gt; pd.DataFrame:
 
     return nanson_baldwin(
@@ -48,7 +51,8 @@ def nanson(
         ballot=ballot,
         borda_score=borda_score,
         show_rank=show_rank,
-        voters=voters
+        voters=voters,
+        transform_kws=transform_kws
     )</code></pre>
 </details>
 </section>
@@ -60,7 +64,7 @@ def nanson(
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="comchoice.aggregate.nanson.nanson"><code class="name flex">
-<span>def <span class="ident">nanson</span></span>(<span>df, alternative='alternative', delimiter=&#x27;&gt;&#x27;, ballot='ballot', borda_score='original', show_rank=True, voters='voters') ‑> pandas.core.frame.DataFrame</span>
+<span>def <span class="ident">nanson</span></span>(<span>df, alternative='alternative', delimiter=&#x27;&gt;&#x27;, ballot='ballot', borda_score='original', show_rank=True, voters='voters', transform_kws={&#x27;dtype_from&#x27;: &#x27;ballot&#x27;, &#x27;dtype_to&#x27;: &#x27;ballot_extended&#x27;, &#x27;delimiter&#x27;: &#x27;&gt;&#x27;, &#x27;delimiter_ties&#x27;: &#x27;=&#x27;, &#x27;delimiter_score&#x27;: &#x27;=&#x27;, &#x27;alternative_a&#x27;: &#x27;alternative_a&#x27;, &#x27;alternative_b&#x27;: &#x27;alternative_b&#x27;, &#x27;selected&#x27;: &#x27;selected&#x27;, &#x27;value&#x27;: &#x27;value&#x27;, &#x27;voter&#x27;: &#x27;voter&#x27;, &#x27;rmv&#x27;: [], &#x27;unique_id&#x27;: False, &#x27;ascending&#x27;: False}) ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -75,7 +79,8 @@ def nanson(
     ballot=&#34;ballot&#34;,
     borda_score=&#34;original&#34;,
     show_rank=True,
-    voters=&#34;voters&#34;
+    voters=&#34;voters&#34;,
+    transform_kws=transform_kws
 ) -&gt; pd.DataFrame:
 
     return nanson_baldwin(
@@ -86,7 +91,8 @@ def nanson(
         ballot=ballot,
         borda_score=borda_score,
         show_rank=show_rank,
-        voters=voters
+        voters=voters,
+        transform_kws=transform_kws
     )</code></pre>
 </details>
 </dd>

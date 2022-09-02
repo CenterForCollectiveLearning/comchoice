@@ -29,6 +29,7 @@
 <pre><code class="python">import numpy as np
 import pandas as pd
 
+from comchoice.aggregate.__default_parameters import transform_kws
 from comchoice.preprocessing.transform import transform
 from itertools import combinations
 
@@ -41,45 +42,26 @@ def pairwise_matrix(
     voter=&#34;voter&#34;,
     voters=&#34;voters&#34;,
     return_alternatives=False,
-    transform_kws=dict(
-        dtype_from=&#34;ballot&#34;,
-        dtype_to=&#34;ballot_extended&#34;,
-        delimiter_ties=&#34;=&#34;,
-        delimiter_score=&#34;=&#34;,
-        alternative_a=&#34;alternative_a&#34;,
-        alternative_b=&#34;alternative_b&#34;,
-        selected=&#34;selected&#34;,
-        value=&#34;value&#34;,
-        voter=&#34;voter&#34;,
-        rmv=[],
-        ascending=False
-    )
+    set_transform=True,
+    transform_kws=transform_kws
 ):
     output = []
 
     cols = [&#34;_winner&#34;, &#34;_loser&#34;]
 
-    # def __transform(data, unique_id=False) -&gt; pd.DataFrame:
-    #     df = data.copy()
-    #     df[&#34;_id&#34;] = range(df.shape[0])
-    #     df[ballot] = df[ballot].str.split(delimiter)
-    #     df = df.explode(rank)
-    #     df = df.rename(columns={rank: &#34;alternative&#34;})
-    #     df[&#34;rank&#34;] = df.groupby(&#34;_id&#34;).cumcount() + 1
-    #     if not unique_id:
-    #         df = df.drop(columns=[&#34;_id&#34;])
-
-    #     return df
-
-    # df = __transform(df, unique_id=True)
-    df = transform(
-        df,
-        **transform_kws,
-        ballot=ballot,
-        delimiter=delimiter,
-        voters=voters,
-        unique_id=True
-    )
+    if set_transform:
+        df = transform(
+            df.copy(),
+            **{
+                **transform_kws,
+                **dict(
+                    ballot=ballot,
+                    delimiter=delimiter,
+                    voters=voters,
+                    unique_id=True
+                )
+            }
+        )
     if voters in list(df):
         df = df.rename(columns={&#34;_id&#34;: &#34;voter&#34;})
     else:
@@ -117,7 +99,7 @@ def pairwise_matrix(
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="comchoice.aggregate.pairwise_matrix.pairwise_matrix"><code class="name flex">
-<span>def <span class="ident">pairwise_matrix</span></span>(<span>df, alternative='alternative', ballot='ballot', delimiter=&#x27;&gt;&#x27;, voter='voter', voters='voters', return_alternatives=False, transform_kws={'dtype_from': 'ballot', 'dtype_to': 'ballot_extended', 'delimiter_ties': '=', 'delimiter_score': '=', 'alternative_a': 'alternative_a', 'alternative_b': 'alternative_b', 'selected': 'selected', 'value': 'value', 'voter': 'voter', 'rmv': [], 'ascending': False})</span>
+<span>def <span class="ident">pairwise_matrix</span></span>(<span>df, alternative='alternative', ballot='ballot', delimiter=&#x27;&gt;&#x27;, voter='voter', voters='voters', return_alternatives=False, set_transform=True, transform_kws={&#x27;dtype_from&#x27;: &#x27;ballot&#x27;, &#x27;dtype_to&#x27;: &#x27;ballot_extended&#x27;, &#x27;delimiter&#x27;: &#x27;&gt;&#x27;, &#x27;delimiter_ties&#x27;: &#x27;=&#x27;, &#x27;delimiter_score&#x27;: &#x27;=&#x27;, &#x27;alternative_a&#x27;: &#x27;alternative_a&#x27;, &#x27;alternative_b&#x27;: &#x27;alternative_b&#x27;, &#x27;selected&#x27;: &#x27;selected&#x27;, &#x27;value&#x27;: &#x27;value&#x27;, &#x27;voter&#x27;: &#x27;voter&#x27;, &#x27;rmv&#x27;: [], &#x27;unique_id&#x27;: False, &#x27;ascending&#x27;: False})</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -133,45 +115,26 @@ def pairwise_matrix(
     voter=&#34;voter&#34;,
     voters=&#34;voters&#34;,
     return_alternatives=False,
-    transform_kws=dict(
-        dtype_from=&#34;ballot&#34;,
-        dtype_to=&#34;ballot_extended&#34;,
-        delimiter_ties=&#34;=&#34;,
-        delimiter_score=&#34;=&#34;,
-        alternative_a=&#34;alternative_a&#34;,
-        alternative_b=&#34;alternative_b&#34;,
-        selected=&#34;selected&#34;,
-        value=&#34;value&#34;,
-        voter=&#34;voter&#34;,
-        rmv=[],
-        ascending=False
-    )
+    set_transform=True,
+    transform_kws=transform_kws
 ):
     output = []
 
     cols = [&#34;_winner&#34;, &#34;_loser&#34;]
 
-    # def __transform(data, unique_id=False) -&gt; pd.DataFrame:
-    #     df = data.copy()
-    #     df[&#34;_id&#34;] = range(df.shape[0])
-    #     df[ballot] = df[ballot].str.split(delimiter)
-    #     df = df.explode(rank)
-    #     df = df.rename(columns={rank: &#34;alternative&#34;})
-    #     df[&#34;rank&#34;] = df.groupby(&#34;_id&#34;).cumcount() + 1
-    #     if not unique_id:
-    #         df = df.drop(columns=[&#34;_id&#34;])
-
-    #     return df
-
-    # df = __transform(df, unique_id=True)
-    df = transform(
-        df,
-        **transform_kws,
-        ballot=ballot,
-        delimiter=delimiter,
-        voters=voters,
-        unique_id=True
-    )
+    if set_transform:
+        df = transform(
+            df.copy(),
+            **{
+                **transform_kws,
+                **dict(
+                    ballot=ballot,
+                    delimiter=delimiter,
+                    voters=voters,
+                    unique_id=True
+                )
+            }
+        )
     if voters in list(df):
         df = df.rename(columns={&#34;_id&#34;: &#34;voter&#34;})
     else:

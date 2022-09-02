@@ -32,8 +32,8 @@ import pandas as pd
 
 def phragmen(
     df,
-    n_seats=1,
-    alternatives=&#34;alternatives&#34;,
+    n_seats=2,
+    ballot=&#34;ballot&#34;,
     delimiter=&#34;,&#34;,
     voters=&#34;voters&#34;
 ) -&gt; pd.DataFrame:
@@ -46,18 +46,18 @@ def phragmen(
     n_rows = df_tmp.shape[0]
     W = []
 
-    df_tmp[alternatives] = df_tmp[alternatives].str.split(delimiter)
+    df_tmp[ballot] = df_tmp[ballot].str.split(delimiter)
     df_tmp = df_tmp.copy()
-    df_tmp = df_tmp.explode(alternatives)
+    df_tmp = df_tmp.explode(ballot)
 
-    dd = 1 / df_tmp.groupby(alternatives).agg({voters: &#34;sum&#34;})
+    dd = 1 / df_tmp.groupby(ballot).agg({voters: &#34;sum&#34;})
     dd = dd.reset_index()
-    dd = dd.rename(columns={voters: &#34;t*&#34;, alternatives: &#34;alternative&#34;})
+    dd = dd.rename(columns={voters: &#34;t*&#34;, ballot: &#34;alternative&#34;})
 
     t_1 = dd.head(1).to_dict(orient=&#34;records&#34;)[0]
     W.append(t_1)
 
-    im = df_tmp.pivot(index=&#34;_id&#34;, columns=alternatives).fillna(0)
+    im = df_tmp.pivot(index=&#34;_id&#34;, columns=ballot).fillna(0)
     columns = [i[1] for i in im.columns]
     im.columns = columns
     im = im.reset_index(drop=True)
@@ -85,7 +85,7 @@ def phragmen(
         t_n = output.head(1).to_dict(orient=&#34;records&#34;)[0]
         W.append(t_n)
 
-    return W</code></pre>
+    return pd.DataFrame(W).rename(columns={&#34;t*&#34;: &#34;value&#34;}).sort_values(&#34;value&#34;, ascending=False)</code></pre>
 </details>
 </section>
 <section>
@@ -96,7 +96,7 @@ def phragmen(
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="comchoice.aggregate.phragmen.phragmen"><code class="name flex">
-<span>def <span class="ident">phragmen</span></span>(<span>df, n_seats=1, alternatives='alternatives', delimiter=',', voters='voters') ‑> pandas.core.frame.DataFrame</span>
+<span>def <span class="ident">phragmen</span></span>(<span>df, n_seats=2, ballot='ballot', delimiter=',', voters='voters') ‑> pandas.core.frame.DataFrame</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -106,8 +106,8 @@ def phragmen(
 </summary>
 <pre><code class="python">def phragmen(
     df,
-    n_seats=1,
-    alternatives=&#34;alternatives&#34;,
+    n_seats=2,
+    ballot=&#34;ballot&#34;,
     delimiter=&#34;,&#34;,
     voters=&#34;voters&#34;
 ) -&gt; pd.DataFrame:
@@ -120,18 +120,18 @@ def phragmen(
     n_rows = df_tmp.shape[0]
     W = []
 
-    df_tmp[alternatives] = df_tmp[alternatives].str.split(delimiter)
+    df_tmp[ballot] = df_tmp[ballot].str.split(delimiter)
     df_tmp = df_tmp.copy()
-    df_tmp = df_tmp.explode(alternatives)
+    df_tmp = df_tmp.explode(ballot)
 
-    dd = 1 / df_tmp.groupby(alternatives).agg({voters: &#34;sum&#34;})
+    dd = 1 / df_tmp.groupby(ballot).agg({voters: &#34;sum&#34;})
     dd = dd.reset_index()
-    dd = dd.rename(columns={voters: &#34;t*&#34;, alternatives: &#34;alternative&#34;})
+    dd = dd.rename(columns={voters: &#34;t*&#34;, ballot: &#34;alternative&#34;})
 
     t_1 = dd.head(1).to_dict(orient=&#34;records&#34;)[0]
     W.append(t_1)
 
-    im = df_tmp.pivot(index=&#34;_id&#34;, columns=alternatives).fillna(0)
+    im = df_tmp.pivot(index=&#34;_id&#34;, columns=ballot).fillna(0)
     columns = [i[1] for i in im.columns]
     im.columns = columns
     im = im.reset_index(drop=True)
@@ -159,7 +159,7 @@ def phragmen(
         t_n = output.head(1).to_dict(orient=&#34;records&#34;)[0]
         W.append(t_n)
 
-    return W</code></pre>
+    return pd.DataFrame(W).rename(columns={&#34;t*&#34;: &#34;value&#34;}).sort_values(&#34;value&#34;, ascending=False)</code></pre>
 </details>
 </dd>
 </dl>
