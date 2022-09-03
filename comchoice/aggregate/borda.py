@@ -9,13 +9,13 @@ from comchoice.preprocessing.transform import transform
 
 def borda(
     df,
-    alternative="alternative",
-    delimiter=">",
-    ballot="ballot",
-    score="original",
-    show_rank=True,
-    voters="voters",
-    transform_kws=transform_kws,
+    alternative: str = "alternative",
+    delimiter: str = ">",
+    ballot: str = "ballot",
+    score: str = "original",
+    show_rank: bool = True,
+    voters: str = "voters",
+    transform_kws: dict = transform_kws,
     **kws
 ) -> pd.DataFrame:
     """Borda Count (1784).

@@ -9,13 +9,13 @@ from comchoice.preprocessing.transform import transform
 
 def k_approval(
     df,
-    k=1,
-    alternative="alternative",
-    ballot="ballot",
-    delimiter=">",
-    show_rank=True,
-    voters="voters",
-    transform_kws=transform_kws,
+    k: int = 1,
+    alternative: str = "alternative",
+    ballot: str = "ballot",
+    delimiter: str = ">",
+    show_rank: bool = True,
+    voters: str = "voters",
+    transform_kws: dict = transform_kws,
 ) -> pd.DataFrame:
     """k-Approval voting method.
 

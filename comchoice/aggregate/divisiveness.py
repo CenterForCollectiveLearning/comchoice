@@ -10,16 +10,16 @@ from comchoice.preprocessing import to_pairwise
 
 def divisiveness(
     df,
-    alternative="alternative",
-    method=ahp,
-    method_kws=dict(),
-    alternative_a="alternative_a",
-    alternative_b="alternative_b",
-    selected="selected",
-    convert_pairwise=False,
-    show_rank=True,
-    verbose=True,
-    voter="voter"
+    alternative: str = "alternative",
+    alternative_a: str = "alternative_a",
+    alternative_b: str = "alternative_b",
+    convert_pairwise: bool = False,
+    method: function = ahp,
+    method_kws: dict = dict(),
+    selected: str = "selected",
+    show_rank: bool = True,
+    verbose: bool = True,
+    voter: str = "voter"
 ):
     """Divisiveness
 

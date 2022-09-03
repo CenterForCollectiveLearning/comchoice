@@ -7,13 +7,13 @@ from comchoice.aggregate.pairwise_matrix import pairwise_matrix
 
 def kemeny_young(
     df,
-    alternative="alternative",
-    ballot="ballot",
-    delimiter=">",
-    voter="voter",
-    voters="voters",
-    score_matrix=False,
-    transform_kws=transform_kws
+    alternative: str = "alternative",
+    ballot: str = "ballot",
+    delimiter: str = ">",
+    voter: str = "voter",
+    voters: str = "voters",
+    score_matrix: bool = False,
+    transform_kws: dict = transform_kws
 ) -> pd.DataFrame:
     """Kemeny-Young method.
 

@@ -1,15 +1,17 @@
 import pandas as pd
+
+from comchoice.aggregate.__default_parameters import transform_kws
 from comchoice.aggregate.borda import borda
 
 
 def dowdall(
     df,
-    alternative="alternative",
-    delimiter=">",
-    ballot="ballot",
-    rmv=[],
-    show_rank=True,
-    voters="voters"
+    alternative: str = "alternative",
+    delimiter: str = ">",
+    ballot: str = "ballot",
+    show_rank: bool = True,
+    voters: str = "voters",
+    transform_kws: dict = transform_kws
 ) -> pd.DataFrame:
     """Dowdall voting method (1971).
 
@@ -18,10 +20,27 @@ def dowdall(
     The first alternative gets 1 point, the 2nd alternative 1/2 points, and so on
     until the alternative ranked in the n position receives 1/n points.
 
+    Parameters
+    ----------
+    df : _type_
+        _description_
+    alternative : str, optional
+        _description_, by default "alternative"
+    delimiter : str, optional
+        _description_, by default ">"
+    ballot : str, optional
+        _description_, by default "ballot"
+    show_rank : bool, optional
+        _description_, by default True
+    voters : str, optional
+        _description_, by default "voters"
+    transform_kws : dict, optional
+        _description_, by default transform_kws
+
     Returns
     -------
-    pandas.DataFrame:
-        a ranking of alternatives using Dowdall.
+    pd.DataFrame
+        Aggregation of preferences using Dowdall.
 
     References
     ----------
@@ -32,8 +51,8 @@ def dowdall(
         alternative=alternative,
         delimiter=delimiter,
         ballot=ballot,
-        rmv=rmv,
         score="dowdall",
         show_rank=show_rank,
-        voters=voters
+        voters=voters,
+        transform_kws=transform_kws
     )

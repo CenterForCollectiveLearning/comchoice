@@ -21,7 +21,7 @@ def copeland(
 
     Each voter ranks alternatives by preference. Next, we sort alternatives by the
     number of times they beat another alternative in a pairwise comparison.
-    The top-1 on Copeland's method is considered a weak Condorcet winner.
+    The top-1 on Copeland's method is always a weak Condorcet winner.
     Likewise, if in an election of `n` alternatives, a alternative beats `n - 1`
     alternatives in pairwise comparison scenarios, it is also considered a Condorcet winner.
 
@@ -46,8 +46,8 @@ def copeland(
 
     Returns
     -------
-    _type_
-        _description_
+    pd.DataFrame
+        Aggregation of preferences using Copeland.
 
     References
     ----------

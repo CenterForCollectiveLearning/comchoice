@@ -5,8 +5,8 @@ from comchoice.aggregate.__transform import __transform
 
 def coombs(
     df,
-    delimiter=">",
-    voters="voters"
+    delimiter: str = ">",
+    voters: str = "voters"
 ) -> str:
     n_voters = df[voters].sum()
 

@@ -5,9 +5,9 @@ from comchoice.aggregate.score import score
 
 def cumulative(
     df,
-    alternative="alternative",
-    score="score",
-    show_rank=True
+    alternative: str = "alternative",
+    score: str = "score",
+    show_rank: bool = True
 ) -> pd.DataFrame:
     """Cumulative Voting.
 

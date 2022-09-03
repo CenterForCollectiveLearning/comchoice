@@ -4,11 +4,31 @@ import pandas as pd
 
 def phragmen(
     df,
-    n_seats=2,
-    ballot="ballot",
-    delimiter=",",
-    voters="voters"
+    n_seats: int = 2,
+    ballot: str = "ballot",
+    delimiter: str = ",",
+    voters: str = "voters"
 ) -> pd.DataFrame:
+    """_summary_
+
+    Parameters
+    ----------
+    df : _type_
+        _description_
+    n_seats : int
+        Number of seats to elect, by default 2.
+    ballot : str, optional
+        _description_, by default "ballot"
+    delimiter : str, optional
+        _description_, by default ","
+    voters : str, optional
+        _description_, by default "voters"
+
+    Returns
+    -------
+    pd.DataFrame
+        _description_
+    """
     # Phragmén’s sequential rule
     df_tmp = df.copy()
     df_tmp["_id"] = range(df_tmp.shape[0])

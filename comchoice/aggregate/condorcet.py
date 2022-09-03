@@ -6,13 +6,13 @@ from comchoice.aggregate.__default_parameters import transform_kws
 
 def condorcet(
     df,
-    alternative="alternative",
-    ballot="ballot",
-    delimiter=">",
-    voter="voter",
-    voters="voters",
-    weak=True,
-    transform_kws=transform_kws
+    alternative: str = "alternative",
+    ballot: str = "ballot",
+    delimiter: str = ">",
+    voter: str = "voter",
+    voters: str = "voters",
+    weak: bool = True,
+    transform_kws: dict = transform_kws
 ):
     """Condorcet winner (1785).
 

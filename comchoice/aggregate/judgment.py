@@ -9,16 +9,16 @@ from comchoice.preprocessing.transform import transform
 
 def judgment(
     df,
-    alternative="alternative",
-    ballot="ballot",
-    delimiter=">",
-    dtype="ballot",
-    method="typical",
+    alternative: str = "alternative",
+    ballot: str = "ballot",
+    delimiter: str = ">",
+    dtype: str = "ballot",
+    method: str = "typical",
     ratings=None,
-    show_rank=True,
-    transform_kws=transform_kws,
-    voters="voters",
-    e=0
+    show_rank: bool = True,
+    transform_kws: dict = transform_kws,
+    voters: str = "voters",
+    e: int = 0
 ):
     df = df.copy()
 

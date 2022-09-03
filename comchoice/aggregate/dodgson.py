@@ -7,14 +7,14 @@ from comchoice.aggregate.tideman import tideman
 
 def dodgson(
     df,
-    approximation="quick",
-    alternative="alternative",
-    delimiter=">",
-    ballot="ballot",
-    show_rank=True,
-    voter="voter",
-    voters="voters",
-    transform_kws=transform_kws
+    approximation: str = "quick",
+    alternative: str = "alternative",
+    delimiter: str = ">",
+    ballot: str = "ballot",
+    show_rank: bool = True,
+    voter: str = "voter",
+    voters: str = "voters",
+    transform_kws: dict = transform_kws
 ):
     if approximation == "quick":
         return dodgson_quick(

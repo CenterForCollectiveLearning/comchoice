@@ -7,15 +7,15 @@ from comchoice.preprocessing.transform import transform
 
 def elo(
     df,
-    alternative_a="alternative_a",
-    alternative_b="alternative_b",
-    alternative="alternative",
-    selected="selected",
+    alternative_a: str = "alternative_a",
+    alternative_b: str = "alternative_b",
+    alternative: str = "alternative",
+    selected: str = "selected",
     rating: int = 400,
     K: int = 10,
-    transform_kws=transform_kws,
+    transform_kws: dict = transform_kws,
     random_state=None,
-    show_rank=True
+    show_rank: bool = True
 ):
     """Elo score.
 

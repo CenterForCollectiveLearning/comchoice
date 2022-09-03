@@ -8,11 +8,11 @@ from comchoice.preprocessing.transform import transform
 
 def irv(
     df,
-    alternative="alternative",
-    delimiter=">",
-    ballot="ballot",
-    voters="voters",
-    transform_kws=transform_kws
+    alternative: str = "alternative",
+    delimiter: str = ">",
+    ballot: str = "ballot",
+    voters: str = "voters",
+    transform_kws: dict = transform_kws
 ) -> pd.DataFrame:
     """Hare Rule (also called as Instant Runoff IRV, Ranked-Choice Voting, and Alternative Vote)
 

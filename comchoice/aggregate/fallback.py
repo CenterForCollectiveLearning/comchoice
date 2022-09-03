@@ -5,10 +5,10 @@ from comchoice.aggregate.__set_rank import __set_rank
 
 def fallback(
     df,
-    alternatives="alternatives",
-    delimiter=">",
-    delimiter_ballot="|",
-    voters="voters"
+    alternatives: str = "alternatives",
+    delimiter: str = ">",
+    delimiter_ballot: str = "|",
+    voters: str = "voters"
 ) -> str:
     alternatives_tmp = f"{alternatives}_tmp"
 

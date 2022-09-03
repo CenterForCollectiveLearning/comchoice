@@ -9,16 +9,14 @@ from comchoice.preprocessing.transform import transform
 
 def bradley_terry(
     df,
-    delimiter=">",
-    alternative="alternative",
-    ballot="ballot",
-    alternative_a="alternative_a",
-    alternative_b="alternative_b",
+    delimiter: str = ">",
+    alternative: str = "alternative",
+    ballot: str = "ballot",
     iterations: int = 1,
-    show_rank=True,
-    transform_kws=transform_kws,
-    voter="voter",
-    voters="voters"
+    show_rank: bool = True,
+    transform_kws: dict = transform_kws,
+    voter: str = "voter",
+    voters: str = "voters"
 ) -> pd.DataFrame:
     """Bradley-Terry model (1952)
 

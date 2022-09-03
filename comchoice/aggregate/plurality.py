@@ -26,22 +26,22 @@ def plurality(
     df : pd.DataFrame
         A data set to be aggregated.
     alternative : str, optional
-        _description_, by default "alternative"
+        Column label to get alternatives, by default "alternative".
     delimiter : str, optional
-        _description_, by default ">"
+        Delimiter used between alternatives in a `ballot`, by default ">".
     ballot : str, optional
-        _description_, by default "ballot"
+        Column label that includes a set of sorted alternatives for each voter or voters (when is defined in the data set), by default "ballot".
     show_rank : bool, optional
-        _description_, by default True
+        Whether or not to include the ranking of alternatives, by default True.
     voters : str, optional
-        _description_, by default "voters"
+        Whether the number of voters is defined in the data, it represents its column label, by default "voters".
     ascending : bool, optional
         _description_, by default False
 
     Returns
     -------
     pd.DataFrame
-        _description_
+        Aggregation of preferences using Plurality
     """
 
     df = transform(

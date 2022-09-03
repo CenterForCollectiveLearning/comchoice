@@ -8,13 +8,13 @@ from comchoice.aggregate.pairwise_matrix import pairwise_matrix
 
 def dodgson_quick(
     df,
-    alternative="alternative",
-    delimiter=">",
-    ballot="ballot",
-    show_rank=True,
-    voter="voter",
-    voters="voters",
-    transform_kws=transform_kws
+    alternative: str = "alternative",
+    delimiter: str = ">",
+    ballot: str = "ballot",
+    show_rank: bool = True,
+    voter: str = "voter",
+    voters: str = "voters",
+    transform_kws: dict = transform_kws
 ) -> pd.DataFrame:
     m = pairwise_matrix(
         df,
