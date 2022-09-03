@@ -9,13 +9,13 @@ from comchoice.preprocessing.transform import transform
 
 def plurality(
     df,
-    alternative="alternative",
-    delimiter=">",
-    ballot="ballot",
-    show_rank=True,
-    voters="voters",
-    ascending=False,
-    transform_kws=transform_kws
+    alternative: str = "alternative",
+    delimiter: str = ">",
+    ballot: str = "ballot",
+    show_rank: bool = True,
+    voters: str = "voters",
+    ascending: bool = False,
+    transform_kws: dict = transform_kws
 ) -> pd.DataFrame:
     """Plurality Rule.
 

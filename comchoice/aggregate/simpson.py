@@ -6,14 +6,14 @@ from comchoice.aggregate.minimax import minimax
 
 def simpson(
     df,
-    method="winning_votes",
-    alternative="alternative",
-    ballot="ballot",
-    delimiter=">",
-    show_rank=True,
-    voter="voter",
-    voters="voters",
-    transform_kws=transform_kws
+    method: str = "winning_votes",
+    alternative: str = "alternative",
+    ballot: str = "ballot",
+    delimiter: str = ">",
+    show_rank: bool = True,
+    voter: str = "voter",
+    voters: str = "voters",
+    transform_kws: dict = transform_kws
 ):
     return minimax(
         df,

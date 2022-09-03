@@ -7,12 +7,12 @@ from comchoice.aggregate.pairwise_matrix import pairwise_matrix
 
 def smith_set(
     df,
-    alternative="alternative",
-    ballot="ballot",
-    delimiter=">",
-    voter="voter",
-    voters="voters",
-    transform_kws=transform_kws
+    alternative: str = "alternative",
+    ballot: str = "ballot",
+    delimiter: str = ">",
+    voter: str = "voter",
+    voters: str = "voters",
+    transform_kws: dict = transform_kws
 ) -> list:
     """Smith Set.
 

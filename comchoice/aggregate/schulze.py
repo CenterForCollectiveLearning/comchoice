@@ -8,13 +8,13 @@ from comchoice.aggregate.pairwise_matrix import pairwise_matrix
 
 def schulze(
     df,
-    alternative="alternative",
-    ballot="ballot",
-    delimiter=">",
-    show_rank=True,
-    voter="voter",
-    voters="voters",
-    transform_kws=transform_kws
+    alternative: str = "alternative",
+    ballot: str = "ballot",
+    delimiter: str = ">",
+    show_rank: bool = True,
+    voter: str = "voter",
+    voters: str = "voters",
+    transform_kws: dict = transform_kws
 ):
 
     d = pairwise_matrix(

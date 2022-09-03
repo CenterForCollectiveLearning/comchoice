@@ -9,10 +9,10 @@ from comchoice.aggregate.__transform import __transform
 
 def score(
     df,
-    aggregation="mean",
-    alternative="alternative",
-    score="score",
-    show_rank=True
+    aggregation: str = "mean",
+    alternative: str = "alternative",
+    score: str = "score",
+    show_rank: bool = True
 ) -> pd.DataFrame:
     """Score Voting. (Also called as Range Voting, Utilitarian Voting).
 

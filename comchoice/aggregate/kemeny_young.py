@@ -57,7 +57,7 @@ def kemeny_young(
             score += value
         output.append([list(permutation), score])
 
-    tmp = pd.DataFrame(output, columns=[rank, "value"]).sort_values(
+    tmp = pd.DataFrame(output, columns=[ballot, "value"]).sort_values(
         "value", ascending=False).reset_index(drop=True)
 
     if score_matrix:

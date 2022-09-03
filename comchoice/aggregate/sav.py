@@ -5,10 +5,10 @@ from comchoice.aggregate.approval import approval
 
 def sav(
     df,
-    delimiter=",",
-    n_seats=2,
-    ballot="ballot",
-    voters="voters"
+    delimiter: str = ",",
+    n_seats: int = 2,
+    ballot: str = "ballot",
+    voters: str = "voters"
 ) -> pd.DataFrame:
     return approval(
         df,

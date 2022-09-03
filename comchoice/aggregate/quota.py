@@ -2,9 +2,9 @@ from math import floor
 
 
 def quota(
-    method="hare",
-    n_votes=1,
-    n_seats=1
+    method: str = "hare",
+    n_votes: int = 1,
+    n_seats: int = 1
 ) -> int:
     """Computes Quota threshold.
 
