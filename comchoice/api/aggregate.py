@@ -1,3 +1,4 @@
+import json
 import pandas as pd
 from typing import Union
 
@@ -22,6 +23,7 @@ def read_root():
 @app.get("/api/aggregate/{method}")
 def aggregate_data(
     method: str,
+    data: str,
     q: Union[str, None] = None
 ) -> dict:
     """API to aggregate preferences by using comchoice methods.
@@ -38,11 +40,13 @@ def aggregate_data(
     _type_
         _description_
     """
-    valid_methods = ["borda", "condorcet", "copeland"]
+    valid_methods = ["borda", "condorcet", "copeland", "plurality"]
 
-    if method in valid_methods:
+    df = pd.DataFrame(json.loads(data))
+
+    if True:  # method in valid_methods:
         return {
-            "data": getattr(agg, method)(fake_df).to_dict(orient="records"),
+            "data": getattr(agg, method)(df).to_dict(orient="records"),
             "q": q
         }
 

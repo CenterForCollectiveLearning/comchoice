@@ -62,21 +62,26 @@ def borda(
     """
     df = transform(
         df.copy(),
-        ballot=ballot,
-        delimiter=delimiter,
-        voters=voters,
-        **transform_kws
+        **{
+            **transform_kws,
+            **dict(
+                ballot=ballot,
+                delimiter=delimiter,
+                voters=voters,
+            )
+        }
     )
+
     N = len(df[alternative].unique())
 
     if score == "dowdall":
-        df["value"] = 1 / df[ballot]
+        df["value"] = 1 / df["rank"]
 
     elif score == "score_n":
-        df["value"] = N - df[ballot] - 1
+        df["value"] = N - df["rank"] - 1
 
     else:
-        df["value"] = N - df[ballot]
+        df["value"] = N - df["rank"]
 
     df = __set_voters(df, voters=voters)
     df = __aggregate(df, groupby=[alternative], aggregation="sum")

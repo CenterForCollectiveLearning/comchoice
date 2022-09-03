@@ -46,13 +46,17 @@ def plurality(
 
     df = transform(
         df.copy(),
-        ballot=ballot,
-        delimiter=delimiter,
-        voters=voters,
-        **transform_kws
+        **{
+            **transform_kws,
+            **dict(
+                ballot=ballot,
+                delimiter=delimiter,
+                voters=voters,
+            )
+        }
     )
 
-    df = df[df[ballot] == 1].copy()
+    df = df[df["rank"] == 1].copy()
     df["value"] = 1
     df = __set_voters(df, voters=voters)
     alternatives = df[alternative].unique()
