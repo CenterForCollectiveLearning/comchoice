@@ -11,23 +11,33 @@ def from_preflib(
     """
     file = urllib.request.urlopen(path)
     arr = file.read().decode("utf-8").split("\n")
+    alternatives = list(filter(lambda k: "# ALTERNATIVE NAME" in k, arr))
+    alternatives = [x.replace("# ALTERNATIVE NAME", "").split(": ")
+                    for x in alternatives]
+
+    unique_orders = list(
+        filter(lambda k: "# NUMBER UNIQUE ORDERS: " in k, arr))[0].split(": ")[1]
+    data = list(filter(lambda k: "# " not in k, arr))
     _ = path.split(".")[-1]
 
-    output = []
-    nodes = int(arr[0])
-    for index, line in enumerate(arr):
-        output.append(line.split(",", 1))
+    df_nodes = pd.DataFrame(
+        alternatives,
+        columns=["alternative", "name"]
+    )
+    df_edges = pd.DataFrame(data).dropna().head(int(unique_orders)).copy()
+    df_edges[["voters", 0]] = df_edges[0].str.split(": ", expand=True)
 
-    df = pd.DataFrame(output).dropna()
-
-    df_nodes = df.head(nodes).copy()
-    df_nodes = df_nodes.rename(columns={0: "node_id", 1: "node_name"})
-    df_edges = df[nodes+1:df.shape[0]].copy()
+    def lambda_row(x):
+        row = [item for item in re.split(r",\{(.*?)\}", x[0])[:2]]
+        if len(row) < 2:
+            row.append(None)
+        return row
 
     if _ in ["toc"]:
         cols = ["winners", "losers"]
+        # df_edges.apply(
         df_edges[cols] = df_edges.apply(
-            lambda x: [item for item in re.split(r",\{(.*?)\}", x[1])[:2]],
+            lambda x: lambda_row(x),
             axis=1,
             result_type="expand"
         )
@@ -42,7 +52,7 @@ def from_preflib(
         cols = ["source", "destination"]
         df_edges[cols] = df_edges[1].str.split(",", expand=True)
 
-    df_edges = df_edges.rename(columns={0: "voters"})
-    df_edges = df_edges.drop(columns=[1], errors="ignore")
+    # df_edges = df_edges.rename(columns={0: "voters"})
+    df_edges = df_edges.drop(columns=[0], errors="ignore")
 
     return df_nodes, df_edges
