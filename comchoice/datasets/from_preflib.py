@@ -4,15 +4,23 @@ import urllib
 
 
 def from_preflib(
-    path
+    path: str
 ):
-    """
-    Converts Preflib Data
+    """Converts Preflib Data
+    Parameters
+    ----------
+    path : str
+        Data set URL
+
+    Returns
+    -------
+    pd.DataFrame, pd.DataFrame
+        DataFrame objects of nodes and edges.
     """
     file = urllib.request.urlopen(path)
     arr = file.read().decode("utf-8").split("\n")
     alternatives = list(filter(lambda k: "# ALTERNATIVE NAME" in k, arr))
-    alternatives = [x.replace("# ALTERNATIVE NAME", "").split(": ")
+    alternatives = [x.replace("# ALTERNATIVE NAME ", "").split(": ")
                     for x in alternatives]
 
     unique_orders = list(
@@ -26,6 +34,7 @@ def from_preflib(
     )
     df_edges = pd.DataFrame(data).dropna().head(int(unique_orders)).copy()
     df_edges[["voters", 0]] = df_edges[0].str.split(": ", expand=True)
+    df_edges["voters"] = df_edges["voters"].astype(int)
 
     def lambda_row(x):
         row = [item for item in re.split(r",\{(.*?)\}", x[0])[:2]]
@@ -35,7 +44,6 @@ def from_preflib(
 
     if _ in ["toc"]:
         cols = ["winners", "losers"]
-        # df_edges.apply(
         df_edges[cols] = df_edges.apply(
             lambda x: lambda_row(x),
             axis=1,
@@ -52,7 +60,6 @@ def from_preflib(
         cols = ["source", "destination"]
         df_edges[cols] = df_edges[1].str.split(",", expand=True)
 
-    # df_edges = df_edges.rename(columns={0: "voters"})
     df_edges = df_edges.drop(columns=[0], errors="ignore")
 
     return df_nodes, df_edges

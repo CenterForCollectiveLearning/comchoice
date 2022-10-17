@@ -31,7 +31,7 @@ def borda(
 
     Parameters
     ----------
-    df : _type_
+    df : pd.DataFrame
         A data set to be aggregated.
     alternative : str, optional
         Column label to get alternatives, by default "alternative".

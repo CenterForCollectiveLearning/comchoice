@@ -44,7 +44,7 @@ def judgment(
         for _alternative, tmp in df.groupby("_id"):
             output = []
             for i, items in tmp.iterrows():
-                output += [items[ballot]] * items[voters]
+                output += [items["rank"]] * items[voters]
 
             jdgm.append([_alternative, np.median(output)])
 
@@ -61,9 +61,9 @@ def judgment(
     if dtype == "score" and ratings:
         jdgm[ballot] = jdgm[ballot].replace(ratings)
 
-    jdgm["p" if ascending else "q"] = jdgm[ballot] < np.floor(
+    jdgm["p" if ascending else "q"] = jdgm["rank"] < np.floor(
         jdgm["alpha"])  # Rate higher than median
-    jdgm["q" if ascending else "p"] = jdgm[ballot] > np.floor(
+    jdgm["q" if ascending else "p"] = jdgm["rank"] > np.floor(
         jdgm["alpha"])  # Rate lower than median
 
     for col in ["p", "q"]:

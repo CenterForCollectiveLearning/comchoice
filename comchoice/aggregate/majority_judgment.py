@@ -7,7 +7,7 @@ from comchoice.aggregate.judgment import judgment
 def majority_judgment(
     df,
     alternative="alternative",
-    ballot="rank",
+    ballot="ballot",
     delimiter=">",
     dtype="ballot",
     ratings=None,

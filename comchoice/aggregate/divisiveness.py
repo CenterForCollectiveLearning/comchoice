@@ -8,12 +8,14 @@ from comchoice.aggregate.__set_rank import __set_rank
 from comchoice.preprocessing import to_pairwise
 
 
+# TODO: Calculate Divisiveness with the Score
 def divisiveness(
     df,
     alternative: str = "alternative",
     alternative_a: str = "alternative_a",
     alternative_b: str = "alternative_b",
     convert_pairwise: bool = False,
+    convert_pairwise_kws: dict = dict(),
     method=ahp,
     method_kws: dict = dict(),
     selected: str = "selected",
@@ -21,14 +23,14 @@ def divisiveness(
     verbose: bool = True,
     voter: str = "voter"
 ):
-    """Divisiveness
+    """Divisiveness.
 
     Parameters
     ----------
     df : _type_
-        _description_
+        A data set to be aggregated.
     alternative : str, optional
-        _description_, by default "id"
+        Column label to get alternatives, by default "alternative".
     method : _type_, optional
         _description_, by default borda
     alternative_a : str, optional
@@ -50,7 +52,8 @@ def divisiveness(
     tmp = df.copy()
     df_original = df.copy()
     if convert_pairwise:
-        tmp = to_pairwise(tmp, origin="voting")
+        tmp = to_pairwise(tmp, **convert_pairwise_kws)
+        df_original = tmp.copy()
 
     tmp = __set_card_id(
         tmp.copy(),
@@ -99,8 +102,12 @@ def divisiveness(
     tmp_a = tmp[tmp["group"] == "A"]
     tmp_b = tmp[tmp["group"] == "B"]
 
-    tmp_dv = pd.merge(tmp_a, tmp_b, on=[
-                      "card_id", alternative, f"{alternative_a}_sorted", f"{alternative_b}_sorted"])
+    tmp_dv = pd.merge(
+        tmp_a,
+        tmp_b,
+        on=["card_id", alternative,
+            f"{alternative_a}_sorted", f"{alternative_b}_sorted"]
+    )
 
     tmp_dv = tmp_dv[[alternative, "card_id", "value_x",
                      "value_y", f"{selected}_x", f"{selected}_y"]]
