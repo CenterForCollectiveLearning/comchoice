@@ -16,8 +16,12 @@ from .divisiveness import divisiveness
 from .dodgson import dodgson
 from .dodgson_quick import dodgson_quick
 from .dowdall import dowdall
+from .droop_quota import droop_quota
 from .elo import elo
 from .fallback import fallback
+from .hagenbach_bischoff_quota import hagenbach_bischoff_quota
+from .hare_quota import hare_quota
+from .imperiali_quota import imperiali_quota
 from .irv import irv
 from .judgment import judgment
 from .k_approval import k_approval
