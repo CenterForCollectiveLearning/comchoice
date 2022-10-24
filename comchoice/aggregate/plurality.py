@@ -36,12 +36,12 @@ def plurality(
     voters : str, optional
         Whether the number of voters is defined in the data, it represents its column label, by default "voters".
     ascending : bool, optional
-        _description_, by default False
+        Whether the score is sorted ascending or not, by default False. When `ascending = True`, the method is called Anti-Plurality.
 
     Returns
     -------
     pd.DataFrame
-        Aggregation of preferences using Plurality
+        Aggregation of preferences using Plurality rule.
     """
 
     df = transform(

@@ -20,6 +20,43 @@ def judgment(
     voters: str = "voters",
     e: int = 0
 ):
+    """Judgment rule. These family of rules relies on the median score in order to elect a winner.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        A data set to be aggregated.
+    alternative : str, optional
+        Column label to get alternatives, by default "alternative".
+    ballot : str, optional
+        Column label that includes a set of sorted alternatives for each voter or voters (when is defined in the data set), by default "ballot".
+    delimiter : str, optional
+        Delimiter used between alternatives in a `ballot`, by default ">".
+    dtype : str, optional
+        _description_, by default "ballot"
+    method : {"typical", "usual", "central", "bucklin", "majority"}
+        Judgment method to use in case of a tie, by default "typical".
+    ratings : _type_, optional
+        _description_, by default None
+    show_rank : bool, optional
+        Whether or not to include the ranking of alternatives, by default True.
+    transform_kws : dict, optional
+        Whether or not to process data.
+    voters : str, optional
+        Whether the number of voters is defined in the data, it represents its column label, by default "voters".
+    e : int, optional
+        Error variable used when `method = "central"`, by default 0.
+
+    Returns
+    -------
+    pd.DataFrame
+        Aggregation of preferences using a highest-majority rule.
+
+    References
+    ----------
+    Lang, J., & Slavkovik, M. (2013, November). Judgment aggregation rules and voting rules. In International Conference on Algorithmic Decision Theory (pp. 230-243). Springer, Berlin, Heidelberg.
+
+    """
     df = df.copy()
 
     if voters in list(df):
