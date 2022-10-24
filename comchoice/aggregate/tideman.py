@@ -16,6 +16,32 @@ def tideman(
     voters: str = "voters",
     transform_kws: dict = transform_kws
 ):
+    """Tideman.
+
+    Parameters
+    ----------
+    df : _type_
+        A data set to be aggregated.
+    alternative : str, optional
+        Column label to get alternatives, by default "alternative".
+    delimiter : str, optional
+        Delimiter used between alternatives in a `ballot`, by default ">".
+    ballot : str, optional
+        Column label that includes a set of sorted alternatives for each voter or voters (when is defined in the data set), by default "ballot".
+    show_rank : bool, optional
+        Whether or not to include the ranking of alternatives, by default True.
+    voter : str, optional
+        _description_, by default "voter"
+    voters : str, optional
+        Whether the number of voters is defined in the data, it represents its column label, by default "voters".
+    transform_kws : dict, optional
+        Whether or not to process data.
+
+    Returns
+    -------
+    pd.DataFrame
+        Aggregation of preferences using Tideman.
+    """
     m = pairwise_matrix(
         df,
         alternative=alternative,

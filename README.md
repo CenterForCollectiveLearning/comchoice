@@ -1,4 +1,4 @@
-<img src="./logo.png" alt="Logo ComChoice" width="350"/>
+<img src="https://github.com/CenterForCollectiveLearning/comchoice/raw/master/logo.png" alt="Logo ComChoice" width="350"/>
 
 ## What it is?
 

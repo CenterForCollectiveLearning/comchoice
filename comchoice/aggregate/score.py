@@ -35,7 +35,7 @@ def score(
     Returns
     -------
     pd.DataFrame
-        _description_
+        Aggregation of preferences using Score voting.
     """
 
     tmp = __aggregate(

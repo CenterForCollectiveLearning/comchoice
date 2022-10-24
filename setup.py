@@ -1,5 +1,6 @@
 import setuptools
 
+
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
@@ -8,9 +9,10 @@ setuptools.setup(
     version="0.1.0",
     author="cnavarreteliz",
     author_email="cnavarreteliz@gmail.com",
-    description="Python library for social choice theory and computational social choice",
-    license_files=("LICENSE.txt",),
+    description="ComChoice (Computational Choice) is a large collection of many well-known voting rules and aggregation methods in Python.",
+    license_files=("LICENSE.md",),
     long_description=long_description,
+    long_description_content_type="text/markdown",
     url="https://github.com/CenterForCollectiveLearning/comchoice",
     packages=setuptools.find_packages(),
     install_requires=[

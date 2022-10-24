@@ -38,9 +38,8 @@ def schulze(
 
     for i in alternatives:
         for j in alternatives:
-            if i != j:
-                if d[i][j] > d[j][i]:
-                    p[i][j] = d[i][j]
+            if i != j and d[i][j] > d[j][i]:
+                p[i][j] = d[i][j]
 
     for i in alternatives:
         for j in alternatives:

@@ -20,10 +20,27 @@ def smith_set(
     is the smallest non-empty set of alternatives in an election.
     Each member defeats every alternative outside the set in a pairwise election.
 
+    Parameters
+    ----------
+    df : pd.DataFrame
+        A data set to be aggregated.
+    alternative : str, optional
+        Column label to get alternatives, by default "alternative".
+    ballot : str, optional
+        Column label that includes a set of sorted alternatives for each voter or voters (when is defined in the data set), by default "ballot".
+    delimiter : str, optional
+        Delimiter used between alternatives in a `ballot`, by default ">".
+    voter : str, optional
+        _description_, by default "voter"
+    voters : str, optional
+        Whether the number of voters is defined in the data, it represents its column label, by default "voters".
+    transform_kws : dict, optional
+        Whether or not to process data.
+
     Returns
     -------
     list:
-        alternatives that are part of the Smith Set.
+        Alternatives that are part of the Smith Set.
     """
 
     m = pairwise_matrix(
