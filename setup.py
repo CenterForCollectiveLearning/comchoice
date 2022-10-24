@@ -20,7 +20,9 @@ setuptools.setup(
         "networkx",
         "numpy",
         "pandas",
-        "requests"
+        "requests",
+        "scipy",
+        "tqdm"
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

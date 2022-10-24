@@ -1,5 +1,4 @@
 import pandas as pd
-from sqlalchemy import column
 
 from comchoice.aggregate.__aggregate import __aggregate
 from comchoice.aggregate.__set_rank import __set_rank
