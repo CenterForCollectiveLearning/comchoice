@@ -3,9 +3,10 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-def spatial_aggregate_grids(
+def aggregate_spatially_grids(
     mystate,
-    new_size = 10
+    new_size = 10,
+    methods="win_rate"
 ):
     """
     Aggregate grids
