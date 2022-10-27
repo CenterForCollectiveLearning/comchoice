@@ -10,24 +10,28 @@ def spatial(
     method: str = "condorcet",
     column_group: str = "grid_list",
     delimiter: str = ",",
-    showHeatmap: bool = True
+    showHeatmap: bool = True,
+    **kwargs
 ) -> int:
-    """Computes Spatial threshold.
+    """Computes Spatial aggregation.
 
     Parameters
     ----------
-    method : {"hare", "imperiali", "droop", "hagenbach-bischoff"}
-        Specifies the method to compute the quota, by default "hare".
-    n_votes : int
-        Number of votes, by default 1.
-    n_seats : int
-        Number of seats to elect, by default 1.
+    method : {"elo", "copeland", "condorcet", "plurality"}
+        Specifies the method to compute the spatial aggregation, by default "condorcet".
+    column_group : int
+        Specifies the column which has the spatial xy information, by default grid_list.
+    delimiter : int
+        Split the column_group using an element, by default ","
 
     Returns
     -------
-    int
-        Quota threshold
+    winners
+        Winners groupedby column_group
+    plot
+        Heatmap showing the winners distributed over the space
     """
+
     winners = []
     for grid in data[column_group].unique():
         winner =  []
@@ -48,7 +52,7 @@ def spatial(
     winners = pd.DataFrame(winners, columns=["winner",column_group])
     
     if showHeatmap:
-        plt.figure()
+        fig, ax = plt.subplots(figsize=(8,6))
         if column_group == "grid_list":
             winners['x'] = winners[column_group].apply(lambda x: x[0])
             winners['y'] = winners[column_group].apply(lambda x: x[1])
@@ -62,12 +66,16 @@ def spatial(
         value_to_int = {j:i for i,j in enumerate(pd.unique(winners["winner"].ravel()))}
         n = len(value_to_int)     
         cmap = sns.color_palette("hsv", n)
-        ax = sns.heatmap(winners.pivot_table(index="y",columns="x",values='cat', \
-            aggfunc=np.unique), cmap=cmap)
+        sns.heatmap(winners.pivot_table(index="y",columns="x",values='cat', \
+            aggfunc=np.unique), cmap=cmap, ax=ax)
         colorbar = ax.collections[0].colorbar 
         r = colorbar.vmax - colorbar.vmin 
         colorbar.set_ticks([colorbar.vmin + r / n * (0.5 + i) for i in range(n)])
         colorbar.set_ticklabels(list(value_to_int.keys())) 
+        ax.invert_yaxis()
         ax.set_title(method)
+        fig.data = winners
+        plt.ioff()
+        return winners[["winner",column_group]], fig
 
     return winners[["winner",column_group]]
