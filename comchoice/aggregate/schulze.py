@@ -16,7 +16,37 @@ def schulze(
     voters: str = "voters",
     transform_kws: dict = transform_kws
 ):
+    """Schulze method (2011)
 
+    Parameters
+    ----------
+    df : pd.DataFrame
+        A data set to be aggregated.
+    alternative : str, optional
+        Column label to get alternatives, by default "alternative".
+    ballot : str, optional
+        Column label that includes a set of sorted alternatives for each voter or voters (when is defined in the data set), by default "ballot".
+    delimiter : str, optional
+        Delimiter used between alternatives in a `ballot`, by default ">".
+    show_rank : bool, optional
+        Whether or not to include the ranking of alternatives, by default True.
+    voter : str, optional
+        _description_, by default "voter"
+    voters : str, optional
+        Whether the number of voters is defined in the data, it represents its column label, by default "voters".
+    transform_kws : dict, optional
+        Whether or not to process data.
+
+    Returns
+    -------
+    pd.DataFrame
+        Aggregation of preferences using Schulze method.
+
+    References
+    ----------
+    Schulze, M. (2011). A new monotonic, clone-independent, reversal symmetric, and condorcet-consistent single-winner election method. Social choice and Welfare, 36(2), 267-303.
+
+    """
     d = pairwise_matrix(
         df,
         alternative=alternative,

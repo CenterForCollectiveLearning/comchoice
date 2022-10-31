@@ -6,7 +6,7 @@ from comchoice.aggregate.pairwise_matrix import pairwise_matrix
 
 
 def kemeny_young(
-    df,
+    df: pd.DataFrame,
     alternative: str = "alternative",
     ballot: str = "ballot",
     delimiter: str = ">",
@@ -15,20 +15,34 @@ def kemeny_young(
     score_matrix: bool = False,
     transform_kws: dict = transform_kws
 ) -> pd.DataFrame:
-    """Kemeny-Young method.
+    """Kemeny-Young method (1959).
 
     The Kemeny-Young method is a voting method that uses preferential ballots
     and pairwise comparison to identify the most popular alternatives in an election.
 
     Parameters
     ----------
-    score_matrix : bool, default = False
-        If the value is `true`, returns the score matrix.
+    df : pd.DataFrame
+        A data set to be aggregated.
+    alternative : str, optional
+        Column label to get alternatives, by default "alternative".
+    ballot : str, optional
+        Column label that includes a set of sorted alternatives for each voter or voters (when is defined in the data set), by default "ballot".
+    delimiter : str, optional
+        Delimiter used between alternatives in a `ballot`, by default ">".
+    voter : str, optional
+        _description_, by default "voter"
+    voters : str, optional
+        Whether the number of voters is defined in the data, it represents its column label, by default "voters".
+    score_matrix : bool, optional
+        _description_, by default False
+    transform_kws : dict, optional
+        Whether or not to process data.
 
     Returns
     -------
-    pandas.DataFrame:
-        Election results using Kemeny-Young method.
+    pd.DataFrame
+        Aggregation of preferences using Kemeny-Young method.
 
     References
     ----------
