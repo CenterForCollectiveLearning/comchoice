@@ -41,6 +41,7 @@ from .schulze import schulze
 from .score import score
 from .simpson import simpson
 from .smith_set import smith_set
+from .spatial import spatial
 from .tideman import tideman
 from .typical_judgment import typical_judgment
 from .usual_judgment import usual_judgment
