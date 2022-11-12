@@ -6,7 +6,7 @@ from comchoice.aggregate.pairwise_matrix import pairwise_matrix
 
 
 def smith_set(
-    df,
+    df: pd.DataFrame,
     alternative: str = "alternative",
     ballot: str = "ballot",
     delimiter: str = ">",

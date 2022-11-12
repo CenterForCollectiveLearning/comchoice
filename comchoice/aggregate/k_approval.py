@@ -8,8 +8,8 @@ from comchoice.preprocessing.transform import transform
 
 
 def k_approval(
-    df,
-    k: int = 1,
+    df: pd.DataFrame,
+    k: int = 2,
     alternative: str = "alternative",
     ballot: str = "ballot",
     delimiter: str = ">",
@@ -17,23 +17,33 @@ def k_approval(
     voters: str = "voters",
     transform_kws: dict = transform_kws,
 ) -> pd.DataFrame:
-    """k-Approval voting method.
+    """k-Approval method.
 
     The method gives 1 if the alternative is ranked over or equal to k. Otherwise, the value given is 0.
 
     Parameters
     ----------
-    k (int, default=1, optional):
-        Threshold to score alternatives with a value of 1.
+    df : pd.DataFrame
+        A data set to be aggregated.
+    k : int, optional
+        Rank threshold to score alternatives, by default 2. When `k = 2`, it is the equivalent of Plurality rule.
+    alternative : str, optional
+        Column label to get alternatives, by default "alternative".
+    ballot : str, optional
+        Column label that includes a set of sorted alternatives for each voter or voters (when is defined in the data set), by default "ballot".
+    delimiter : str, optional
+        Delimiter used between alternatives in a `ballot`, by default ">".
+    show_rank : bool, optional
+        Whether or not to include the ranking of alternatives, by default True.
+    voters : str, optional
+        Whether the number of voters is defined in the data, it represents its column label, by default "voters".
+    transform_kws : dict, optional
+        Whether or not to process data.
 
     Returns
     -------
-    pandas.DataFrame:
-        Election results using the k-approval method.
-
-    References
-    ----------
-
+    pd.DataFrame
+        Aggregation of preferences using k-Approval.
     """
     df = transform(
         df.copy(),

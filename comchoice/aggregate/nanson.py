@@ -5,7 +5,7 @@ from comchoice.aggregate.__default_parameters import transform_kws
 
 
 def nanson(
-    df,
+    df: pd.DataFrame,
     alternative="alternative",
     delimiter=">",
     ballot="ballot",

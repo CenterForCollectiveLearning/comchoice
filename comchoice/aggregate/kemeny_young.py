@@ -31,11 +31,11 @@ def kemeny_young(
     delimiter : str, optional
         Delimiter used between alternatives in a `ballot`, by default ">".
     voter : str, optional
-        _description_, by default "voter"
+        Column label of voter unique identifier, by default "voter".
     voters : str, optional
         Whether the number of voters is defined in the data, it represents its column label, by default "voters".
     score_matrix : bool, optional
-        _description_, by default False
+        _description_, by default False.
     transform_kws : dict, optional
         Whether or not to process data.
 

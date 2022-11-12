@@ -5,7 +5,7 @@ from comchoice.aggregate.__default_parameters import transform_kws
 
 
 def condorcet(
-    df,
+    df: pd.DataFrame,
     alternative: str = "alternative",
     ballot: str = "ballot",
     delimiter: str = ">",

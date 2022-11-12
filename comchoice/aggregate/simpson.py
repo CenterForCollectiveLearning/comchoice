@@ -5,7 +5,7 @@ from comchoice.aggregate.minimax import minimax
 
 
 def simpson(
-    df,
+    df: pd.DataFrame,
     method: str = "winning_votes",
     alternative: str = "alternative",
     ballot: str = "ballot",

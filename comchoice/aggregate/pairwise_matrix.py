@@ -17,6 +17,35 @@ def pairwise_matrix(
     set_transform=True,
     transform_kws=transform_kws
 ):
+    """Pairwise Matrix.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        _description_
+    alternative : str, optional
+        Column label to get alternatives, by default "alternative".
+    ballot : str, optional
+        Column label that includes a set of sorted alternatives for each voter or voters (when is defined in the data set), by default "ballot".
+    delimiter : str, optional
+        Delimiter used between alternatives in a `ballot`, by default ">".
+    voter : str, optional
+        _description_, by default "voter"
+    voters : str, optional
+        Whether the number of voters is defined in the data, it represents its column label, by default "voters".
+    return_alternatives : bool, optional
+        Whether the value is `True`, it returns a second variable that includes the alternatives's labels, by default False.
+    set_transform : bool, optional
+        Whether the value is `True`, it converts the DataFrame into a Pairwise object, by default True.
+    transform_kws : dict, optional
+        Whether or not to process data.
+
+    Returns
+    -------
+    pd.DataFrame
+        _description_
+
+    """
     output = []
 
     cols = ["_winner", "_loser"]

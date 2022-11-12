@@ -7,7 +7,7 @@ from comchoice.aggregate.__set_rank import __set_rank
 
 
 def tideman(
-    df,
+    df: pd.DataFrame,
     alternative: str = "alternative",
     delimiter: str = ">",
     ballot: str = "ballot",
@@ -20,7 +20,7 @@ def tideman(
 
     Parameters
     ----------
-    df : _type_
+    df : pd.DataFrame
         A data set to be aggregated.
     alternative : str, optional
         Column label to get alternatives, by default "alternative".

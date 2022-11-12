@@ -6,7 +6,7 @@ from comchoice.aggregate.__default_parameters import transform_kws
 
 
 def nanson_baldwin(
-    df,
+    df: pd.DataFrame,
     method="nanson",
     alternative="alternative",
     delimiter=">",

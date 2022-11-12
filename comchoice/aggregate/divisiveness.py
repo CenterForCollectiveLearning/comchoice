@@ -10,7 +10,7 @@ from comchoice.preprocessing import to_pairwise
 
 # TODO: Calculate Divisiveness with the Score
 def divisiveness(
-    df,
+    df: pd.DataFrame,
     alternative: str = "alternative",
     alternative_a: str = "alternative_a",
     alternative_b: str = "alternative_b",
@@ -23,31 +23,37 @@ def divisiveness(
     verbose: bool = True,
     voter: str = "voter"
 ):
-    """Divisiveness.
+    """Divisiveness. Navarrete et al. (2022)
+
+    This method allows to calculate divisive alternatives in a set of preferences without relying in any self-reported data.
 
     Parameters
     ----------
-    df : _type_
+    df : pd.DataFrame
         A data set to be aggregated.
     alternative : str, optional
         Column label to get alternatives, by default "alternative".
-    method : _type_, optional
-        _description_, by default borda
+    method : comchoice.function, optional
+        Method used to calculate divisiveness, by default borda.
     alternative_a : str, optional
-        _description_, by default "alternative_a"
+        Whether a pairwise dataset is given, it represents the first alternative included in the comparison, by default "alternative_a".
     alternative_b : str, optional
-        _description_, by default "alternative_b"
+        Whether a pairwise dataset is given, it represents the second alternative included in the comparison, by default "alternative_b".
     selected : str, optional
-        _description_, by default "selected"
+        Whether a pairwise dataset is given, it represents the selected alternative included in the comparison, by default "selected". Ties between alternatives are represent with the value 0.
     verbose : bool, optional
-        _description_, by default True
+        Whether the value is `True`, it returns an output with the progress of the calculation. by default True.
     voter : str, optional
-        _description_, by default "voter"
+        Column label of voter unique identifier, by default "voter".
 
     Returns
     -------
-    _type_
-        _description_
+    pd.DataFrame
+        Aggregation of preferences using Divisiveness.
+
+    References
+    ----------
+    Navarrete, C., Ferrada, N., Macedo, M., Colley, R., Zhang, J., Grandi, U., Lang, J., & Hidalgo, C.A. (2022). Understanding Political Agreements and Disagreements: Evidence from the 2022 French Presidential Election.
     """
     tmp = df.copy()
     df_original = df.copy()

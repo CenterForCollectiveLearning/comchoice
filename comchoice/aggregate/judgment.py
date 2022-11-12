@@ -20,7 +20,9 @@ def judgment(
     voters: str = "voters",
     e: int = 0
 ):
-    """Judgment rule. These family of rules relies on the median score in order to elect a winner.
+    """Judgment rules. 
+
+    These family of rules relies on the median score in order to elect a winner.
 
     Parameters
     ----------

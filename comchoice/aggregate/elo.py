@@ -6,7 +6,7 @@ from comchoice.preprocessing.transform import transform
 
 
 def elo(
-    df,
+    df: pd.DataFrame,
     alternative_a: str = "alternative_a",
     alternative_b: str = "alternative_b",
     alternative: str = "alternative",
@@ -17,19 +17,38 @@ def elo(
     random_state=None,
     show_rank: bool = True
 ):
-    """Elo score.
+    """Elo rating.
 
     Calculates a ranking of alternatives using Elo rating.
 
     Parameters
     ----------
-    rating : int, default=400
-        Initial rating of each alternative.
-    K : int, default=10
-        The K-factor estimates the score that a player can win in a game.
+    df : _type_
+        _description_
+    alternative_a : str, optional
+        _description_, by default "alternative_a"
+    alternative_b : str, optional
+        _description_, by default "alternative_b"
+    alternative : str, optional
+        _description_, by default "alternative"
+    selected : str, optional
+        _description_, by default "selected"
+    rating : int, optional
+        Initial rating of each alternative, by default 400.
+    K : int, optional
+        Freedom degree in the equation, by default 10.
+    transform_kws : dict, optional
+        _description_, by default transform_kws
+    random_state : _type_, optional
+        _description_, by default None
+    show_rank : bool, optional
+        _description_, by default True
 
+    Returns
+    -------
+    pd.DataFrame
+        Aggregation of preferences using Elo.
     """
-
     df = df.copy()
     if random_state:
         df = df.sample(frac=1, random_state=random_state)

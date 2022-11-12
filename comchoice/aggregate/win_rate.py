@@ -5,7 +5,7 @@ from comchoice.aggregate.__set_card_id import __set_card_id
 
 
 def win_rate(
-    df,
+    df: pd.DataFrame,
     alternative="alternative",
     alternative_a="alternative_a",
     alternative_b="alternative_b",

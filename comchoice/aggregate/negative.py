@@ -4,7 +4,7 @@ from comchoice.aggregate.score import score
 
 
 def negative(
-    df,
+    df: pd.DataFrame,
     alternative="alternative",
     score="score",
     show_rank=True

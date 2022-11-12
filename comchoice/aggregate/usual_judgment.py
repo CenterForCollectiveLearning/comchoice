@@ -5,7 +5,7 @@ from comchoice.aggregate.judgment import judgment
 
 
 def usual_judgment(
-    df,
+    df: pd.DataFrame,
     alternative: str = "alternative",
     ballot: str = "rank",
     delimiter: str = ">",

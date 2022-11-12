@@ -6,7 +6,7 @@ from comchoice.aggregate.pairwise_matrix import pairwise_matrix
 
 
 def minimax(
-    df,
+    df: pd.DataFrame,
     method="winning_votes",
     alternative="alternative",
     ballot="ballot",
@@ -16,7 +16,7 @@ def minimax(
     voters="voters",
     transform_kws=transform_kws
 ) -> pd.DataFrame:
-    """_summary_
+    """Minimax rule.
 
     Parameters
     ----------

@@ -8,7 +8,7 @@ from comchoice.preprocessing.transform import transform
 
 
 def borda(
-    df,
+    df: pd.DataFrame,
     alternative: str = "alternative",
     delimiter: str = ">",
     ballot: str = "ballot",

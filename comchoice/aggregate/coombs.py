@@ -4,10 +4,26 @@ from comchoice.aggregate.__transform import __transform
 
 
 def coombs(
-    df,
+    df: pd.DataFrame,
     delimiter: str = ">",
     voters: str = "voters"
 ) -> str:
+    """Coombs rule.
+
+    Parameters
+    ----------
+    df : _type_
+        _description_
+    delimiter : str, optional
+        _description_, by default ">"
+    voters : str, optional
+        _description_, by default "voters"
+
+    Returns
+    -------
+    str
+        _description_
+    """
     n_voters = df[voters].sum()
 
     def count_by_rank(df, delimiter=">", rmv=[], n_voters=n_voters):
