@@ -4,13 +4,35 @@ from itertools import combinations
 
 
 def approval(
-    df,
-    delimiter=",",
-    method="proportional",
-    n_seats=2,
-    ballot="ballot",
-    voters="voters"
-):
+    df: pd.DataFrame,
+    delimiter: str = ",",
+    method: str = "proportional",
+    n_seats: int = 2,
+    ballot: str = "ballot",
+    voters: str = "voters"
+) -> pd.DataFrame:
+    """Approval rule.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        A data set to be aggregated.
+    delimiter : str, optional
+        Delimiter used between alternatives in a `ballot`, by default ",".
+    method : {"classic", "proportional", "satisfaction"}, optional
+        Approval method to use, by default "proportional".
+    n_seats : int, optional
+        Number of seats to elect, by default 2.
+    ballot : str, optional
+        Column label that includes a set of sorted alternatives for each voter or voters (when is defined in the data set), by default "ballot".
+    voters : str, optional
+        Whether the number of voters is defined in the data, it represents its column label, by default "voters".
+
+    Returns
+    -------
+    pd.DataFrame
+        Aggregation of preferences using Approval rule.
+    """
     df = df.copy()
 
     def harmonic(n):

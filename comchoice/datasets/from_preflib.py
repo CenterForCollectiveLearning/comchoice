@@ -54,7 +54,8 @@ def from_preflib(
                 "{", "", regex=False).str.replace("}", "", regex=False)
 
     elif _ in ["soc"]:
-        df_edges = df_edges.rename(columns={1: "rank"})
+        df_edges = df_edges.rename(columns={0: "ballot"})
+        df_edges["ballot"] = df_edges["ballot"].str.replace(",", ">")
 
     else:
         cols = ["source", "destination"]
