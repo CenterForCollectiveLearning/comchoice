@@ -6,15 +6,15 @@ from comchoice.aggregate.judgment import judgment
 
 def majority_judgment(
     df: pd.DataFrame,
-    alternative="alternative",
-    ballot="ballot",
-    delimiter=">",
-    dtype="ballot",
+    alternative: str = "alternative",
+    ballot: str = "ballot",
+    delimiter: str = ">",
+    dtype: str = "ballot",
     ratings=None,
-    show_rank=True,
-    transform_kws=transform_kws,
-    voters="voters",
-    e=0
+    show_rank: bool = True,
+    transform_kws: dict = transform_kws,
+    voters: str = "voters",
+    e: int = 0
 ):
     return judgment(
         df,

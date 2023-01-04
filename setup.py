@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="comchoice",
-    version="0.1.0",
+    version="0.1.2",
     author="cnavarreteliz",
     author_email="cnavarreteliz@gmail.com",
     description="ComChoice (Computational Choice) is a large collection of many well-known voting rules and aggregation methods in Python.",

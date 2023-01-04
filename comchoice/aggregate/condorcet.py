@@ -19,7 +19,7 @@ def condorcet(
     A Condorcet winner is the alternative who wins 100% of 1v1 elections regarding all
     the other alternatives running in the same election (under a plurality rule).
 
-    A weak Condorcet winner does not need to satisfy the rule of 100% of victories.
+    A weak Condorcet winner does not need to satisfy the rule of 100% of pairwise victories.
 
     Parameters
     ----------
@@ -37,6 +37,8 @@ def condorcet(
         Whether the number of voters is defined in the data, it represents its column label, by default "voters".
     weak : bool, optional
         Whether or not returns a weak Condorcet winner, by default True.
+    transform_kws : dict, optional
+        Attributes to handle the data frame
 
     Returns
     -------

@@ -9,7 +9,7 @@ def ballot_extend(
     rmv=[],
     unique_id=False
 ):
-    df["_id"] = range(df.shape[0])
+    df["voter"] = range(df.shape[0])
     df[ballot] = df[ballot].str.split(delimiter)
     df = df.explode(ballot)
 
@@ -17,11 +17,11 @@ def ballot_extend(
     if len(rmv) > 0:
         df = df[~df["alternative"].isin(rmv)].copy()
 
-    df["rank_a"] = df.groupby("_id").cumcount() + 1
+    df["rank_a"] = df.groupby("voter").cumcount() + 1
 
     df["alternative"] = df["alternative"].str.split(delimiter_ties)
     df["rank_b"] = df["alternative"].map(len)
-    df["rank_b"] = df.groupby("_id")["rank_b"].cumsum()
+    df["rank_b"] = df.groupby("voter")["rank_b"].cumsum()
 
     df["rank"] = df.apply(lambda x: x["rank_a"] if len(
         x["alternative"]) > 1 else x["rank_b"], axis=1)
@@ -30,6 +30,6 @@ def ballot_extend(
     df = df.drop(columns=["rank_a", "rank_b"])
 
     if not unique_id:
-        df = df.drop(columns=["_id"])
+        df = df.drop(columns=["voter"])
 
     return df

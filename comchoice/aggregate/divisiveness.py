@@ -1,11 +1,12 @@
 import numpy as np
 import pandas as pd
+from itertools import combinations
 from tqdm import tqdm
 
 from . import ahp
 from comchoice.aggregate.__set_card_id import __set_card_id
 from comchoice.aggregate.__set_rank import __set_rank
-from comchoice.preprocessing import to_pairwise
+from comchoice.preprocessing import unpack_ballot, to_pairwise
 
 
 # TODO: Calculate Divisiveness with the Score
@@ -16,6 +17,7 @@ def divisiveness(
     alternative_b: str = "alternative_b",
     convert_pairwise: bool = False,
     convert_pairwise_kws: dict = dict(),
+    dtype: str = "pairwise",
     method=ahp,
     method_kws: dict = dict(),
     selected: str = "selected",
@@ -55,22 +57,40 @@ def divisiveness(
     ----------
     Navarrete, C., Ferrada, N., Macedo, M., Colley, R., Zhang, J., Grandi, U., Lang, J., & Hidalgo, C.A. (2022). Understanding Political Agreements and Disagreements: Evidence from the 2022 French Presidential Election.
     """
-    tmp = df.copy()
-    df_original = df.copy()
+    df_source = df.copy()
+
+    if dtype == "ballot":
+        df_source = unpack_ballot(df_source)
+
+    df_pairwise = df_source.copy()
+
+    convert_pairwise = dtype != "pairwise"
+
     if convert_pairwise:
-        tmp = to_pairwise(tmp, **convert_pairwise_kws)
-        df_original = tmp.copy()
+        df_pairwise = to_pairwise(
+            df_pairwise,
+            **convert_pairwise_kws,
+            dtype=dtype
+        )
 
-    tmp = __set_card_id(
-        tmp.copy(),
-        alternative_a=alternative_a,
-        alternative_b=alternative_b,
-        selected=selected,
-        concat="_"
-    )
+    if "card_id" not in list(df_pairwise):
+        df_pairwise = __set_card_id(
+            df_pairwise.copy(),
+            alternative_a=alternative_a,
+            alternative_b=alternative_b,
+            selected=selected,
+            concat="_"
+        )
 
-    dd = tmp.groupby(["card_id", selected, voter]).agg({"id": "count"})
+    if dtype in ["ballot", "ballot_extended"]:
+        df_source["_pairs"] = df_source["ballot"]\
+            .apply(lambda x: list(combinations(x.split(">"), 2)))\
+            .apply(lambda x: ["_".join(w) for w in x])
+
+    dd = df_pairwise.groupby(["card_id", selected, voter]).agg({"id": "count"})
     # _data = df.copy().set_index(voter)
+    alternatives = set(df_pairwise[alternative_a]) | set(
+        df_pairwise[alternative_b])
 
     def _f(idx, df_select):
         card_id = idx[0]
@@ -78,7 +98,8 @@ def divisiveness(
         users = [item[2] for item in df_select.index.to_numpy()]
 
         # data_temp = _data.loc[users].reset_index()
-        data_temp = df_original[df_original[voter].isin(users)]
+        data_temp = df_source[df_source[voter].isin(users)]
+
         r_tmp = method(data_temp, **method_kws).dropna()
         r_tmp["card_id"] = card_id
         r_tmp[selected] = s
@@ -91,8 +112,11 @@ def divisiveness(
 
     _data_tmp = dd.groupby(level=[0, 1])
 
-    _iter = tqdm(_data_tmp, position=0,
-                 leave=True) if verbose else _data_tmp
+    _iter = tqdm(
+        _data_tmp,
+        position=0,
+        leave=True
+    ) if verbose else _data_tmp
 
     for idx, df_select in _iter:
         tmp_list.append(_f(idx, df_select))
@@ -126,10 +150,12 @@ def divisiveness(
     tmp_frag_b = tmp_dv[[alternative, f"{selected}_y", "value"]].rename(
         columns={f"{selected}_y": "selected"})
     tmp = pd.concat([tmp_frag_a, tmp_frag_b])
-    tmp = tmp[tmp[alternative]
-              == tmp["selected"]]
+    tmp = tmp[tmp[alternative] == tmp["selected"]]
     tmp = tmp.groupby(alternative).agg(
-        {"value": "mean"}).reset_index()
+        {"value": "mean"})
+
+    tmp = tmp.reindex(alternatives, index=1).fillna(0)
+    tmp = tmp.reset_index()
 
     if show_rank:
         tmp = __set_rank(tmp)

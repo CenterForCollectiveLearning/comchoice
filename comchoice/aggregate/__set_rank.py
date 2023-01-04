@@ -30,6 +30,6 @@ def __set_rank(
         ascending=ascending
     ).astype(int)
 
-    df = df.sort_values("rank")
+    df = df.sort_values("rank").reset_index(drop=True)
 
     return df

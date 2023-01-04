@@ -20,7 +20,7 @@ def from_preflib(
     file = urllib.request.urlopen(path)
     arr = file.read().decode("utf-8").split("\n")
     alternatives = list(filter(lambda k: "# ALTERNATIVE NAME" in k, arr))
-    alternatives = [x.replace("# ALTERNATIVE NAME ", "").split(": ")
+    alternatives = [x.replace("# ALTERNATIVE NAME ", "").split(": ", 1)
                     for x in alternatives]
 
     unique_orders = list(

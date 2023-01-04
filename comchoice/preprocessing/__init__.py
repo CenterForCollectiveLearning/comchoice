@@ -4,3 +4,4 @@ from .to_ballot import to_ballot
 from .to_individual_voter import to_individual_voter
 from .to_pairwise import to_pairwise
 from .to_rank import to_rank
+from .unpack_ballot import unpack_ballot

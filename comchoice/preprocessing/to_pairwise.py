@@ -47,7 +47,7 @@ def to_pairwise(
     """
 
     # TODO: Allow ties
-    if dtype == "ballot":
+    if dtype in ["ballot", "ballot_extended"]:
         if voters in list(df):
             output = []
             for i, row in df.iterrows():
