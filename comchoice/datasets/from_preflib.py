@@ -4,13 +4,18 @@ import urllib
 
 
 def from_preflib(
-    path: str
+    path: str,
+    get_dataset_metadata: bool = False
 ):
     """Converts Preflib Data
+
     Parameters
     ----------
     path : str
         Data set URL
+    get_dataset_metadata : bool
+        Whether this value is True, it returns a third dict with metadata included in the dataset, by default "voters".
+
 
     Returns
     -------
@@ -23,8 +28,10 @@ def from_preflib(
     alternatives = [x.replace("# ALTERNATIVE NAME ", "").split(": ", 1)
                     for x in alternatives]
 
-    unique_orders = list(
-        filter(lambda k: "# NUMBER UNIQUE ORDERS: " in k, arr))[0].split(": ")[1]
+    def get_preflib_info(key, arr=arr):
+        return list(filter(lambda k: f"# {key}: " in k, arr))[0].split(": ", 1)[1]
+
+    unique_orders = get_preflib_info("NUMBER UNIQUE ORDERS")
     data = list(filter(lambda k: "# " not in k, arr))
     _ = path.split(".")[-1]
 
@@ -62,5 +69,18 @@ def from_preflib(
         df_edges[cols] = df_edges[1].str.split(",", expand=True)
 
     df_edges = df_edges.drop(columns=[0], errors="ignore")
+
+    if get_dataset_metadata:
+        metadata = {
+            "data_type": get_preflib_info("DATA TYPE"),
+            "modification_date": get_preflib_info("MODIFICATION DATE"),
+            "modification_type": get_preflib_info("MODIFICATION TYPE"),
+            "number_alternatives": int(get_preflib_info("NUMBER ALTERNATIVES")),
+            "number_unique_orders": int(unique_orders),
+            "number_voters": int(get_preflib_info("NUMBER VOTERS")),
+            "publication_date": get_preflib_info("PUBLICATION DATE"),
+            "title": get_preflib_info("TITLE")
+        }
+        return df_nodes, df_edges, metadata
 
     return df_nodes, df_edges
