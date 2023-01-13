@@ -41,8 +41,8 @@ def borda(
         Delimiter used between alternatives in a `ballot`, by default ">".
     rmv : list, optional
         List of alternatives to exclude before computing the score by the rule, by default [].
-    score : {"original", "score_n", "dowdall"}
-        Specifies the minimax rule to be used to compute Borda, by default "original".
+    score : {"original", "score_n", "dowdall", "weighted"}
+        Specifies the minimax rule to be used to compute Borda, by default "original". Whether "weighted" is selected, the score is equivalent to win percentage.
     show_rank : bool, optional
         Whether or not to include the ranking of alternatives, by default True.
     transform_kws: dict, optional
@@ -60,6 +60,8 @@ def borda(
     Borda, J. D. (1784). Mémoire sur les élections au scrutin. Histoire de l'Academie
     Royale des Sciences pour 1781 (Paris, 1784).
     """
+    n_voters = df[voters].sum() if voters in list(df) else df.shape[0]
+
     df = transform(
         df.copy(),
         **{
@@ -85,6 +87,9 @@ def borda(
 
     df = __set_voters(df, voters=voters)
     df = __aggregate(df, groupby=[alternative], aggregation="sum")
+
+    if score == "weighted":
+        df["value"] = df["value"] / (n_voters * (N - 1))
 
     if show_rank:
         df = __set_rank(df)
