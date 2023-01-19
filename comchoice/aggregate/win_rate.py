@@ -3,6 +3,8 @@ import pandas as pd
 from comchoice.aggregate.__set_rank import __set_rank
 from comchoice.aggregate.__set_card_id import __set_card_id
 
+# TODO use the algorithm implemented in Borda
+
 
 def win_rate(
     df: pd.DataFrame,

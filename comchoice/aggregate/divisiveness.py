@@ -15,7 +15,6 @@ def divisiveness(
     alternative: str = "alternative",
     alternative_a: str = "alternative_a",
     alternative_b: str = "alternative_b",
-    convert_pairwise: bool = False,
     convert_pairwise_kws: dict = dict(),
     dtype: str = "pairwise",
     method=ahp,
