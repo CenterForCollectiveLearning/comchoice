@@ -14,7 +14,7 @@ def from_preflib(
     path : str
         Data set URL
     get_dataset_metadata : bool
-        Whether this value is True, it returns a third dict with metadata included in the dataset, by default "voters".
+        Whether this value is True, it returns a third dict with metadata included in the dataset, by default False.
 
 
     Returns
@@ -60,7 +60,7 @@ def from_preflib(
             df_edges[col] = df_edges[col].str.replace(
                 "{", "", regex=False).str.replace("}", "", regex=False)
 
-    elif _ in ["soc"]:
+    elif _ in ["soc", "soi"]:
         df_edges = df_edges.rename(columns={0: "ballot"})
         df_edges["ballot"] = df_edges["ballot"].str.replace(",", ">")
 
